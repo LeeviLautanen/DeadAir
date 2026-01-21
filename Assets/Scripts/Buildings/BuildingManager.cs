@@ -20,7 +20,7 @@ public class BuildingManager : MonoBehaviour
 
         var buildingData = buildingDatabase[buildingId];
 
-        if (!resourceManager.TryConsume(buildingData.ConstructionCost))
+        if (!resourceManager.TryConsumeResources(buildingData.ConstructionCost))
         {
             Debug.LogWarning("Not enough resources to build " + buildingData.DisplayName);
             return null;

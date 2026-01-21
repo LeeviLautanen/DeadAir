@@ -2,16 +2,16 @@ using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
 
-public class ResourceTextUI : MonoBehaviour
+public class ResourceUI : MonoBehaviour
 {
     private ResourceManager manager;
-    private readonly Dictionary<string, TMP_Text> resourceTexts;
+    private readonly Dictionary<string, TMP_Text> resourceTexts = new();
 
     private void Awake()
     {
-        resourceTexts["human"] = GameObject.Find("HumanText").GetComponent<TMP_Text>();
-        resourceTexts["material"] = GameObject.Find("MaterialText").GetComponent<TMP_Text>();
-        resourceTexts["energy"] = GameObject.Find("EnergyText").GetComponent<TMP_Text>();
+        resourceTexts["humans"] = GameObject.Find("HumansCounter").GetComponent<TMP_Text>();
+        resourceTexts["materials"] = GameObject.Find("MaterialsCounter").GetComponent<TMP_Text>();
+        resourceTexts["energy"] = GameObject.Find("EnergyCounter").GetComponent<TMP_Text>();
     }
 
     private void OnEnable()
@@ -26,13 +26,15 @@ public class ResourceTextUI : MonoBehaviour
 
         foreach (var kvp in resourceTexts)
         {
-            if (manager.TryGetResource(kvp.Key, out var stack))
+            if (manager.ContainsResource(kvp.Key))
             {
-                kvp.Value.text = Format(kvp.Key, stack.Amount, stack.MaxAmount);
+                int amount = manager.GetResourceAmount(kvp.Key);
+                int maxAmount = manager.GetResourceMaxAmount(kvp.Key);
+                kvp.Value.text = Format(kvp.Key, amount, maxAmount);
             }
             else
             {
-                kvp.Value.text = "--";
+                kvp.Value.text = $"{kvp.Key}:";
             }
         }
     }
@@ -53,8 +55,16 @@ public class ResourceTextUI : MonoBehaviour
         resourceTexts[id].text = Format(id, amount, maxAmount);
     }
 
-    private string Format(string name, int amount, int maxAmount)
+    private string Format(string name, int amount, int maxAmount = 0)
     {
-        return $"{name}: {amount} / {maxAmount}";
+        if (maxAmount > 0)
+        {
+
+            return $"{name}: {amount} / {maxAmount}";
+        }
+        else
+        {
+            return $"{name}: {amount}";
+        }
     }
 }

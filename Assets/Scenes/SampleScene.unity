@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 93531066}
   - component: {fileID: 93531067}
   - component: {fileID: 93531069}
+  - component: {fileID: 93531070}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -177,13 +178,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 93531061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2cbecd021a258647876be50497ae75c, type: 3}
+  m_Script: {fileID: 11500000, guid: 6c5badba7e0d6bc4d947536aae8b96ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   startingResources:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     Amount: 50
-    MaxAmount: 0
+  - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
+    Amount: 20
+  - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    Amount: 100
 --- !u!114 &93531065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,6 +241,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc360b2015866894f94dcb8b0ca843fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &93531070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93531061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4b1cf08db0306b4b9d5072c61845663, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HumanManager
+  checkInterval: 1
+  increaseRate: 5
+  decreaseRate: 5
 --- !u!1 &327786864
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,6 +506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 849228979}
   - component: {fileID: 849228980}
+  - component: {fileID: 849228981}
   m_Layer: 5
   m_Name: Counters
   m_TagString: Untagged
@@ -514,7 +534,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 274.62, y: 100}
+  m_SizeDelta: {x: 300, y: 150}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &849228980
 MonoBehaviour:
@@ -536,12 +556,24 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &849228981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 849228978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3edba2773600f34429be05e9a86e7761, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceUI
 --- !u!1 &876573826
 GameObject:
   m_ObjectHideFlags: 0
@@ -1034,9 +1066,8 @@ GameObject:
   - component: {fileID: 1354498099}
   - component: {fileID: 1354498102}
   - component: {fileID: 1354498101}
-  - component: {fileID: 1354498100}
   m_Layer: 5
-  m_Name: WoodCounter
+  m_Name: MaterialsCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1059,21 +1090,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: 390, y: 50}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &1354498100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1354498098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3edba2773600f34429be05e9a86e7761, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceId: wood
 --- !u!114 &1354498101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1185,7 +1203,6 @@ GameObject:
   - component: {fileID: 1375021197}
   - component: {fileID: 1375021200}
   - component: {fileID: 1375021199}
-  - component: {fileID: 1375021198}
   m_Layer: 5
   m_Name: EnergyCounter
   m_TagString: Untagged
@@ -1210,21 +1227,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: 390, y: 50}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &1375021198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1375021196}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3edba2773600f34429be05e9a86e7761, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceId: wood
 --- !u!114 &1375021199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1466,7 +1470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f36b55cc4e828a5428c13d3a7e2f2ce8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 2
   zoomSpeed: 1
   minZoom: 5
   maxZoom: 20
@@ -1482,9 +1486,8 @@ GameObject:
   - component: {fileID: 1541555714}
   - component: {fileID: 1541555717}
   - component: {fileID: 1541555716}
-  - component: {fileID: 1541555715}
   m_Layer: 5
-  m_Name: HumanCounter
+  m_Name: HumansCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1507,21 +1510,8 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 50}
+  m_SizeDelta: {x: 390, y: 50}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &1541555715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1541555713}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3edba2773600f34429be05e9a86e7761, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceId: wood
 --- !u!114 &1541555716
 MonoBehaviour:
   m_ObjectHideFlags: 0

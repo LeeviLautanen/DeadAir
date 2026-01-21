@@ -13,7 +13,6 @@ public class InputHandler : MonoBehaviour
     private void Start()
     {
         mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
-        Debug.Log(mainCamera);
         buildingPlacer = FindFirstObjectByType<BuildingPlacer>();
     }
 
