@@ -52,11 +52,11 @@ public class InputHandler : MonoBehaviour
     {
         if (Keyboard.current.digit1Key.wasPressedThisFrame)
         {
-            buildingPlacer.SelectBuilding("sawmill");
+            buildingPlacer.SelectBuilding("apartment");
         }
         else if (Keyboard.current.digit2Key.wasPressedThisFrame)
         {
-            buildingPlacer.SelectBuilding("house");
+            buildingPlacer.SelectBuilding("refinery");
         }
     }
 }

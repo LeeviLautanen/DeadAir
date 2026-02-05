@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
-  m_Name: Sawmill
+  m_Name: Refinery
   m_EditorClassIdentifier: 
-  Id: sawmill
-  DisplayName: Sawmill
+  Id: refinery
+  DisplayName: Refinery
   ConstructionCost:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     Amount: 50

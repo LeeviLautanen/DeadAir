@@ -202,9 +202,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   availableBuildings:
+  - {fileID: 11400000, guid: 82a624732f9ceca4db98e9ee212e8773, type: 2}
   - {fileID: 11400000, guid: 093fc80c4ae8422499891a66499f2ede, type: 2}
-  - {fileID: 11400000, guid: 82a624732f9ceca4db98e9ee212e8773, type: 2}
-  - {fileID: 11400000, guid: 82a624732f9ceca4db98e9ee212e8773, type: 2}
 --- !u!114 &93531066
 MonoBehaviour:
   m_ObjectHideFlags: 0
