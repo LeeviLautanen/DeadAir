@@ -58,5 +58,9 @@ public class InputHandler : MonoBehaviour
         {
             buildingPlacer.SelectBuilding("refinery");
         }
+        else if (Keyboard.current.digit3Key.wasPressedThisFrame)
+        {
+            buildingPlacer.SelectBuilding("shield");
+        }
     }
 }

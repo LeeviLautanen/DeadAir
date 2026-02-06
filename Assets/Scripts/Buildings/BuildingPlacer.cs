@@ -36,18 +36,24 @@ public class BuildingPlacer : MonoBehaviour
         if (buildingManager == null || buildingId == currentBuildingId) return;
 
         selectedBuildingData = buildingManager.GetBuildingData(buildingId);
-        if (selectedBuildingData != null)
+
+
+        if (selectedBuildingData == null)
         {
-            if (IsPlacing || buildingGhost != null) ClearSelected();
-
-            IsPlacing = true;
-            currentBuildingId = buildingId;
-            buildingTypeText.text = selectedBuildingData.DisplayName;
-            buildingGhost = Instantiate(selectedBuildingData.Prefab);
-
-            // Not needed, just to shut up errors
-            buildingGhost.GetComponent<Building>().Initialize(selectedBuildingData);
+            Debug.LogError($"No building data found for id: {buildingId}");
+            return;
         }
+
+        if (IsPlacing || buildingGhost != null) ClearSelected();
+
+        IsPlacing = true;
+        currentBuildingId = buildingId;
+        buildingTypeText.text = selectedBuildingData.DisplayName;
+        buildingGhost = Instantiate(selectedBuildingData.Prefab);
+
+        // Not needed, just to shut up errors
+        buildingGhost.GetComponent<Building>().Initialize(selectedBuildingData);
+
     }
 
     public void TryPlaceBuilding(int x)
