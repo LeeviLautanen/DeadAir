@@ -35,7 +35,7 @@ public class InputHandler : MonoBehaviour
         {
             if (buildingPlacer.IsPlacing)
             {
-                buildingPlacer.TryPlaceBuilding((int)MouseWorldPosition.x);
+                buildingPlacer.TryPlaceGhost();
             }
         }
 

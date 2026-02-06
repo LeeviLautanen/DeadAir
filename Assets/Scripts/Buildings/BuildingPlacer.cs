@@ -56,11 +56,11 @@ public class BuildingPlacer : MonoBehaviour
 
     }
 
-    public void TryPlaceBuilding(int x)
+    public void TryPlaceGhost()
     {
         if (buildingManager == null || IsPlacing == false) return;
 
-        Vector3 spawnPos = new(x, 0, -1);
+        Vector3 spawnPos = new(buildingGhost.transform.position.x, 0, -1);
         buildingManager.CreateBuilding(currentBuildingId, spawnPos);
         ClearSelected();
     }
