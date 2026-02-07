@@ -92,6 +92,8 @@ public class BuildingManager : MonoBehaviour
             }
         }
 
+        resourceManager.SmoothResources();
+
         return;
     }
 

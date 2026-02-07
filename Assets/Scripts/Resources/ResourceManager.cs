@@ -164,6 +164,25 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
+    public void SmoothResources()
+    {
+        resourceLookup.TryGetValue("humans", out ResourceStack humans);
+        if (humans != null)
+        {
+            int maxHumans = resourceMaxLookup["humans"];
+            if (humans.Amount < maxHumans)
+            {
+                AddResource("humans", Mathf.CeilToInt(humans.Amount * 0.1f));
+                TriggerResourceChanged(humans.Data.Id, humans.Amount);
+            }
+            else if (humans.Amount > maxHumans)
+            {
+                TryConsumeResource("humans", Mathf.CeilToInt(humans.Amount * 0.1f));
+                TriggerResourceChanged(humans.Data.Id, humans.Amount);
+            }
+        }
+    }
+
     public Dictionary<string, int> GetResourceStates()
     {
         Dictionary<string, int> states = new();
