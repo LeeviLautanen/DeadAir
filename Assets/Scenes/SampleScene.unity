@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 93531066}
   - component: {fileID: 93531067}
   - component: {fileID: 93531069}
-  - component: {fileID: 93531070}
   - component: {fileID: 93531071}
   m_Layer: 0
   m_Name: Managers
@@ -184,7 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingResources:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 50
+    Amount: 50000
   - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
     Amount: 20
   - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
@@ -243,21 +242,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc360b2015866894f94dcb8b0ca843fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &93531070
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 93531061}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4b1cf08db0306b4b9d5072c61845663, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HumanManager
-  checkInterval: 1
-  increaseRate: 5
-  decreaseRate: 5
 --- !u!114 &93531071
 MonoBehaviour:
   m_ObjectHideFlags: 0

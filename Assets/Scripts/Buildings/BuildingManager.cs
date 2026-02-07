@@ -41,11 +41,18 @@ public class BuildingManager : MonoBehaviour
         newBuilding.TryGetComponent(out Building buildingComponent);
         if (buildingComponent == null)
         {
-            buildingComponent = newBuilding.AddComponent<Building>();
+            Debug.LogError("Building prefab does not have a Building script");
+            return null;
         }
 
         // Initialize the building with its data
         buildingComponent.Initialize(buildingData);
+
+        // Add effects to capacity
+        foreach (var effect in buildingData.CapacityEffects)
+        {
+            resourceManager.ChangeResourceMax(effect.Data.Id, effect.Amount);
+        }
 
         instantiatedBuildings.Add(newBuilding);
 

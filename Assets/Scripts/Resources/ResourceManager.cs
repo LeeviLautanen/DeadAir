@@ -10,6 +10,11 @@ public class ResourceManager : MonoBehaviour
     private readonly Dictionary<string, ResourceStack> resourceLookup = new();
     private readonly Dictionary<string, int> resourceMaxLookup = new();
 
+    private void Awake()
+    {
+        InitializeResources();
+    }
+
     public bool TryConsumeResources(List<ResourceStack> costs)
     {
         if (costs == null || costs.Count == 0) return false;
@@ -138,13 +143,25 @@ public class ResourceManager : MonoBehaviour
         return resourceLookup.ContainsKey(resourceId);
     }
 
-    public int GetResourceMaxAmount(string resourceId)
+    public int GetResourceMax(string resourceId)
     {
         if (resourceMaxLookup.TryGetValue(resourceId, out int maxAmount))
         {
             return maxAmount;
         }
         return -1;
+    }
+
+    public void ChangeResourceMax(string resourceId, int delta)
+    {
+        if (resourceMaxLookup.ContainsKey(resourceId))
+        {
+            resourceMaxLookup[resourceId] = Mathf.Max(0, resourceMaxLookup[resourceId] + delta);
+            if (resourceLookup.TryGetValue(resourceId, out ResourceStack entry))
+            {
+                TriggerResourceChanged(entry.Data.Id, entry.Amount);
+            }
+        }
     }
 
     public Dictionary<string, int> GetResourceStates()
@@ -168,11 +185,6 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
-    private void Awake()
-    {
-        InitializeResources();
-    }
-
     private void InitializeResources()
     {
         resourceLookup.Clear();
@@ -184,6 +196,26 @@ public class ResourceManager : MonoBehaviour
                 resourceLookup[stack.Data.Id] = stack;
                 resourceMaxLookup[stack.Data.Id] = stack.Data.DefaultMaxAmount;
                 TriggerResourceChanged(stack.Data.Id, stack.Amount);
+            }
+        }
+
+        Building.OnBuildingDestroyed += HandleBuildingDestroyed;
+    }
+
+    private void HandleBuildingDestroyed(GameObject buildingGO)
+    {
+        if (buildingGO.TryGetComponent(out Building building))
+        {
+            var data = building.Data;
+            if (data == null)
+            {
+                Debug.LogError("No building data found for resource processing.");
+                return;
+            }
+
+            foreach (var effect in data.CapacityEffects)
+            {
+                ChangeResourceMax(effect.Data.Id, -effect.Amount);
             }
         }
     }

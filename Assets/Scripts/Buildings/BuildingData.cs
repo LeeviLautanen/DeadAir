@@ -18,4 +18,7 @@ public class BuildingData : ScriptableObject
 
     [Header("Consumption")]
     public List<ResourceStack> ConsumedResources;
+
+    [Header("Capacity effects")]
+    public List<ResourceStack> CapacityEffects;
 }

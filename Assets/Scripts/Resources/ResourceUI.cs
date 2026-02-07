@@ -29,7 +29,7 @@ public class ResourceUI : MonoBehaviour
             if (manager.ContainsResource(kvp.Key))
             {
                 int amount = manager.GetResourceAmount(kvp.Key);
-                int maxAmount = manager.GetResourceMaxAmount(kvp.Key);
+                int maxAmount = manager.GetResourceMax(kvp.Key);
                 kvp.Value.text = Format(kvp.Key, amount, maxAmount);
             }
             else

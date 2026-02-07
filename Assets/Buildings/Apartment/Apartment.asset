@@ -21,3 +21,6 @@ MonoBehaviour:
   Prefab: {fileID: 2672589904300108679, guid: 3be4f90b12012c243a9bf239c5f7bd34, type: 3}
   ProducedResources: []
   ConsumedResources: []
+  CapacityEffects:
+  - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
+    Amount: 20
