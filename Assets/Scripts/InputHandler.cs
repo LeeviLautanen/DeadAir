@@ -62,5 +62,9 @@ public class InputHandler : MonoBehaviour
         {
             buildingPlacer.SelectBuilding("shield");
         }
+        else if (Keyboard.current.digit4Key.wasPressedThisFrame)
+        {
+            buildingPlacer.SelectBuilding("power_plant");
+        }
     }
 }

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
-  m_Name: ShieldData
+  m_Name: PowerPlantData
   m_EditorClassIdentifier: 
-  Id: shield
-  DisplayName: Shield
+  Id: power_plant
+  DisplayName: Power plant
   ConstructionCost:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 30
+    Amount: 50
   MaxHealth: 100
-  Prefab: {fileID: 7875127117606328118, guid: 75a9f06e5b96def42bb7290add7fadfe, type: 3}
-  ProducedResources: []
-  ConsumedResources:
+  Prefab: {fileID: 2672589904300108679, guid: fdecaa516d1c5034c937ec48c7e162a9, type: 3}
+  ProducedResources:
   - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    Amount: 10
+    Amount: 50
+  ConsumedResources: []
   CapacityEffects: []
