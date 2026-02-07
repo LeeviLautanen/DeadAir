@@ -10,6 +10,15 @@ public class BuildingManager : MonoBehaviour
     private List<GameObject> instantiatedBuildings;
     private ResourceManager resourceManager;
 
+    private void Start()
+    {
+        InitializeBuildingDatabase();
+        instantiatedBuildings = new List<GameObject>();
+        resourceManager = GetComponent<ResourceManager>();
+
+        Building.OnBuildingDestroyed += DestroyBuilding;
+    }
+
     public GameObject CreateBuilding(string buildingId, Vector3 position, Quaternion rotation = default)
     {
         if (!buildingDatabase.ContainsKey(buildingId))
@@ -77,13 +86,6 @@ public class BuildingManager : MonoBehaviour
         }
 
         return;
-    }
-
-    private void Start()
-    {
-        InitializeBuildingDatabase();
-        instantiatedBuildings = new List<GameObject>();
-        resourceManager = GetComponent<ResourceManager>();
     }
 
     private void InitializeBuildingDatabase()

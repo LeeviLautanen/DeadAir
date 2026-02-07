@@ -1,21 +1,26 @@
 using UnityEngine;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Collections;
 
 public class MeteoriteManager : MonoBehaviour
 {
+    private static readonly WaitForSeconds _waitForSeconds1 = new(0.5f);
     public GameObject MeteoritePrefab;
+
     private void Start()
     {
-
+        StartCoroutine(SpawnMeteorites());
     }
 
-    void FixedUpdate()
+    IEnumerator SpawnMeteorites()
     {
-        spawnMeteorite();
+        while (true)
+        {
+            SpawnMeteorite();
+            yield return _waitForSeconds1;
+        }
     }
 
-    private void spawnMeteorite()
+    private void SpawnMeteorite()
     {
         Vector3 spawnPosition = new(0, 20, -1);
         float angle = Random.Range(-30f, 30f);

@@ -1,12 +1,15 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Building : MonoBehaviour
 {
     public BuildingData Data => buildingData;
+    public static event Action<GameObject> OnBuildingDestroyed;
 
     private BuildingData buildingData;
     private bool isInitialized = false;
+    private float currentHealth;
 
     internal void Initialize(BuildingData data)
     {
@@ -17,10 +20,11 @@ public class Building : MonoBehaviour
         }
 
         buildingData = data;
+        currentHealth = buildingData.MaxHealth;
         isInitialized = true;
     }
 
-    void Start()
+    private void Start()
     {
         if (!isInitialized)
         {
@@ -28,13 +32,36 @@ public class Building : MonoBehaviour
         }
     }
 
-    void OnDestroy()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        // Building is being destroyed
+        if (other.gameObject.TryGetComponent(out Meteorite meteorite))
+        {
+            if (meteorite == null)
+            {
+                Debug.LogError("Shield collided with an object that doesnt have the meteorite script");
+                return;
+            }
+            Damage(meteorite.Damage);
+        }
+    }
+
+    private void Damage(float damage)
+    {
+        currentHealth = Mathf.Max(currentHealth - damage, 0);
+
+        if (currentHealth <= 0)
+        {
+            DestroyBuilding();
+        }
+    }
+
+    private void Repair(float amount)
+    {
+        currentHealth = Mathf.Min(currentHealth + amount, buildingData.MaxHealth);
     }
 
     public virtual void DestroyBuilding()
     {
-        Destroy(gameObject);
+        OnBuildingDestroyed?.Invoke(gameObject);
     }
 }

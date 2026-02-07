@@ -101,6 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9120461976362767843}
   - component: {fileID: 5722922078217300730}
+  - component: {fileID: 3428503239749182352}
   m_Layer: 0
   m_Name: Refinery
   m_TagString: Untagged
@@ -136,3 +137,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634f8a4923f0ee3498573b32abf2dc07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!60 &3428503239749182352
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2672589904300108679}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.82}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 1.2007115}
+      - {x: -2.2275817, y: 0.4455008}
+      - {x: -2.209534, y: -0.80098855}
+      - {x: 2.230062, y: -0.80901694}
+      - {x: 2.2275815, y: 0.4695863}
+  m_UseDelaunayMesh: 1

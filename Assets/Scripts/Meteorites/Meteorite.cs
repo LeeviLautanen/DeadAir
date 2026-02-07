@@ -3,19 +3,16 @@ using UnityEngine;
 
 public class Meteorite : MonoBehaviour
 {
-    public int Damage = 5;
+    public float Damage = 5f;
     public float Speed = 10f;
 
-    void Start()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
+        Destroy(gameObject);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        transform.position += Speed * Time.deltaTime * transform.forward;
-    }
-
-    void OnDestroy()
-    {
+        transform.position += -1f * Speed * Time.deltaTime * transform.up;
     }
 }
