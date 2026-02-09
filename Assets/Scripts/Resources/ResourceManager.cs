@@ -5,10 +5,10 @@ using Mono.Cecil;
 
 public class ResourceManager : MonoBehaviour
 {
-    public event Action<string, int, int> OnResourceChanged;
+    public event Action<string, float, float> OnResourceChanged;
     [SerializeField] private List<ResourceStack> startingResources = new();
     private readonly Dictionary<string, ResourceStack> resourceLookup = new();
-    private readonly Dictionary<string, int> resourceMaxLookup = new();
+    private readonly Dictionary<string, float> resourceMaxLookup = new();
 
     private void Awake()
     {
@@ -60,9 +60,9 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool TryConsumeResource(string resourceId, int amount)
+    public bool TryConsumeResource(string resourceId, float amount)
     {
-        if (amount <= 0) return false;
+        if (amount <= 0f) return false;
 
         if (resourceLookup.TryGetValue(resourceId, out ResourceStack entry))
         {
@@ -93,9 +93,9 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool AddResource(string resourceId, int amount)
+    public bool AddResource(string resourceId, float amount)
     {
-        if (amount <= 0) return false;
+        if (amount <= 0f) return false;
 
         if (resourceLookup.TryGetValue(resourceId, out ResourceStack entry))
         {
@@ -129,13 +129,13 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public int GetResourceAmount(string resourceId)
+    public float GetResourceAmount(string resourceId)
     {
         if (resourceLookup.TryGetValue(resourceId, out ResourceStack entry))
         {
             return entry.Amount;
         }
-        return -1;
+        return -1f;
     }
 
     public bool ContainsResource(string resourceId)
@@ -143,20 +143,20 @@ public class ResourceManager : MonoBehaviour
         return resourceLookup.ContainsKey(resourceId);
     }
 
-    public int GetResourceMax(string resourceId)
+    public float GetResourceMax(string resourceId)
     {
-        if (resourceMaxLookup.TryGetValue(resourceId, out int maxAmount))
+        if (resourceMaxLookup.TryGetValue(resourceId, out float maxAmount))
         {
             return maxAmount;
         }
-        return -1;
+        return -1f;
     }
 
-    public void ChangeResourceMax(string resourceId, int delta)
+    public void ChangeResourceMax(string resourceId, float delta)
     {
         if (resourceMaxLookup.ContainsKey(resourceId))
         {
-            resourceMaxLookup[resourceId] = Mathf.Max(0, resourceMaxLookup[resourceId] + delta);
+            resourceMaxLookup[resourceId] = Mathf.Max(0f, resourceMaxLookup[resourceId] + delta);
             if (resourceLookup.TryGetValue(resourceId, out ResourceStack entry))
             {
                 TriggerResourceChanged(entry.Data.Id, entry.Amount);
@@ -169,23 +169,23 @@ public class ResourceManager : MonoBehaviour
         resourceLookup.TryGetValue("humans", out ResourceStack humans);
         if (humans != null)
         {
-            int maxHumans = resourceMaxLookup["humans"];
+            float maxHumans = resourceMaxLookup["humans"];
             if (humans.Amount < maxHumans)
             {
-                AddResource("humans", Mathf.CeilToInt(humans.Amount * 0.1f));
+                AddResource("humans", Mathf.Ceil(humans.Amount * 0.1f));
                 TriggerResourceChanged(humans.Data.Id, humans.Amount);
             }
             else if (humans.Amount > maxHumans)
             {
-                TryConsumeResource("humans", Mathf.CeilToInt(humans.Amount * 0.1f));
+                TryConsumeResource("humans", Mathf.Ceil(humans.Amount * 0.1f));
                 TriggerResourceChanged(humans.Data.Id, humans.Amount);
             }
         }
     }
 
-    public Dictionary<string, int> GetResourceStates()
+    public Dictionary<string, float> GetResourceStates()
     {
-        Dictionary<string, int> states = new();
+        Dictionary<string, float> states = new();
         foreach (var pair in resourceLookup)
         {
             states[pair.Key] = pair.Value.Amount;
@@ -193,7 +193,7 @@ public class ResourceManager : MonoBehaviour
         return states;
     }
 
-    public void LoadResourceStates(Dictionary<string, int> states)
+    public void LoadResourceStates(Dictionary<string, float> states)
     {
         foreach (var pair in states)
         {
@@ -239,9 +239,9 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
-    private bool AddToStack(ResourceStack stack, int amount)
+    private bool AddToStack(ResourceStack stack, float amount)
     {
-        if (amount <= 0) return false;
+        if (amount <= 0f) return false;
 
         if (stack.Amount + amount > resourceMaxLookup[stack.Data.Id])
         {
@@ -255,7 +255,7 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    private void TriggerResourceChanged(string id, int amount)
+    private void TriggerResourceChanged(string id, float amount)
     {
         OnResourceChanged?.Invoke(id, amount, resourceMaxLookup[id]);
     }

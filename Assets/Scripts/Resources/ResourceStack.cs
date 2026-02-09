@@ -2,5 +2,5 @@
 public class ResourceStack
 {
     public ResourceData Data;
-    public int Amount;
+    public float Amount;
 }

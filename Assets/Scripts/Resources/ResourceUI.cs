@@ -28,8 +28,8 @@ public class ResourceUI : MonoBehaviour
         {
             if (manager.ContainsResource(kvp.Key))
             {
-                int amount = manager.GetResourceAmount(kvp.Key);
-                int maxAmount = manager.GetResourceMax(kvp.Key);
+                float amount = manager.GetResourceAmount(kvp.Key);
+                float maxAmount = manager.GetResourceMax(kvp.Key);
                 kvp.Value.text = Format(kvp.Key, amount, maxAmount);
             }
             else
@@ -49,22 +49,22 @@ public class ResourceUI : MonoBehaviour
         manager.OnResourceChanged -= OnResourceChanged;
     }
 
-    private void OnResourceChanged(string id, int amount, int maxAmount)
+    private void OnResourceChanged(string id, float amount, float maxAmount)
     {
         if (!resourceTexts.ContainsKey(id)) return;
         resourceTexts[id].text = Format(id, amount, maxAmount);
     }
 
-    private string Format(string name, int amount, int maxAmount = 0)
+    private string Format(string name, float amount, float maxAmount = 0)
     {
         if (maxAmount > 0)
         {
 
-            return $"{name}: {amount} / {maxAmount}";
+            return $"{name}: {amount:.1f} / {maxAmount:.1f}";
         }
         else
         {
-            return $"{name}: {amount}";
+            return $"{name}: {amount:.1f}";
         }
     }
 }
