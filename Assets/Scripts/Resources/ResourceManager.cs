@@ -6,8 +6,8 @@ using Mono.Cecil;
 public class ResourceManager : MonoBehaviour
 {
     public event Action<string, float, float> OnResourceChanged;
-    [SerializeField] private List<ResourceStack> startingResources = new();
-    private readonly Dictionary<string, ResourceStack> resourceLookup = new();
+    [SerializeField] private List<ResourceAmount> startingResources = new();
+    private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
     private readonly Dictionary<string, float> resourceMaxLookup = new();
 
     private void Awake()
@@ -15,15 +15,15 @@ public class ResourceManager : MonoBehaviour
         InitializeResources();
     }
 
-    public bool TryConsumeResources(List<ResourceStack> costs)
+    public bool TryConsumeResources(List<ResourceAmount> costs)
     {
         if (costs == null || costs.Count == 0) return false;
 
         int costsProcessed = 0;
         for (int i = 0; i < costs.Count; i++)
         {
-            ResourceStack cost = costs[i];
-            if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceStack entry))
+            ResourceAmount cost = costs[i];
+            if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
             {
                 if (entry.Amount < cost.Amount)
                 {
@@ -43,8 +43,8 @@ public class ResourceManager : MonoBehaviour
             // rollback
             for (int i = 0; i < costsProcessed; i++)
             {
-                ResourceStack cost = costs[i];
-                if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceStack entry))
+                ResourceAmount cost = costs[i];
+                if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
                 {
                     entry.Amount += cost.Amount;
                 }
@@ -52,7 +52,7 @@ public class ResourceManager : MonoBehaviour
             return false;
         }
 
-        foreach (ResourceStack cost in costs)
+        foreach (ResourceAmount cost in costs)
         {
             TriggerResourceChanged(cost.Data.Id, resourceLookup[cost.Data.Id].Amount);
         }
@@ -64,7 +64,7 @@ public class ResourceManager : MonoBehaviour
     {
         if (amount <= 0f) return false;
 
-        if (resourceLookup.TryGetValue(resourceId, out ResourceStack entry))
+        if (resourceLookup.TryGetValue(resourceId, out ResourceAmount entry))
         {
             if (entry.Amount < amount)
             {
@@ -77,13 +77,13 @@ public class ResourceManager : MonoBehaviour
         return false;
     }
 
-    public bool AddResources(List<ResourceStack> newResources)
+    public bool AddResources(List<ResourceAmount> newResources)
     {
         if (newResources == null || newResources.Count == 0) return false;
 
-        foreach (ResourceStack stack in newResources)
+        foreach (ResourceAmount stack in newResources)
         {
-            if (resourceLookup.TryGetValue(stack.Data.Id, out ResourceStack entry))
+            if (resourceLookup.TryGetValue(stack.Data.Id, out ResourceAmount entry))
             {
                 AddToStack(entry, stack.Amount);
                 TriggerResourceChanged(entry.Data.Id, entry.Amount);
@@ -97,7 +97,7 @@ public class ResourceManager : MonoBehaviour
     {
         if (amount <= 0f) return false;
 
-        if (resourceLookup.TryGetValue(resourceId, out ResourceStack entry))
+        if (resourceLookup.TryGetValue(resourceId, out ResourceAmount entry))
         {
             AddToStack(entry, amount);
             TriggerResourceChanged(entry.Data.Id, entry.Amount);
@@ -106,32 +106,9 @@ public class ResourceManager : MonoBehaviour
         return false;
     }
 
-    public bool HasResources(List<ResourceStack> costs)
-    {
-        if (costs == null || costs.Count == 0) return true;
-
-        for (int i = 0; i < costs.Count; i++)
-        {
-            ResourceStack cost = costs[i];
-            if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceStack entry))
-            {
-                if (entry.Amount < cost.Amount)
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public float GetResourceAmount(string resourceId)
     {
-        if (resourceLookup.TryGetValue(resourceId, out ResourceStack entry))
+        if (resourceLookup.TryGetValue(resourceId, out ResourceAmount entry))
         {
             return entry.Amount;
         }
@@ -157,7 +134,7 @@ public class ResourceManager : MonoBehaviour
         if (resourceMaxLookup.ContainsKey(resourceId))
         {
             resourceMaxLookup[resourceId] = Mathf.Max(0f, resourceMaxLookup[resourceId] + delta);
-            if (resourceLookup.TryGetValue(resourceId, out ResourceStack entry))
+            if (resourceLookup.TryGetValue(resourceId, out ResourceAmount entry))
             {
                 TriggerResourceChanged(entry.Data.Id, entry.Amount);
             }
@@ -166,7 +143,7 @@ public class ResourceManager : MonoBehaviour
 
     public void SmoothResources()
     {
-        resourceLookup.TryGetValue("humans", out ResourceStack humans);
+        resourceLookup.TryGetValue("humans", out ResourceAmount humans);
         if (humans != null)
         {
             float maxHumans = resourceMaxLookup["humans"];
@@ -197,7 +174,7 @@ public class ResourceManager : MonoBehaviour
     {
         foreach (var pair in states)
         {
-            if (resourceLookup.TryGetValue(pair.Key, out ResourceStack stack))
+            if (resourceLookup.TryGetValue(pair.Key, out ResourceAmount stack))
             {
                 TriggerResourceChanged(stack.Data.Id, stack.Amount);
             }
@@ -208,7 +185,7 @@ public class ResourceManager : MonoBehaviour
     {
         resourceLookup.Clear();
 
-        foreach (ResourceStack stack in startingResources)
+        foreach (ResourceAmount stack in startingResources)
         {
             if (stack.Data != null)
             {
@@ -239,7 +216,7 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
-    private bool AddToStack(ResourceStack stack, float amount)
+    private bool AddToStack(ResourceAmount stack, float amount)
     {
         if (amount <= 0f) return false;
 

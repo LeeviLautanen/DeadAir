@@ -7,18 +7,18 @@ public class BuildingData : ScriptableObject
     [Header("Properties")]
     public string Id;
     public string DisplayName;
-    public List<ResourceStack> ConstructionCost;
+    public List<ResourceAmount> ConstructionCost;
     public int MaxHealth = 100;
 
     [Header("Visual")]
     public GameObject Prefab;
 
     [Header("Production")]
-    public List<ResourceStack> ProducedResources;
+    public List<ResourceAmount> ProducedResources;
 
     [Header("Consumption")]
-    public List<ResourceStack> ConsumedResources;
+    public List<ResourceAmount> ConsumedResources;
 
     [Header("Capacity effects")]
-    public List<ResourceStack> CapacityEffects;
+    public List<ResourceAmount> CapacityEffects;
 }

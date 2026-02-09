@@ -1,5 +1,5 @@
 [System.Serializable]
-public class ResourceStack
+public class ResourceAmount
 {
     public ResourceData Data;
     public float Amount;
