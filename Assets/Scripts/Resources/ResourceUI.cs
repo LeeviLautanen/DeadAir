@@ -12,6 +12,25 @@ public class ResourceUI : MonoBehaviour
         resourceTexts["humans"] = GameObject.Find("HumansCounter").GetComponent<TMP_Text>();
         resourceTexts["materials"] = GameObject.Find("MaterialsCounter").GetComponent<TMP_Text>();
         resourceTexts["energy"] = GameObject.Find("EnergyCounter").GetComponent<TMP_Text>();
+
+        InvokeRepeating(nameof(UpdateResourceTexts), 0f, 1f);
+    }
+
+    private void UpdateResourceTexts()
+    {
+        foreach (var kvp in resourceTexts)
+        {
+            if (manager.ContainsResource(kvp.Key))
+            {
+                float amount = manager.GetResourceAmount(kvp.Key);
+                float maxAmount = manager.GetResourceMax(kvp.Key);
+                kvp.Value.text = Format(kvp.Key, amount, maxAmount);
+            }
+            else
+            {
+                kvp.Value.text = $"{kvp.Key}:";
+            }
+        }
     }
 
     private void OnEnable()
@@ -60,11 +79,11 @@ public class ResourceUI : MonoBehaviour
         if (maxAmount > 0)
         {
 
-            return $"{name}: {amount:.1f} / {maxAmount:.1f}";
+            return $"{name}: {amount:F0} / {maxAmount:F0}";
         }
         else
         {
-            return $"{name}: {amount:.1f}";
+            return $"{name}: {amount:F0}";
         }
     }
 }

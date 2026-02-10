@@ -5,6 +5,7 @@ public class Meteorite : MonoBehaviour
 {
     public float Damage = 5f;
     public float Speed = 10f;
+    public bool HasCollided = false;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {

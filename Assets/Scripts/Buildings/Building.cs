@@ -5,6 +5,7 @@ using UnityEngine;
 public class Building : MonoBehaviour
 {
     public BuildingData Data => buildingData;
+    public bool IsActive = true;
     public static event Action<GameObject> OnBuildingDestroyed;
 
     private BuildingData buildingData;
@@ -58,6 +59,16 @@ public class Building : MonoBehaviour
     private void Repair(float amount)
     {
         currentHealth = Mathf.Min(currentHealth + amount, buildingData.MaxHealth);
+    }
+
+    public virtual void Activate()
+    {
+        IsActive = true;
+    }
+
+    public virtual void Deactivate()
+    {
+        IsActive = false;
     }
 
     public virtual void DestroyBuilding()

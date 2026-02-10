@@ -17,8 +17,6 @@ public class ResourceManager : MonoBehaviour
 
     public bool TryConsumeResources(List<ResourceAmount> costs)
     {
-        if (costs == null || costs.Count == 0) return false;
-
         int costsProcessed = 0;
         for (int i = 0; i < costs.Count; i++)
         {
@@ -60,6 +58,45 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
+    public bool TryConsumeResourceRates(List<ResourceAmount> rates)
+    {
+        int costsProcessed = 0;
+        for (int i = 0; i < rates.Count; i++)
+        {
+            ResourceAmount rate = rates[i];
+            if (resourceLookup.TryGetValue(rate.Data.Id, out ResourceAmount entry))
+            {
+                float amount = rate.Amount * Time.deltaTime;
+                if (entry.Amount < amount)
+                {
+                    break;
+                }
+                entry.Amount -= amount;
+                costsProcessed++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if (costsProcessed != rates.Count)
+        {
+            // rollback
+            for (int i = 0; i < costsProcessed; i++)
+            {
+                ResourceAmount rate = rates[i];
+                if (resourceLookup.TryGetValue(rate.Data.Id, out ResourceAmount entry))
+                {
+                    entry.Amount += rate.Amount * Time.deltaTime;
+                }
+            }
+            return false;
+        }
+
+        return true;
+    }
+
     public bool TryConsumeResource(string resourceId, float amount)
     {
         if (amount <= 0f) return false;
@@ -87,6 +124,27 @@ public class ResourceManager : MonoBehaviour
             {
                 AddToStack(entry, stack.Amount);
                 TriggerResourceChanged(entry.Data.Id, entry.Amount);
+            }
+        }
+
+        return true;
+    }
+
+    public bool AddResourceRates(List<ResourceAmount> rates)
+    {
+        foreach (ResourceAmount rate in rates)
+        {
+            if (resourceLookup.TryGetValue(rate.Data.Id, out ResourceAmount entry))
+            {
+                float amount = rate.Amount * Time.deltaTime;
+                if (entry.Amount + amount > resourceMaxLookup[entry.Data.Id])
+                {
+                    entry.Amount = resourceMaxLookup[entry.Data.Id];
+                }
+                else
+                {
+                    entry.Amount += amount;
+                }
             }
         }
 
@@ -147,15 +205,15 @@ public class ResourceManager : MonoBehaviour
         if (humans != null)
         {
             float maxHumans = resourceMaxLookup["humans"];
+            ResourceAmount newAmount = new() { Data = humans.Data, Amount = maxHumans * 0.1f };
+            List<ResourceAmount> rates = new() { newAmount };
             if (humans.Amount < maxHumans)
             {
-                AddResource("humans", Mathf.Ceil(humans.Amount * 0.1f));
-                TriggerResourceChanged(humans.Data.Id, humans.Amount);
+                AddResourceRates(rates);
             }
             else if (humans.Amount > maxHumans)
             {
-                TryConsumeResource("humans", Mathf.Ceil(humans.Amount * 0.1f));
-                TriggerResourceChanged(humans.Data.Id, humans.Amount);
+                TryConsumeResourceRates(rates);
             }
         }
     }
@@ -234,6 +292,7 @@ public class ResourceManager : MonoBehaviour
 
     private void TriggerResourceChanged(string id, float amount)
     {
+        Debug.Log($"Resource '{id}' changed to {amount}");
         OnResourceChanged?.Invoke(id, amount, resourceMaxLookup[id]);
     }
 }

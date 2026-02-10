@@ -9,6 +9,7 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<string, BuildingData> buildingDatabase;
     private List<GameObject> instantiatedBuildings;
     private ResourceManager resourceManager;
+    private SortedDictionary<int, List<Building>> resourceEntityLists = new();
 
     private void Start()
     {
@@ -17,6 +18,35 @@ public class BuildingManager : MonoBehaviour
         resourceManager = GetComponent<ResourceManager>();
 
         Building.OnBuildingDestroyed += DestroyBuilding;
+    }
+
+    private void Update()
+    {
+        foreach (var entityList in resourceEntityLists)
+        {
+            foreach (var entity in entityList.Value)
+            {
+                if (!entity.IsActive) continue;
+                resourceManager.AddResourceRates(entity.Data.ProducedResources);
+            }
+        }
+
+        foreach (var entityList in resourceEntityLists)
+        {
+            foreach (var entity in entityList.Value)
+            {
+                if (resourceManager.TryConsumeResourceRates(entity.Data.ConsumedResources))
+                {
+                    if (!entity.IsActive) entity.Activate();
+                }
+                else
+                {
+                    if (entity.IsActive) entity.Deactivate();
+                }
+            }
+        }
+
+        resourceManager.SmoothResources();
     }
 
     public GameObject CreateBuilding(string buildingId, Vector3 position, Quaternion rotation = default)
@@ -38,15 +68,15 @@ public class BuildingManager : MonoBehaviour
         GameObject newBuilding = Instantiate(buildingData.Prefab, position, rotation);
 
         // Get or add building component and initialize with data
-        newBuilding.TryGetComponent(out Building buildingComponent);
-        if (buildingComponent == null)
+        newBuilding.TryGetComponent(out Building buildingScript);
+        if (buildingScript == null)
         {
             Debug.LogError("Building prefab does not have a Building script");
             return null;
         }
 
         // Initialize the building with its data
-        buildingComponent.Initialize(buildingData);
+        buildingScript.Initialize(buildingData);
 
         // Add effects to capacity
         foreach (var effect in buildingData.CapacityEffects)
@@ -55,6 +85,12 @@ public class BuildingManager : MonoBehaviour
         }
 
         instantiatedBuildings.Add(newBuilding);
+
+        if (!resourceEntityLists.ContainsKey(buildingData.ConsumptionPriority))
+        {
+            resourceEntityLists[buildingData.ConsumptionPriority] = new List<Building>();
+        }
+        resourceEntityLists[buildingData.ConsumptionPriority].Add(buildingScript);
 
         //Debug.Log($"Created {buildingData.DisplayName} at {position}");
         return newBuilding;
@@ -72,29 +108,6 @@ public class BuildingManager : MonoBehaviour
             instantiatedBuildings.Remove(building);
             Destroy(building);
         }
-    }
-
-    public void ProcessBuildingResources()
-    {
-        foreach (var buildingObj in instantiatedBuildings)
-        {
-            if (buildingObj.TryGetComponent(out Building building))
-            {
-                var data = building.Data;
-                if (data == null)
-                {
-                    Debug.LogError("No building data found for production processing.");
-                    continue;
-                }
-
-                resourceManager.AddResources(data.ProducedResources);
-                resourceManager.TryConsumeResources(data.ConsumedResources);
-            }
-        }
-
-        resourceManager.SmoothResources();
-
-        return;
     }
 
     private void InitializeBuildingDatabase()

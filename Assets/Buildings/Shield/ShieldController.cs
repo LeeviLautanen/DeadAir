@@ -10,6 +10,7 @@ public class ShieldController : Building
 
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D shieldCollider;
+    private bool shieldIsActive => shieldCollider.enabled;
     private float shieldHealth = 100f;
 
     private void Start()
@@ -27,27 +28,38 @@ public class ShieldController : Building
                 Debug.LogError("Shield collided with an object that doesnt have the meteorite script");
                 return;
             }
-            Damage(meteorite.Damage);
+
+            if (!meteorite.HasCollided)
+            {
+                Damage(meteorite.Damage);
+                meteorite.HasCollided = true;
+            }
         }
     }
 
     private void Update()
     {
-        Repair(RecoverSpeed * Time.deltaTime);
+        if (IsActive) Repair(RecoverSpeed * Time.deltaTime);
 
-        if (shieldHealth > 50f && spriteRenderer.sprite == shieldOffTexture)
+        if (IsActive && !shieldIsActive && shieldHealth > 50f)
         {
-            Activate();
+            ActivateShield();
         }
     }
 
-    public void Activate()
+    public override void Deactivate()
+    {
+        base.Deactivate();
+        DeactivateShield();
+    }
+
+    public void ActivateShield()
     {
         shieldCollider.enabled = true;
         spriteRenderer.sprite = shieldOnTexture;
     }
 
-    public void Deactivate()
+    public void DeactivateShield()
     {
         shieldCollider.enabled = false;
         spriteRenderer.sprite = shieldOffTexture;

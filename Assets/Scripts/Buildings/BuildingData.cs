@@ -9,6 +9,7 @@ public class BuildingData : ScriptableObject
     public string DisplayName;
     public List<ResourceAmount> ConstructionCost;
     public int MaxHealth = 100;
+    public int ConsumptionPriority = 0;
 
     [Header("Visual")]
     public GameObject Prefab;
