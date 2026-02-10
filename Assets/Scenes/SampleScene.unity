@@ -243,6 +243,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteManager
   MeteoritePrefab: {fileID: 442019905741593186, guid: 967ac5278c53b82449aee041a49ea18d, type: 3}
+  SpawnRange: {x: -40, y: 40}
+  SpawnAngleRange: 30
+  spawnAmount: 20
+  spawnInterval: 5
+  spawnDuration: 2
 --- !u!1 &327786864
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,7 +284,7 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
@@ -839,7 +844,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
