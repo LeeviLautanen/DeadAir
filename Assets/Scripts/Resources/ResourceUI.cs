@@ -13,7 +13,12 @@ public class ResourceUI : MonoBehaviour
         resourceTexts["materials"] = GameObject.Find("MaterialsCounter").GetComponent<TMP_Text>();
         resourceTexts["energy"] = GameObject.Find("EnergyCounter").GetComponent<TMP_Text>();
 
-        InvokeRepeating(nameof(UpdateResourceTexts), 0f, 1f);
+        //InvokeRepeating(nameof(UpdateResourceTexts), 0f, 1f);
+    }
+
+    private void Update()
+    {
+        UpdateResourceTexts();
     }
 
     private void UpdateResourceTexts()
@@ -24,11 +29,11 @@ public class ResourceUI : MonoBehaviour
             {
                 float amount = manager.GetResourceAmount(kvp.Key);
                 float maxAmount = manager.GetResourceMax(kvp.Key);
-                kvp.Value.text = Format(kvp.Key, amount, maxAmount);
+                kvp.Value.SetText(Format(kvp.Key, amount, maxAmount));
             }
             else
             {
-                kvp.Value.text = $"{kvp.Key}:";
+                kvp.Value.SetText(kvp.Key + ":");
             }
         }
     }
