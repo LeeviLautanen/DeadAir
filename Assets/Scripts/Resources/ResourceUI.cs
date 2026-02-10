@@ -76,6 +76,7 @@ public class ResourceUI : MonoBehaviour
     private void OnResourceChanged(string id, float amount, float maxAmount)
     {
         if (!resourceTexts.ContainsKey(id)) return;
+        Debug.Log($"Resource '{id}' changed to {amount}");
         resourceTexts[id].text = Format(id, amount, maxAmount);
     }
 

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Mono.Cecil;
 
 public class ResourceManager : MonoBehaviour
 {
@@ -114,22 +113,6 @@ public class ResourceManager : MonoBehaviour
         return false;
     }
 
-    public bool AddResources(List<ResourceAmount> newResources)
-    {
-        if (newResources == null || newResources.Count == 0) return false;
-
-        foreach (ResourceAmount stack in newResources)
-        {
-            if (resourceLookup.TryGetValue(stack.Data.Id, out ResourceAmount entry))
-            {
-                AddToStack(entry, stack.Amount);
-                TriggerResourceChanged(entry.Data.Id, entry.Amount);
-            }
-        }
-
-        return true;
-    }
-
     public bool AddResourceRates(List<ResourceAmount> rates)
     {
         foreach (ResourceAmount rate in rates)
@@ -149,19 +132,6 @@ public class ResourceManager : MonoBehaviour
         }
 
         return true;
-    }
-
-    public bool AddResource(string resourceId, float amount)
-    {
-        if (amount <= 0f) return false;
-
-        if (resourceLookup.TryGetValue(resourceId, out ResourceAmount entry))
-        {
-            AddToStack(entry, amount);
-            TriggerResourceChanged(entry.Data.Id, entry.Amount);
-            return true;
-        }
-        return false;
     }
 
     public float GetResourceAmount(string resourceId)
@@ -274,25 +244,8 @@ public class ResourceManager : MonoBehaviour
         }
     }
 
-    private bool AddToStack(ResourceAmount stack, float amount)
-    {
-        if (amount <= 0f) return false;
-
-        if (stack.Amount + amount > resourceMaxLookup[stack.Data.Id])
-        {
-            stack.Amount = resourceMaxLookup[stack.Data.Id];
-        }
-        else
-        {
-            stack.Amount += amount;
-        }
-
-        return true;
-    }
-
     private void TriggerResourceChanged(string id, float amount)
     {
-        Debug.Log($"Resource '{id}' changed to {amount}");
         OnResourceChanged?.Invoke(id, amount, resourceMaxLookup[id]);
     }
 }
