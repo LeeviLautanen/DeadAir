@@ -101,12 +101,14 @@ public class BuildingManager : MonoBehaviour
         return buildingDatabase.ContainsKey(buildingId) ? buildingDatabase[buildingId] : null;
     }
 
-    public void DestroyBuilding(GameObject building)
+    public void DestroyBuilding(GameObject buildingGO)
     {
-        if (instantiatedBuildings.Contains(building))
+        if (instantiatedBuildings.Contains(buildingGO))
         {
-            instantiatedBuildings.Remove(building);
-            Destroy(building);
+            Building buildingScript = buildingGO.GetComponent<Building>();
+            resourceEntityLists[buildingScript.Data.ConsumptionPriority].Remove(buildingScript);
+            instantiatedBuildings.Remove(buildingGO);
+            Destroy(buildingGO);
         }
     }
 
