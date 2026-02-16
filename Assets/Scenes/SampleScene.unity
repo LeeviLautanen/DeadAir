@@ -245,9 +245,9 @@ MonoBehaviour:
   MeteoritePrefab: {fileID: 442019905741593186, guid: 967ac5278c53b82449aee041a49ea18d, type: 3}
   SpawnRange: {x: -40, y: 40}
   SpawnAngleRange: 30
-  spawnAmount: 20
+  spawnAmount: 50
   spawnInterval: 5
-  spawnDuration: 2
+  spawnDuration: 5
 --- !u!1 &327786864
 GameObject:
   m_ObjectHideFlags: 0

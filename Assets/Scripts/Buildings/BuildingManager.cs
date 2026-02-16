@@ -9,7 +9,8 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<string, BuildingData> buildingDatabase;
     private List<GameObject> instantiatedBuildings;
     private ResourceManager resourceManager;
-    private SortedDictionary<int, List<Building>> resourceEntityLists = new();
+    private List<Building>[] resourceEntityLists = new List<Building>[10];
+    private List<Building>[] reservationBuildingList = new List<Building>[10];
 
     private void Start()
     {
@@ -18,13 +19,15 @@ public class BuildingManager : MonoBehaviour
         resourceManager = GetComponent<ResourceManager>();
 
         Building.OnBuildingDestroyed += DestroyBuilding;
+        Building.OnBuildingActivated += HandleBuildingActivation;
+        Building.OnBuildingDeactivated += HandleBuildingActivation;
     }
 
     private void Update()
     {
         foreach (var entityList in resourceEntityLists)
         {
-            foreach (var entity in entityList.Value)
+            foreach (var entity in entityList)
             {
                 if (!entity.IsActive) continue;
                 resourceManager.AddResourceRates(entity.Data.ProducedResources);
@@ -33,7 +36,7 @@ public class BuildingManager : MonoBehaviour
 
         foreach (var entityList in resourceEntityLists)
         {
-            foreach (var entity in entityList.Value)
+            foreach (var entity in entityList)
             {
                 if (resourceManager.TryConsumeResourceRates(entity.Data.ConsumedResources))
                 {
@@ -77,20 +80,16 @@ public class BuildingManager : MonoBehaviour
 
         // Initialize the building with its data
         buildingScript.Initialize(buildingData);
-
-        // Add effects to capacity
-        foreach (var effect in buildingData.CapacityEffects)
-        {
-            resourceManager.ChangeResourceMax(effect.Data.Id, effect.Amount);
-        }
-
         instantiatedBuildings.Add(newBuilding);
 
-        if (!resourceEntityLists.ContainsKey(buildingData.ConsumptionPriority))
-        {
-            resourceEntityLists[buildingData.ConsumptionPriority] = new List<Building>();
-        }
+        // Add building to the resource entity list based on its consumption priority
         resourceEntityLists[buildingData.ConsumptionPriority].Add(buildingScript);
+
+        // Add building to the reservation list based on its consumption priority
+        reservationBuildingList[buildingData.ConsumptionPriority].Add(buildingScript);
+
+        // Activate the new building
+        buildingScript.Activate();
 
         //Debug.Log($"Created {buildingData.DisplayName} at {position}");
         return newBuilding;
@@ -101,14 +100,47 @@ public class BuildingManager : MonoBehaviour
         return buildingDatabase.ContainsKey(buildingId) ? buildingDatabase[buildingId] : null;
     }
 
-    public void DestroyBuilding(GameObject buildingGO)
+    private void DestroyBuilding(Building building)
     {
-        if (instantiatedBuildings.Contains(buildingGO))
+        if (instantiatedBuildings.Contains(building.gameObject))
         {
-            Building buildingScript = buildingGO.GetComponent<Building>();
-            resourceEntityLists[buildingScript.Data.ConsumptionPriority].Remove(buildingScript);
-            instantiatedBuildings.Remove(buildingGO);
-            Destroy(buildingGO);
+            resourceEntityLists[building.Data.ConsumptionPriority].Remove(building);
+            instantiatedBuildings.Remove(building.gameObject);
+            Destroy(building.gameObject);
+        }
+    }
+
+    private void HandleBuildingActivation(Building building)
+    {
+        // Reserve resources (badly implemented)
+        foreach (var reservation in building.Data.ReservationEffects)
+        {
+            if (!resourceManager.TryReserveResource(reservation))
+            {
+                return;
+            }
+        }
+
+        // Add effects to capacity
+        foreach (var effect in building.Data.CapacityEffects)
+        {
+            resourceManager.ChangeResourceMax(effect.Data.Id, effect.Amount);
+        }
+
+    }
+
+    private void HandleBuildingDeactivation(Building building)
+    {
+        // Remove capacity effects
+        foreach (var effect in building.Data.CapacityEffects)
+        {
+            resourceManager.ChangeResourceMax(effect.Data.Id, -effect.Amount);
+        }
+
+        // Release reserved resources
+        foreach (var reservation in building.Data.ReservationEffects)
+        {
+            resourceManager.ReleaseReservation(reservation);
         }
     }
 

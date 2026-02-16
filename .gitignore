@@ -26,6 +26,9 @@
 # Visual Studio cache directory
 .vs/
 
+# Github copilot instructions
+.github/
+
 # Gradle cache directory
 .gradle/
 

@@ -8,6 +8,7 @@ public class ResourceManager : MonoBehaviour
     [SerializeField] private List<ResourceAmount> startingResources = new();
     private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
     private readonly Dictionary<string, float> resourceMaxLookup = new();
+    private readonly Dictionary<string, float> reservationLookup = new();
 
     private void Awake()
     {
@@ -22,7 +23,7 @@ public class ResourceManager : MonoBehaviour
             ResourceAmount cost = costs[i];
             if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
             {
-                if (entry.Amount < cost.Amount)
+                if (cost.Amount > (entry.Amount + reservationLookup[entry.Data.Id]))
                 {
                     break;
                 }
@@ -66,7 +67,7 @@ public class ResourceManager : MonoBehaviour
             if (resourceLookup.TryGetValue(rate.Data.Id, out ResourceAmount entry))
             {
                 float amount = rate.Amount * Time.deltaTime;
-                if (entry.Amount < amount)
+                if (amount > (entry.Amount + reservationLookup[entry.Data.Id]))
                 {
                     break;
                 }
@@ -102,7 +103,7 @@ public class ResourceManager : MonoBehaviour
 
         if (resourceLookup.TryGetValue(resourceId, out ResourceAmount entry))
         {
-            if (entry.Amount < amount)
+            if (amount > (entry.Amount + reservationLookup[entry.Data.Id]))
             {
                 return false;
             }
@@ -111,6 +112,33 @@ public class ResourceManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public bool TryReserveResource(ResourceAmount reservation)
+    {
+        if (resourceLookup.TryGetValue(reservation.Data.Id, out ResourceAmount entry))
+        {
+            float amount = reservation.Amount;
+            if (amount > (entry.Amount + reservationLookup[entry.Data.Id])
+                || reservationLookup[entry.Data.Id] + amount > resourceMaxLookup[entry.Data.Id])
+            {
+                return false;
+            }
+            reservationLookup[entry.Data.Id] += amount;
+            return true;
+        }
+        return false;
+    }
+
+    public bool ReleaseReservation(ResourceAmount reservation)
+    {
+        float amount = reservation.Amount;
+        if (amount > reservationLookup[reservation.Data.Id])
+        {
+            return false;
+        }
+        reservationLookup[reservation.Data.Id] -= amount;
+        return true;
     }
 
     public bool AddResourceRates(List<ResourceAmount> rates)
@@ -219,27 +247,9 @@ public class ResourceManager : MonoBehaviour
             {
                 resourceLookup[stack.Data.Id] = stack;
                 resourceMaxLookup[stack.Data.Id] = stack.Data.DefaultMaxAmount;
+                reservationLookup[stack.Data.Id] = 0f;
+
                 TriggerResourceChanged(stack.Data.Id, stack.Amount);
-            }
-        }
-
-        Building.OnBuildingDestroyed += HandleBuildingDestroyed;
-    }
-
-    private void HandleBuildingDestroyed(GameObject buildingGO)
-    {
-        if (buildingGO.TryGetComponent(out Building building))
-        {
-            var data = building.Data;
-            if (data == null)
-            {
-                Debug.LogError("No building data found for resource processing.");
-                return;
-            }
-
-            foreach (var effect in data.CapacityEffects)
-            {
-                ChangeResourceMax(effect.Data.Id, -effect.Amount);
             }
         }
     }

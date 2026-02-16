@@ -6,7 +6,9 @@ public class Building : MonoBehaviour
 {
     public BuildingData Data => buildingData;
     public bool IsActive = true;
-    public static event Action<GameObject> OnBuildingDestroyed;
+    public static event Action<Building> OnBuildingDestroyed;
+    public static event Action<Building> OnBuildingActivated;
+    public static event Action<Building> OnBuildingDeactivated;
 
     private BuildingData buildingData;
     private bool isInitialized = false;
@@ -63,16 +65,23 @@ public class Building : MonoBehaviour
 
     public virtual void Activate()
     {
+        if (IsActive) return;
+
         IsActive = true;
+        OnBuildingActivated?.Invoke(this);
     }
 
     public virtual void Deactivate()
     {
+        if (!IsActive) return;
+
         IsActive = false;
+        OnBuildingDeactivated?.Invoke(this);
     }
 
     public virtual void DestroyBuilding()
     {
-        OnBuildingDestroyed?.Invoke(gameObject);
+        Deactivate();
+        OnBuildingDestroyed?.Invoke(this);
     }
 }
