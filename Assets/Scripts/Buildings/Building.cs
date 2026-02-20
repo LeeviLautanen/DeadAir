@@ -69,6 +69,21 @@ public class Building : MonoBehaviour, IResourceUser
         OnBuildingDestroyed?.Invoke(this);
     }
 
+    public void UpdateState()
+    {
+        if (currentState == BuildingState.Inactive
+            || Data.ConsumedResources.Count == 0) return;
+
+        if (resourceManager.TryConsumeResourceRates(Data.ConsumedResources))
+        {
+            if (currentState == BuildingState.OutOfResources) TransitionTo(BuildingState.Operational);
+        }
+        else
+        {
+            if (currentState != BuildingState.OutOfResources) TransitionTo(BuildingState.OutOfResources);
+        }
+    }
+
     protected virtual void EnterState(BuildingState state)
     {
         switch (state)

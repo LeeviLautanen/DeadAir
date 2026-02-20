@@ -68,17 +68,7 @@ public class ResourceManager : MonoBehaviour
 
             foreach (var user in userList)
             {
-                if (user.CurrentState == BuildingState.Inactive
-                    || user.Data.ConsumedResources.Count == 0) continue;
-
-                if (TryConsumeResourceRates(user.Data.ConsumedResources))
-                {
-                    if (user.CurrentState == BuildingState.OutOfResources) user.OnResourcesRecovered();
-                }
-                else
-                {
-                    if (user.CurrentState != BuildingState.OutOfResources) user.OnOutOfResources();
-                }
+                user.UpdateState();
             }
         }
 
