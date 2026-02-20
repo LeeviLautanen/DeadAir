@@ -1,0 +1,22 @@
+digraph G {
+    Initialization -> inactive;
+
+    # States
+    inactive [label= "Inactive"];
+    operating [label= "Operating"];
+    pending_resources [label= "Pending resources"];
+    pending_reservation [label= "Pending reservation"];
+    
+    # Transitions
+    inactive -> pending_reservation [label= "Activated"];
+    
+    pending_reservation -> operating [label= "Reserved"];
+    pending_reservation -> pending_reservation [label= "Not reserved"];
+    
+    pending_resources -> pending_resources[label= "Not consumed"];
+    pending_resources -> operating [label= "Consumed"];
+
+    operating -> operating [label= "Consumed"];
+    operating -> pending_resources [label= "No resources"];
+    operating -> pending_reservation [label= "No reservation"];
+}
