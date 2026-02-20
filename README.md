@@ -1,10 +1,6 @@
 ### Building state machine
 
 ```mermaid
----
-config:
-  layout: elk
----
 stateDiagram
   direction TB
   [*] --> inactive
