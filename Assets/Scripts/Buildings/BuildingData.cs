@@ -10,7 +10,7 @@ public class BuildingData : ScriptableObject
     public List<ResourceAmount> ConstructionCost;
     public int MaxHealth = 100;
     [Range(0, 10)]
-    public int ConsumptionPriority = 0;
+    public int ResourcePriority = 0;
 
     [Header("Visual")]
     public GameObject Prefab;
@@ -25,11 +25,11 @@ public class BuildingData : ScriptableObject
     public List<ResourceAmount> CapacityEffects;
 
     [Header("Resources reserved when active")]
-    public List<ResourceAmount> ReservationEffects;
+    public List<ResourceAmount> RequiredReservations;
 
     // Limit the consumption priority to fit allowed range
     private void OnValidate()
     {
-        ConsumptionPriority = Mathf.Clamp(ConsumptionPriority, 0, 10);
+        ResourcePriority = Mathf.Clamp(ResourcePriority, 0, 10);
     }
 }

@@ -9,11 +9,13 @@ public class InputHandler : MonoBehaviour
 
     private Camera mainCamera;
     private BuildingPlacer buildingPlacer;
+    private BuildingManager buildingManager;
 
     private void Start()
     {
         mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
         buildingPlacer = FindFirstObjectByType<BuildingPlacer>();
+        buildingManager = FindFirstObjectByType<BuildingManager>();
     }
 
     private void Update()
@@ -21,6 +23,7 @@ public class InputHandler : MonoBehaviour
         MouseWorldPosition = MousePosInWorld();
         HandleNumberKeys();
         HandleMouseClicks();
+        HandleSaveControls();
     }
 
     private Vector3 MousePosInWorld()
@@ -65,6 +68,22 @@ public class InputHandler : MonoBehaviour
         else if (Keyboard.current.digit4Key.wasPressedThisFrame)
         {
             buildingPlacer.SelectBuilding("power_plant");
+        }
+    }
+
+    private void HandleSaveControls()
+    {
+        if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.sKey.wasPressedThisFrame)
+        {
+            buildingManager.SaveBuildings();
+        }
+        else if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            buildingManager.LoadBuildings();
+        }
+        else if (Keyboard.current.leftCtrlKey.isPressed && Keyboard.current.cKey.wasPressedThisFrame)
+        {
+            System.IO.File.Delete("./buildings.json");
         }
     }
 }

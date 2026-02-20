@@ -11,7 +11,7 @@ public class ShieldController : Building
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D shieldCollider;
     private bool shieldIsActive => shieldCollider.enabled;
-    private float shieldHealth = 100f;
+    private float shieldHealth = 0f;
 
     private void Start()
     {
@@ -39,18 +39,12 @@ public class ShieldController : Building
 
     private void Update()
     {
-        if (IsActive) Repair(RecoverSpeed * Time.deltaTime);
+        if (CurrentState == BuildingState.Operational) Repair(RecoverSpeed * Time.deltaTime);
 
-        if (IsActive && !shieldIsActive && shieldHealth > 50f)
+        if (CurrentState == BuildingState.Operational && !shieldIsActive && shieldHealth > 50f)
         {
             ActivateShield();
         }
-    }
-
-    public override void Deactivate()
-    {
-        base.Deactivate();
-        DeactivateShield();
     }
 
     public void ActivateShield()
@@ -65,13 +59,35 @@ public class ShieldController : Building
         spriteRenderer.sprite = shieldOffTexture;
     }
 
+    protected override void EnterState(BuildingState state)
+    {
+        base.EnterState(state);
+
+        switch (state)
+        {
+            case BuildingState.PendingReservation:
+                break;
+
+            case BuildingState.Operational:
+                break;
+
+            case BuildingState.OutOfResources:
+                DeactivateShield();
+                break;
+
+            case BuildingState.Inactive:
+                DeactivateShield();
+                break;
+        }
+    }
+
     private void Damage(float damage)
     {
         shieldHealth = Mathf.Max(shieldHealth - damage, 0);
 
         if (shieldHealth <= 0)
         {
-            Deactivate();
+            DeactivateShield();
         }
     }
 

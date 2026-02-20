@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class BuildingPlacer : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class BuildingPlacer : MonoBehaviour
     private string currentBuildingId;
     private BuildingData selectedBuildingData;
     private TMP_Text buildingTypeText;
-    private GameObject buildingGhost;
+    private GameObject ghostGO;
 
     private void Start()
     {
@@ -24,9 +25,10 @@ public class BuildingPlacer : MonoBehaviour
         if (IsPlacing)
         {
             Vector3 mousePos = inputHandler.MouseWorldPosition;
-            if (buildingGhost != null)
+            if (ghostGO != null)
             {
-                buildingGhost.transform.position = new Vector3(Mathf.Round(mousePos.x), 0, -1);
+                Vector3 ghostPos = new(Mathf.Round(mousePos.x), ghostGO.transform.position.y, -1);
+                ghostGO.transform.position = ghostPos;
             }
         }
     }
@@ -44,23 +46,26 @@ public class BuildingPlacer : MonoBehaviour
             return;
         }
 
-        if (IsPlacing || buildingGhost != null) ClearSelected();
+        if (IsPlacing || ghostGO != null) ClearSelected();
 
         IsPlacing = true;
         currentBuildingId = buildingId;
         buildingTypeText.text = selectedBuildingData.DisplayName;
-        buildingGhost = Instantiate(selectedBuildingData.Prefab);
 
-        // Not needed, just to shut up errors
-        buildingGhost.GetComponent<Building>().Initialize(selectedBuildingData);
+        ghostGO = new("BuildingGhost");
+        SpriteRenderer buildingGhost = ghostGO.AddComponent<SpriteRenderer>();
 
+        GameObject buildingPrefab = buildingManager.availableBuildings.Find(b => b.Id == buildingId).Prefab;
+        ghostGO.transform.position = buildingPrefab.GetComponentInChildren<SpriteRenderer>().gameObject.transform.position;
+        buildingGhost.sprite = buildingPrefab.GetComponentInChildren<SpriteRenderer>().sprite;
+        buildingGhost.sortingOrder = 1000;
     }
 
     public void TryPlaceGhost()
     {
         if (buildingManager == null || IsPlacing == false) return;
 
-        Vector3 spawnPos = new(buildingGhost.transform.position.x, 0, -1);
+        Vector3 spawnPos = new(ghostGO.transform.position.x, 0, -1);
         buildingManager.CreateBuilding(currentBuildingId, spawnPos);
         ClearSelected();
     }
@@ -70,9 +75,9 @@ public class BuildingPlacer : MonoBehaviour
         IsPlacing = false;
         currentBuildingId = null;
         buildingTypeText.text = "";
-        if (buildingGhost != null)
+        if (ghostGO != null)
         {
-            Destroy(buildingGhost);
+            Destroy(ghostGO);
         }
     }
 }

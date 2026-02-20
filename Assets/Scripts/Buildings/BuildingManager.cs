@@ -9,8 +9,6 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<string, BuildingData> buildingDatabase;
     private List<GameObject> instantiatedBuildings;
     private ResourceManager resourceManager;
-    private List<Building>[] resourceEntityLists = new List<Building>[10];
-    private List<Building>[] reservationBuildingList = new List<Building>[10];
 
     private void Start()
     {
@@ -19,37 +17,6 @@ public class BuildingManager : MonoBehaviour
         resourceManager = GetComponent<ResourceManager>();
 
         Building.OnBuildingDestroyed += DestroyBuilding;
-        Building.OnBuildingActivated += HandleBuildingActivation;
-        Building.OnBuildingDeactivated += HandleBuildingActivation;
-    }
-
-    private void Update()
-    {
-        foreach (var entityList in resourceEntityLists)
-        {
-            foreach (var entity in entityList)
-            {
-                if (!entity.IsActive) continue;
-                resourceManager.AddResourceRates(entity.Data.ProducedResources);
-            }
-        }
-
-        foreach (var entityList in resourceEntityLists)
-        {
-            foreach (var entity in entityList)
-            {
-                if (resourceManager.TryConsumeResourceRates(entity.Data.ConsumedResources))
-                {
-                    if (!entity.IsActive) entity.Activate();
-                }
-                else
-                {
-                    if (entity.IsActive) entity.Deactivate();
-                }
-            }
-        }
-
-        resourceManager.SmoothResources();
     }
 
     public GameObject CreateBuilding(string buildingId, Vector3 position, Quaternion rotation = default)
@@ -82,12 +49,6 @@ public class BuildingManager : MonoBehaviour
         buildingScript.Initialize(buildingData);
         instantiatedBuildings.Add(newBuilding);
 
-        // Add building to the resource entity list based on its consumption priority
-        resourceEntityLists[buildingData.ConsumptionPriority].Add(buildingScript);
-
-        // Add building to the reservation list based on its consumption priority
-        reservationBuildingList[buildingData.ConsumptionPriority].Add(buildingScript);
-
         // Activate the new building
         buildingScript.Activate();
 
@@ -100,47 +61,55 @@ public class BuildingManager : MonoBehaviour
         return buildingDatabase.ContainsKey(buildingId) ? buildingDatabase[buildingId] : null;
     }
 
+    public void SaveBuildings()
+    {
+        BuildingSaveDataList saveDataList = new();
+        foreach (var buildingObj in instantiatedBuildings)
+        {
+            if (buildingObj.TryGetComponent(out Building buildingScript))
+            {
+                BuildingData data = buildingScript.Data;
+                Vector3 position = buildingObj.transform.position;
+                saveDataList.Buildings.Add(new BuildingSaveData(data.Id, position));
+            }
+        }
+        string json = JsonUtility.ToJson(saveDataList);
+        System.IO.File.WriteAllText("./buildings.json", json);
+    }
+
+    public void LoadBuildings()
+    {
+        string path = "./buildings.json";
+        if (!System.IO.File.Exists(path))
+        {
+            Debug.LogWarning("No save file found for buildings.");
+            return;
+        }
+
+        string json = System.IO.File.ReadAllText(path);
+        BuildingSaveDataList saveDataList = JsonUtility.FromJson<BuildingSaveDataList>(json);
+
+        // Clear existing buildings
+        foreach (var buildingObj in instantiatedBuildings)
+        {
+            buildingObj.TryGetComponent(out Building buildingScript);
+            buildingScript.DestroyBuilding();
+        }
+        instantiatedBuildings.Clear();
+
+        // Instantiate buildings from save data
+        foreach (var saveData in saveDataList.Buildings)
+        {
+            CreateBuilding(saveData.BuildingId, saveData.Position);
+        }
+    }
+
     private void DestroyBuilding(Building building)
     {
         if (instantiatedBuildings.Contains(building.gameObject))
         {
-            resourceEntityLists[building.Data.ConsumptionPriority].Remove(building);
             instantiatedBuildings.Remove(building.gameObject);
             Destroy(building.gameObject);
-        }
-    }
-
-    private void HandleBuildingActivation(Building building)
-    {
-        // Reserve resources (badly implemented)
-        foreach (var reservation in building.Data.ReservationEffects)
-        {
-            if (!resourceManager.TryReserveResource(reservation))
-            {
-                return;
-            }
-        }
-
-        // Add effects to capacity
-        foreach (var effect in building.Data.CapacityEffects)
-        {
-            resourceManager.ChangeResourceMax(effect.Data.Id, effect.Amount);
-        }
-
-    }
-
-    private void HandleBuildingDeactivation(Building building)
-    {
-        // Remove capacity effects
-        foreach (var effect in building.Data.CapacityEffects)
-        {
-            resourceManager.ChangeResourceMax(effect.Data.Id, -effect.Amount);
-        }
-
-        // Release reserved resources
-        foreach (var reservation in building.Data.ReservationEffects)
-        {
-            resourceManager.ReleaseReservation(reservation);
         }
     }
 
@@ -151,5 +120,24 @@ public class BuildingManager : MonoBehaviour
         {
             buildingDatabase[building.Id] = building;
         }
+    }
+}
+
+[System.Serializable]
+public class BuildingSaveDataList
+{
+    public List<BuildingSaveData> Buildings = new();
+}
+
+[System.Serializable]
+public class BuildingSaveData
+{
+    public string BuildingId;
+    public Vector3 Position;
+
+    public BuildingSaveData(string buildingId, Vector3 position)
+    {
+        BuildingId = buildingId;
+        Position = position;
     }
 }
