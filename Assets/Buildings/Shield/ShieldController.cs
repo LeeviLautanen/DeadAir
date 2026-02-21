@@ -11,9 +11,9 @@ public class ShieldController : Building
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D shieldCollider;
     private bool shieldIsActive => shieldCollider.enabled;
-    private float shieldHealth = 0f;
+    private float shieldHealth = 100f;
 
-    private void Start()
+    private void Awake()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         shieldCollider = GetComponent<CircleCollider2D>();
@@ -37,16 +37,6 @@ public class ShieldController : Building
         }
     }
 
-    private void Update()
-    {
-        if (CurrentState == BuildingState.Operational) Repair(RecoverSpeed * Time.deltaTime);
-
-        if (CurrentState == BuildingState.Operational && !shieldIsActive && shieldHealth > 50f)
-        {
-            ActivateShield();
-        }
-    }
-
     public void ActivateShield()
     {
         shieldCollider.enabled = true;
@@ -59,24 +49,44 @@ public class ShieldController : Building
         spriteRenderer.sprite = shieldOffTexture;
     }
 
+    public override void UpdateState()
+    {
+        base.UpdateState();
+        switch (currentState)
+        {
+            case BuildingState.Inactive:
+                // Do nothing until activated
+                break;
+
+            case BuildingState.PendingResources:
+                break;
+
+            case BuildingState.Operational:
+                Repair(RecoverSpeed * Time.deltaTime);
+
+                if (!shieldIsActive && shieldHealth > 50f)
+                {
+                    ActivateShield();
+                }
+                break;
+        }
+    }
+
     protected override void EnterState(BuildingState state)
     {
         base.EnterState(state);
 
         switch (state)
         {
-            case BuildingState.PendingReservation:
+            case BuildingState.Inactive:
+                DeactivateShield();
+                break;
+
+            case BuildingState.PendingResources:
+                DeactivateShield();
                 break;
 
             case BuildingState.Operational:
-                break;
-
-            case BuildingState.OutOfResources:
-                DeactivateShield();
-                break;
-
-            case BuildingState.Inactive:
-                DeactivateShield();
                 break;
         }
     }

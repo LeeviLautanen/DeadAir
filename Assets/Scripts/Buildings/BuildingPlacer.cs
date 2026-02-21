@@ -56,7 +56,9 @@ public class BuildingPlacer : MonoBehaviour
         SpriteRenderer buildingGhost = ghostGO.AddComponent<SpriteRenderer>();
 
         GameObject buildingPrefab = buildingManager.availableBuildings.Find(b => b.Id == buildingId).Prefab;
-        ghostGO.transform.position = buildingPrefab.GetComponentInChildren<SpriteRenderer>().gameObject.transform.position;
+        GameObject spriteGO = buildingPrefab.GetComponentInChildren<SpriteRenderer>().gameObject;
+        ghostGO.transform.localScale = spriteGO.transform.localScale;
+        ghostGO.transform.position = spriteGO.transform.position;
         buildingGhost.sprite = buildingPrefab.GetComponentInChildren<SpriteRenderer>().sprite;
         buildingGhost.sortingOrder = 1000;
     }

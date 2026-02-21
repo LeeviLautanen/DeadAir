@@ -1,26 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Linq;
 
 public class ResourceManager : MonoBehaviour
 {
     public event Action<string, float, float, float> OnResourceChanged;
 
-    private static readonly Logger log = new();
-    private static System.Random rng = new();
+    private static readonly Logger log = new(false);
+    private static readonly System.Random rng = new();
     [SerializeField] private List<ResourceAmount> startingResources = new();
     private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
     private readonly Dictionary<string, float> resourceMaxLookup = new();
     private readonly Dictionary<string, float> reservationLookup = new();
     private readonly List<Building>[] resourceUserLists = new List<Building>[10];
-    private readonly List<Building>[] resourceReserverLists = new List<Building>[10];
     private readonly List<Building> unregisterBuffer = new();
     private readonly List<Building> registerBuffer = new();
 
     private void Awake()
     {
         InitializeResources();
+        Building.OnBuildingCreated += building =>
+        {
+            log.Log($"Building created: {building.Data.DisplayName}");
+            RegisterResourceUser(building);
+        };
     }
 
     private void Update()
@@ -44,18 +47,6 @@ public class ResourceManager : MonoBehaviour
         }
         unregisterBuffer.Clear();
 
-        // Add resources
-        foreach (var userList in resourceUserLists)
-        {
-            foreach (var user in userList)
-            {
-                if (user.CurrentState != BuildingState.Operational
-                    || user.Data.ProducedResources.Count == 0) continue;
-
-                AddResourceRates(user.Data.ProducedResources);
-            }
-        }
-
         // Consume resources
         foreach (var userList in resourceUserLists)
         {
@@ -69,6 +60,18 @@ public class ResourceManager : MonoBehaviour
             foreach (var user in userList)
             {
                 user.UpdateState();
+            }
+        }
+
+        // Add resources
+        foreach (var userList in resourceUserLists)
+        {
+            foreach (var user in userList)
+            {
+                if (user.CurrentState != BuildingState.Operational
+                    || user.Data.ProducedResources.Count == 0) continue;
+
+                AddResources(user.Data.ProducedResources, true);
             }
         }
 
@@ -87,97 +90,12 @@ public class ResourceManager : MonoBehaviour
         unregisterBuffer.Add(building);
     }
 
-    public bool TryConsumeResources(List<ResourceAmount> costs)
-    {
-        int costsProcessed = 0;
-        for (int i = 0; i < costs.Count; i++)
-        {
-            ResourceAmount cost = costs[i];
-            if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
-            {
-                if (cost.Amount > (entry.Amount + reservationLookup[entry.Data.Id]))
-                {
-                    break;
-                }
-                entry.Amount -= cost.Amount;
-                costsProcessed++;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        if (costsProcessed != costs.Count)
-        {
-            // rollback
-            for (int i = 0; i < costsProcessed; i++)
-            {
-                ResourceAmount cost = costs[i];
-                if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
-                {
-                    entry.Amount += cost.Amount;
-                }
-            }
-            return false;
-        }
-
-        return true;
-    }
-
-    public bool TryConsumeResourceRates(List<ResourceAmount> rates)
-    {
-        int costsProcessed = 0;
-        for (int i = 0; i < rates.Count; i++)
-        {
-            ResourceAmount rate = rates[i];
-            resourceLookup.TryGetValue(rate.Data.Id, out ResourceAmount entry);
-            float amount = rate.Amount * Time.deltaTime;
-            if (amount > (entry.Amount + reservationLookup[entry.Data.Id]))
-            {
-                break;
-            }
-            //log.Log($"Successfully consumed {amount} of {rate.Data.DisplayName} (current: {entry.Amount}, reserved: {reservationLookup[entry.Data.Id]})");
-            entry.Amount -= amount;
-            costsProcessed++;
-        }
-
-        if (costsProcessed != rates.Count)
-        {
-            // rollback
-            for (int i = 0; i < costsProcessed; i++)
-            {
-                ResourceAmount rate = rates[i];
-                if (resourceLookup.TryGetValue(rate.Data.Id, out ResourceAmount entry))
-                {
-                    entry.Amount += rate.Amount * Time.deltaTime;
-                }
-            }
-            return false;
-        }
-
-        return true;
-    }
-
-    public bool TryConsumeResource(string resourceId, float amount)
-    {
-        if (amount <= 0f) return false;
-
-        resourceLookup.TryGetValue(resourceId, out ResourceAmount entry);
-        if (amount > (entry.Amount + reservationLookup[entry.Data.Id]))
-        {
-            return false;
-        }
-        entry.Amount -= amount;
-        return true;
-    }
-
     public bool TryReserveResource(ResourceAmount reservation)
     {
         resourceLookup.TryGetValue(reservation.Data.Id, out ResourceAmount entry);
         float amount = reservation.Amount;
-        if (amount > (entry.Amount + reservationLookup[entry.Data.Id])
-            || reservationLookup[entry.Data.Id] + amount > resourceMaxLookup[entry.Data.Id])
+        if (entry.Amount < (amount + reservationLookup[entry.Data.Id]) ||
+            resourceMaxLookup[entry.Data.Id] < (amount + reservationLookup[entry.Data.Id]))
         {
             return false;
         }
@@ -236,13 +154,52 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool AddResourceRates(List<ResourceAmount> rates)
+    public bool TryConsumeResources(List<ResourceAmount> costs, bool isRate = false)
     {
-        foreach (ResourceAmount rate in rates)
+        int costsProcessed = 0;
+        for (int i = 0; i < costs.Count; i++)
         {
-            if (resourceLookup.TryGetValue(rate.Data.Id, out ResourceAmount entry))
+            ResourceAmount cost = costs[i];
+            if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
             {
-                float amount = rate.Amount * Time.deltaTime;
+                float amount = cost.Amount * (isRate ? GetDeltaTime() : 1f);
+                if (amount > (entry.Amount + reservationLookup[entry.Data.Id]))
+                {
+                    break;
+                }
+                entry.Amount -= amount;
+                costsProcessed++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if (costsProcessed != costs.Count)
+        {
+            // rollback
+            for (int i = 0; i < costsProcessed; i++)
+            {
+                ResourceAmount cost = costs[i];
+                if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
+                {
+                    entry.Amount += cost.Amount * (isRate ? GetDeltaTime() : 1f);
+                }
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    public bool AddResources(List<ResourceAmount> amounts, bool isRate = false)
+    {
+        foreach (ResourceAmount resource in amounts)
+        {
+            if (resourceLookup.TryGetValue(resource.Data.Id, out ResourceAmount entry))
+            {
+                float amount = resource.Amount * (isRate ? GetDeltaTime() : 1f);
                 if (entry.Amount + amount > resourceMaxLookup[entry.Data.Id])
                 {
                     entry.Amount = resourceMaxLookup[entry.Data.Id];
@@ -251,6 +208,27 @@ public class ResourceManager : MonoBehaviour
                 {
                     entry.Amount += amount;
                 }
+            }
+        }
+
+        return true;
+    }
+
+    public bool HasEnoughResources(List<ResourceAmount> costs, bool isRate = false)
+    {
+        foreach (ResourceAmount cost in costs)
+        {
+            if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
+            {
+                float amount = cost.Amount * (isRate ? GetDeltaTime() : 1f);
+                if (amount > (entry.Amount + reservationLookup[entry.Data.Id]))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -311,6 +289,22 @@ public class ResourceManager : MonoBehaviour
     {
         resourceMaxLookup.ContainsKey(resourceId);
         resourceMaxLookup[resourceId] = Mathf.Max(0f, resourceMaxLookup[resourceId] + delta);
+
+        if (resourceMaxLookup[resourceId] >= reservationLookup[resourceId]) return;
+
+        for (int i = resourceUserLists.Length - 1; i >= 0; i--)
+        {
+            foreach (Building building in resourceUserLists[i])
+            {
+                if (building.CurrentState == BuildingState.Operational
+                    && building.Data.RequiredReservations.Exists(r => r.Data.Id == resourceId))
+                {
+                    ReleaseReservations(building.Data.RequiredReservations);
+                    building.TransitionTo(BuildingState.PendingResources);
+                    if (resourceMaxLookup[resourceId] >= reservationLookup[resourceId]) return;
+                }
+            }
+        }
     }
 
     private void SmoothResources()
@@ -323,22 +317,24 @@ public class ResourceManager : MonoBehaviour
             List<ResourceAmount> rates = new() { newAmount };
             if (humans.Amount < maxHumans)
             {
-                AddResourceRates(rates);
+                AddResources(rates, true);
             }
             else if (humans.Amount > maxHumans)
             {
-                TryConsumeResourceRates(rates);
+                TryConsumeResources(rates, true);
             }
         }
+    }
+
+    private float GetDeltaTime()
+    {
+        return Time.deltaTime;
     }
 
     private void InitializeResources()
     {
         for (int i = 0; i < resourceUserLists.Length; i++)
             resourceUserLists[i] = new List<Building>();
-
-        for (int i = 0; i < resourceReserverLists.Length; i++)
-            resourceReserverLists[i] = new List<Building>();
 
         foreach (ResourceAmount stack in startingResources)
         {
