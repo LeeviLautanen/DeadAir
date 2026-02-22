@@ -14,6 +14,7 @@ public class Building : MonoBehaviour
     protected BuildingData buildingData;
     [SerializeField] protected BuildingState currentState = BuildingState.Inactive;
     protected float currentHealth;
+    protected float startupTimer;
 
     internal void Initialize(BuildingData data)
     {
@@ -71,7 +72,7 @@ public class Building : MonoBehaviour
         TransitionTo(BuildingState.Destroyed);
     }
 
-    public virtual void UpdateState()
+    public virtual void UpdateState(float deltaTime)
     {
         switch (currentState)
         {
@@ -79,16 +80,25 @@ public class Building : MonoBehaviour
                 // Do nothing until activated
                 break;
 
-            case BuildingState.PendingResources:
-                if (resourceManager.HasEnoughResources(Data.ConsumedResources, true) &&
-                    resourceManager.TryReserveResources(Data.RequiredReservations))
+            case BuildingState.Startup:
+                startupTimer -= deltaTime;
+                if (startupTimer <= 0)
                 {
                     TransitionTo(BuildingState.Operational);
                 }
                 break;
 
+            case BuildingState.PendingResources:
+                if (resourceManager.HasEnoughResources(Data.ConsumedResources, true) &&
+                    resourceManager.TryReserveResources(Data.RequiredReservations, this))
+                {
+                    TransitionTo(BuildingState.Startup);
+                }
+                break;
+
             case BuildingState.Operational:
-                if (!resourceManager.TryConsumeResources(Data.ConsumedResources, true))
+                if (!resourceManager.HasReservation(this) ||
+                    !resourceManager.TryConsumeResources(Data.ConsumedResources, true))
                 {
                     TransitionTo(BuildingState.PendingResources);
                 }
@@ -102,9 +112,14 @@ public class Building : MonoBehaviour
         {
             case BuildingState.Inactive:
                 log.Log($"Building {buildingData.DisplayName} is now inactive.");
-                resourceManager.ReleaseReservations(Data.RequiredReservations);
+                resourceManager.ReleaseReservations(Data.RequiredReservations, this);
                 resourceManager.UnregisterResourceUser(this);
                 resourceManager.RemoveCapacityEffects(Data.CapacityEffects);
+                break;
+
+            case BuildingState.Startup:
+                log.Log($"Building {buildingData.DisplayName} is starting up.");
+                startupTimer = buildingData.StartupTime;
                 break;
 
             case BuildingState.PendingResources:
@@ -119,7 +134,7 @@ public class Building : MonoBehaviour
 
             case BuildingState.Destroyed:
                 log.Log($"Building {buildingData.DisplayName} destroyed.");
-                resourceManager.ReleaseReservations(Data.RequiredReservations);
+                resourceManager.ReleaseReservations(Data.RequiredReservations, this);
                 resourceManager.UnregisterResourceUser(this);
                 resourceManager.RemoveCapacityEffects(Data.CapacityEffects);
                 OnBuildingDestroyed?.Invoke(this);

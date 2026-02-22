@@ -11,6 +11,7 @@ public class BuildingData : ScriptableObject
     public int MaxHealth = 100;
     [Range(0, 10)]
     public int ResourcePriority = 0;
+    public float StartupTime = 1f;
 
     [Header("Visual")]
     public GameObject Prefab;

@@ -13,6 +13,7 @@ public class ResourceManager : MonoBehaviour
     private readonly Dictionary<string, float> resourceMaxLookup = new();
     private readonly Dictionary<string, float> reservationLookup = new();
     private readonly List<Building>[] resourceUserLists = new List<Building>[10];
+    private readonly Dictionary<Building, bool> reservationDict = new();
     private readonly List<Building> unregisterBuffer = new();
     private readonly List<Building> registerBuffer = new();
 
@@ -59,7 +60,7 @@ public class ResourceManager : MonoBehaviour
 
             foreach (var user in userList)
             {
-                user.UpdateState();
+                user.UpdateState(GetDeltaTime());
             }
         }
 
@@ -104,7 +105,7 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool TryReserveResources(List<ResourceAmount> reservations)
+    public bool TryReserveResources(List<ResourceAmount> reservations, Building reserver)
     {
         int processed = 0;
         for (int i = 0; i < reservations.Count; i++)
@@ -127,6 +128,8 @@ public class ResourceManager : MonoBehaviour
             return false;
         }
 
+        reservationDict[reserver] = true;
+
         return true;
     }
 
@@ -142,16 +145,25 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool ReleaseReservations(List<ResourceAmount> reservations)
+    public bool ReleaseReservations(List<ResourceAmount> reservations, Building reserver)
     {
         foreach (ResourceAmount reservation in reservations)
         {
             if (!ReleaseReservation(reservation))
             {
+                log.Error($"Failed to release reservation of {reservation.Amount} of {reservation.Data.DisplayName} for building {reserver.Data.DisplayName}");
                 return false;
             }
         }
+
+        reservationDict[reserver] = false;
+
         return true;
+    }
+
+    public bool HasReservation(Building building)
+    {
+        return reservationDict.TryGetValue(building, out bool has) && has;
     }
 
     public bool TryConsumeResources(List<ResourceAmount> costs, bool isRate = false)
@@ -299,7 +311,7 @@ public class ResourceManager : MonoBehaviour
                 if (building.CurrentState == BuildingState.Operational
                     && building.Data.RequiredReservations.Exists(r => r.Data.Id == resourceId))
                 {
-                    ReleaseReservations(building.Data.RequiredReservations);
+                    ReleaseReservations(building.Data.RequiredReservations, building);
                     building.TransitionTo(BuildingState.PendingResources);
                     if (resourceMaxLookup[resourceId] >= reservationLookup[resourceId]) return;
                 }

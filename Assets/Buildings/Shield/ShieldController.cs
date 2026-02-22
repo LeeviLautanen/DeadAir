@@ -49,9 +49,9 @@ public class ShieldController : Building
         spriteRenderer.sprite = shieldOffTexture;
     }
 
-    public override void UpdateState()
+    public override void UpdateState(float deltaTime)
     {
-        base.UpdateState();
+        base.UpdateState(deltaTime);
         switch (currentState)
         {
             case BuildingState.Inactive:
@@ -64,7 +64,7 @@ public class ShieldController : Building
             case BuildingState.Operational:
                 Repair(RecoverSpeed * Time.deltaTime);
 
-                if (!shieldIsActive && shieldHealth > 50f)
+                if (!shieldIsActive)
                 {
                     ActivateShield();
                 }
