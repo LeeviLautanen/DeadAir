@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(CircleCollider2D))]
 public class ShieldController : Building
 {
     public Sprite shieldOnTexture;
@@ -16,24 +15,34 @@ public class ShieldController : Building
     private void Awake()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        shieldCollider = GetComponent<CircleCollider2D>();
+        foreach (var collider in GetComponentsInChildren<BuildingCollider>())
+        {
+            if (collider.Type == BuildingColliderType.Shield)
+            {
+                collider.gameObject.TryGetComponent(out shieldCollider);
+                break;
+            }
+        }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public override void ColliderEnter(BuildingColliderType colliderType, Collider2D other)
     {
-        if (other.gameObject.TryGetComponent(out Meteorite meteorite))
+        base.ColliderEnter(colliderType, other);
+        switch (colliderType)
         {
-            if (meteorite == null)
-            {
-                Debug.LogError("Shield collided with an object that doesnt have the meteorite script");
-                return;
-            }
-
-            if (!meteorite.HasCollided)
-            {
-                Damage(meteorite.Damage);
-                meteorite.HasCollided = true;
-            }
+            case BuildingColliderType.Shield:
+                if (other.gameObject.TryGetComponent(out Meteorite meteorite))
+                {
+                    if (meteorite == null)
+                    {
+                        Debug.LogError("Shield collided with an object that doesnt have the meteorite script");
+                        return;
+                    }
+                    if (meteorite.HasCollided) return; // Prevent multiple collisions from the same meteorite
+                    meteorite.HasCollided = true;
+                    DamageShield(meteorite.Damage);
+                }
+                break;
         }
     }
 
@@ -62,7 +71,7 @@ public class ShieldController : Building
                 break;
 
             case BuildingState.Operational:
-                Repair(RecoverSpeed * Time.deltaTime);
+                RepairShield(RecoverSpeed * Time.deltaTime);
 
                 if (!shieldIsActive)
                 {
@@ -91,7 +100,7 @@ public class ShieldController : Building
         }
     }
 
-    private void Damage(float damage)
+    private void DamageShield(float damage)
     {
         shieldHealth = Mathf.Max(shieldHealth - damage, 0);
 
@@ -101,7 +110,7 @@ public class ShieldController : Building
         }
     }
 
-    private void Repair(float amount)
+    private void RepairShield(float amount)
     {
         shieldHealth = Mathf.Min(shieldHealth + amount, 100f);
     }

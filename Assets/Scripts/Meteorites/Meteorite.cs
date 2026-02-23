@@ -12,7 +12,7 @@ public class Meteorite : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!collision.CompareTag("Meteorite")) Destroy(gameObject);
+        if (!collision.CompareTag("Meteorite") && collision.gameObject.layer == LayerMask.NameToLayer("Damage")) Destroy(gameObject);
     }
 
     private void FixedUpdate()

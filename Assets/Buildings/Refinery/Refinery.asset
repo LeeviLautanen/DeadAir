@@ -14,12 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: refinery
   DisplayName: Refinery
+  Footprint: {x: 8, y: 1}
   ConstructionCost:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     Amount: 50
   MaxHealth: 100
+  ResourcePriority: 0
+  StartupTime: 1
   Prefab: {fileID: 2672589904300108679, guid: b4aa49893e8a2244480071f2aefa34ac, type: 3}
   ProducedResources:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     Amount: 10
   ConsumedResources: []
+  CapacityEffects: []
+  RequiredReservations: []

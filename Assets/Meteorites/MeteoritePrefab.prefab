@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6812303874240783486}
   - component: {fileID: 1871145975364710864}
   - component: {fileID: 7642928285625040828}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MeteoritePrefab
   m_TagString: Meteorite
   m_Icon: {fileID: 0}

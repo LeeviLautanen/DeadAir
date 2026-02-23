@@ -47,7 +47,6 @@ public class ResourceUI : MonoBehaviour
             Debug.LogWarning("Resource UI manager was null on enable");
             return;
         }
-        manager.OnResourceChanged += OnResourceChanged;
 
         foreach (var kvp in resourceTexts)
         {
@@ -71,7 +70,6 @@ public class ResourceUI : MonoBehaviour
             Debug.LogWarning("Resource UI manager was null on disable");
             return;
         }
-        manager.OnResourceChanged -= OnResourceChanged;
     }
 
     private void OnResourceChanged(string id, float amount, float maxAmount, float reservedAmount)

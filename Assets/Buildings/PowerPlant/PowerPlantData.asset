@@ -14,11 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: power_plant
   DisplayName: Power plant
+  Footprint: {x: 9, y: 1}
   ConstructionCost:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     Amount: 50
   MaxHealth: 100
   ResourcePriority: 0
+  StartupTime: 1
   Prefab: {fileID: 2672589904300108679, guid: fdecaa516d1c5034c937ec48c7e162a9, type: 3}
   ProducedResources:
   - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}

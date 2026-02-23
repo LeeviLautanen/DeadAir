@@ -6,49 +6,66 @@ public class Building : MonoBehaviour
     public BuildingData Data => buildingData;
     public int Priority => buildingData.ResourcePriority;
     public BuildingState CurrentState => currentState;
-    public static event Action<Building> OnBuildingDestroyed;
-    public static event Action<Building> OnBuildingCreated;
+    public bool ValidBuildPlacement => placementOverlapCount == 0;
 
-    protected static readonly Logger log = new();
+    protected static readonly Logger log = new(true, LogLevel.Info);
     protected ResourceManager resourceManager;
+    protected BuildingManager buildingManager;
     protected BuildingData buildingData;
     [SerializeField] protected BuildingState currentState = BuildingState.Inactive;
     protected float currentHealth;
     protected float startupTimer;
+    private float placementOverlapCount = 0;
 
     internal void Initialize(BuildingData data)
     {
         resourceManager = FindFirstObjectByType<ResourceManager>();
+        buildingManager = FindFirstObjectByType<BuildingManager>();
         buildingData = data;
         currentHealth = buildingData.MaxHealth;
     }
 
-    private void Start()
+    public virtual void ColliderEnter(BuildingColliderType colliderType, Collider2D other)
     {
-        if (buildingData == null)
+        switch (colliderType)
         {
-            log.Error("Building initialized without data!");
-            return;
+            case BuildingColliderType.Damage:
+                if (other.gameObject.TryGetComponent(out Meteorite meteorite))
+                {
+                    if (meteorite == null)
+                    {
+                        Debug.LogError("Shield collided with an object that doesnt have the meteorite script");
+                        return;
+                    }
+                    if (meteorite.HasCollided) return; // Prevent multiple collisions from the same meteorite
+                    meteorite.HasCollided = true;
+                    Damage(meteorite.Damage);
+                }
+                break;
+
+            case BuildingColliderType.Placement:
+                if (other.gameObject.layer != LayerMask.NameToLayer("Placement")) break;
+                placementOverlapCount++;
+                log.Info(placementOverlapCount);
+                break;
         }
-        Activate();
-        OnBuildingCreated?.Invoke(this);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    public virtual void ColliderExit(BuildingColliderType colliderType, Collider2D other)
     {
-        if (other.gameObject.TryGetComponent(out Meteorite meteorite))
+        switch (colliderType)
         {
-            if (meteorite == null)
-            {
-                Debug.LogError("Shield collided with an object that doesnt have the meteorite script");
-                return;
-            }
-            Damage(meteorite.Damage);
+            case BuildingColliderType.Placement:
+                if (other.gameObject.layer != LayerMask.NameToLayer("Placement")) break;
+                placementOverlapCount = Mathf.Max(placementOverlapCount - 1, 0);
+                log.Info(placementOverlapCount);
+                break;
         }
     }
 
     public void Activate()
     {
+        resourceManager.RegisterResourceUser(this);
         if (currentState == BuildingState.Inactive)
             TransitionTo(BuildingState.PendingResources);
     }
@@ -111,34 +128,33 @@ public class Building : MonoBehaviour
         switch (state)
         {
             case BuildingState.Inactive:
-                log.Log($"Building {buildingData.DisplayName} is now inactive.");
+                log.Info($"Building {buildingData.DisplayName} is now inactive.");
                 resourceManager.ReleaseReservations(Data.RequiredReservations, this);
-                resourceManager.UnregisterResourceUser(this);
                 resourceManager.RemoveCapacityEffects(Data.CapacityEffects);
+                resourceManager.UnregisterResourceUser(this);
                 break;
 
             case BuildingState.Startup:
-                log.Log($"Building {buildingData.DisplayName} is starting up.");
+                log.Info($"Building {buildingData.DisplayName} is starting up.");
                 startupTimer = buildingData.StartupTime;
                 break;
 
             case BuildingState.PendingResources:
-                log.Log($"Building {buildingData.DisplayName} is pending reservation.");
+                log.Info($"Building {buildingData.DisplayName} is pending reservation.");
                 break;
 
             case BuildingState.Operational:
-                log.Log($"Building {buildingData.DisplayName} is now operational.");
+                log.Info($"Building {buildingData.DisplayName} is now operational.");
                 resourceManager.RegisterResourceUser(this);
                 resourceManager.ApplyCapacityEffects(Data.CapacityEffects);
                 break;
 
             case BuildingState.Destroyed:
-                log.Log($"Building {buildingData.DisplayName} destroyed.");
+                log.Info($"Building {buildingData.DisplayName} destroyed.");
                 resourceManager.ReleaseReservations(Data.RequiredReservations, this);
                 resourceManager.UnregisterResourceUser(this);
                 resourceManager.RemoveCapacityEffects(Data.CapacityEffects);
-                OnBuildingDestroyed?.Invoke(this);
-                Destroy(gameObject);
+                buildingManager.DestroyBuilding(this);
                 break;
         }
     }

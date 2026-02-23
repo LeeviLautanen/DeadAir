@@ -14,13 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: shield
   DisplayName: Shield
+  Footprint: {x: 2, y: 1}
   ConstructionCost:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     Amount: 30
   MaxHealth: 100
+  ResourcePriority: 0
+  StartupTime: 1
   Prefab: {fileID: 7875127117606328118, guid: 75a9f06e5b96def42bb7290add7fadfe, type: 3}
   ProducedResources: []
   ConsumedResources:
   - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
     Amount: 10
   CapacityEffects: []
+  RequiredReservations: []

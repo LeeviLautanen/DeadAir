@@ -4,8 +4,6 @@ using System;
 
 public class ResourceManager : MonoBehaviour
 {
-    public event Action<string, float, float, float> OnResourceChanged;
-
     private static readonly Logger log = new(false);
     private static readonly System.Random rng = new();
     [SerializeField] private List<ResourceAmount> startingResources = new();
@@ -20,11 +18,6 @@ public class ResourceManager : MonoBehaviour
     private void Awake()
     {
         InitializeResources();
-        Building.OnBuildingCreated += building =>
-        {
-            log.Log($"Building created: {building.Data.DisplayName}");
-            RegisterResourceUser(building);
-        };
     }
 
     private void Update()
@@ -33,7 +26,7 @@ public class ResourceManager : MonoBehaviour
         foreach (Building building in registerBuffer)
         {
             var list = resourceUserLists[building.Data.ResourcePriority];
-            log.Log($"Registering building {building.Data.DisplayName} to resource manager ({resourceUserLists[building.Data.ResourcePriority].Count}).");
+            log.Info($"Registering building {building.Data.DisplayName} to resource manager ({resourceUserLists[building.Data.ResourcePriority].Count}).");
             if (!list.Contains(building))
                 list.Add(building);
         }
@@ -101,7 +94,7 @@ public class ResourceManager : MonoBehaviour
             return false;
         }
         reservationLookup[entry.Data.Id] += amount;
-        log.Log($"Reserved {amount} of {reservation.Data.DisplayName} (current: {entry.Amount}, reserved: {reservationLookup[entry.Data.Id]}, max: {resourceMaxLookup[entry.Data.Id]})");
+        log.Info($"Reserved {amount} of {reservation.Data.DisplayName} (current: {entry.Amount}, reserved: {reservationLookup[entry.Data.Id]}, max: {resourceMaxLookup[entry.Data.Id]})");
         return true;
     }
 
@@ -140,7 +133,7 @@ public class ResourceManager : MonoBehaviour
         {
             return false;
         }
-        log.Log($"Released reservation of {amount} of {reservation.Data.DisplayName} (reserved: {reservationLookup[reservation.Data.Id]}, max: {resourceMaxLookup[reservation.Data.Id]})");
+        log.Info($"Released reservation of {amount} of {reservation.Data.DisplayName} (reserved: {reservationLookup[reservation.Data.Id]}, max: {resourceMaxLookup[reservation.Data.Id]})");
         reservationLookup[reservation.Data.Id] = Mathf.Max(0f, reservationLookup[reservation.Data.Id] - amount);
         return true;
     }

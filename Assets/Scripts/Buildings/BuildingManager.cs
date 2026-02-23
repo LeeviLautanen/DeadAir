@@ -6,6 +6,7 @@ public class BuildingManager : MonoBehaviour
     [Header("Available Buildings")]
     public List<BuildingData> availableBuildings;
 
+    private static readonly Logger log = new(true, LogLevel.Info);
     private Dictionary<string, BuildingData> buildingDatabase;
     private List<GameObject> instantiatedBuildings;
     private ResourceManager resourceManager;
@@ -15,23 +16,26 @@ public class BuildingManager : MonoBehaviour
         InitializeBuildingDatabase();
         instantiatedBuildings = new List<GameObject>();
         resourceManager = GetComponent<ResourceManager>();
-
-        Building.OnBuildingDestroyed += DestroyBuilding;
     }
 
     public GameObject CreateBuilding(string buildingId, Vector3 position, Quaternion rotation = default)
     {
         if (!buildingDatabase.ContainsKey(buildingId))
         {
-            Debug.LogError($"Building with ID '{buildingId}' not found!");
+            log.Error($"Building with ID '{buildingId}' not found!");
             return null;
         }
 
         var buildingData = buildingDatabase[buildingId];
+        if (buildingData == null)
+        {
+            log.Error($"Building data for ID '{buildingId}' is null!");
+            return null;
+        }
 
         if (!resourceManager.TryConsumeResources(buildingData.ConstructionCost))
         {
-            Debug.LogWarning("Not enough resources to build " + buildingData.DisplayName);
+            log.Warning("Not enough resources to build " + buildingData.DisplayName);
             return null;
         }
 
@@ -41,7 +45,7 @@ public class BuildingManager : MonoBehaviour
         newBuilding.TryGetComponent(out Building buildingScript);
         if (buildingScript == null)
         {
-            Debug.LogError("Building prefab does not have a Building script");
+            log.Error("Building prefab does not have the building script");
             return null;
         }
 
@@ -49,10 +53,9 @@ public class BuildingManager : MonoBehaviour
         buildingScript.Initialize(buildingData);
         instantiatedBuildings.Add(newBuilding);
 
-        // Activate the new building
         buildingScript.Activate();
 
-        //Debug.Log($"Created {buildingData.DisplayName} at {position}");
+        //log.Info($"Created {buildingData.DisplayName} at {position}");
         return newBuilding;
     }
 
@@ -82,7 +85,7 @@ public class BuildingManager : MonoBehaviour
         string path = "./buildings.json";
         if (!System.IO.File.Exists(path))
         {
-            Debug.LogWarning("No save file found for buildings.");
+            log.Warning("No save file found for buildings.");
             return;
         }
 
@@ -104,7 +107,7 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    private void DestroyBuilding(Building building)
+    public void DestroyBuilding(Building building)
     {
         if (instantiatedBuildings.Contains(building.gameObject))
         {
