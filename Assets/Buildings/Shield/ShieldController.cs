@@ -23,6 +23,10 @@ public class ShieldController : Building
                 break;
             }
         }
+        if (shieldCollider == null)
+        {
+            Debug.LogError("No shield collider found on shield building");
+        }
     }
 
     public override void ColliderEnter(BuildingColliderType colliderType, Collider2D other)
@@ -48,12 +52,14 @@ public class ShieldController : Building
 
     public void ActivateShield()
     {
+        if (shieldIsActive || shieldCollider == null) return;
         shieldCollider.enabled = true;
         spriteRenderer.sprite = shieldOnTexture;
     }
 
     public void DeactivateShield()
     {
+        if (!shieldIsActive || shieldCollider == null) return;
         shieldCollider.enabled = false;
         spriteRenderer.sprite = shieldOffTexture;
     }
