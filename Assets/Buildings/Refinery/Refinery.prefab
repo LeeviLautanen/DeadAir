@@ -49,7 +49,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 183
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436a0506538da9e4a8545d129d60c505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingCollider
-  type: 1
+  Type: 1
 --- !u!1 &2509416652404243086
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,7 +314,7 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 0
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -362,4 +362,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436a0506538da9e4a8545d129d60c505, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingCollider
-  type: 0
+  Type: 0
