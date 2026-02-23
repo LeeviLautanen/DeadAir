@@ -345,7 +345,7 @@ MonoBehaviour:
   currentState: 0
   shieldOnTexture: {fileID: 21300000, guid: 9a95ce900984ea54595f6ae262043b53, type: 3}
   shieldOffTexture: {fileID: 21300000, guid: 92778e669cdeeae40970e18217b96b8a, type: 3}
-  RecoverSpeed: 0.5
+  RecoverSpeed: 15
 --- !u!1 &8406395892397589977
 GameObject:
   m_ObjectHideFlags: 0
