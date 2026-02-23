@@ -5,7 +5,7 @@ public class ShieldController : Building
 {
     public Sprite shieldOnTexture;
     public Sprite shieldOffTexture;
-    public float RecoverSpeed = 0.5f;
+    public float RecoverSpeed = 10f;
 
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D shieldCollider;
@@ -53,6 +53,8 @@ public class ShieldController : Building
     public void ActivateShield()
     {
         if (shieldIsActive || shieldCollider == null) return;
+
+        log.Info("Activating shield");
         shieldCollider.enabled = true;
         spriteRenderer.sprite = shieldOnTexture;
     }
@@ -60,6 +62,8 @@ public class ShieldController : Building
     public void DeactivateShield()
     {
         if (!shieldIsActive || shieldCollider == null) return;
+
+        log.Info("Deactivating shield");
         shieldCollider.enabled = false;
         spriteRenderer.sprite = shieldOffTexture;
     }
@@ -79,7 +83,7 @@ public class ShieldController : Building
             case BuildingState.Operational:
                 RepairShield(RecoverSpeed * Time.deltaTime);
 
-                if (!shieldIsActive)
+                if (!shieldIsActive && shieldHealth > 50f)
                 {
                     ActivateShield();
                 }
@@ -109,7 +113,6 @@ public class ShieldController : Building
     private void DamageShield(float damage)
     {
         shieldHealth = Mathf.Max(shieldHealth - damage, 0);
-
         if (shieldHealth <= 0)
         {
             DeactivateShield();
