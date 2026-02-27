@@ -71,9 +71,8 @@ public class BuildingManager : MonoBehaviour
         {
             if (buildingObj.TryGetComponent(out Building buildingScript))
             {
-                BuildingData data = buildingScript.Data;
                 Vector3 position = buildingObj.transform.position;
-                saveDataList.Buildings.Add(new BuildingSaveData(data.Id, position));
+                saveDataList.Buildings.Add(new BuildingSaveData(buildingScript.Id, position));
             }
         }
         string json = JsonUtility.ToJson(saveDataList);

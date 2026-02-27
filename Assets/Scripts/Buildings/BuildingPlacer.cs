@@ -72,8 +72,10 @@ public class BuildingPlacer : MonoBehaviour
         if (buildingManager == null || IsPlacing == false || !ghostBuilding.ValidBuildPlacement) return;
 
         Vector3 spawnPos = new(ghostGO.transform.position.x, 0, -1);
-        buildingManager.CreateBuilding(currentBuildingId, spawnPos);
-        ClearSelected();
+        if (buildingManager.CreateBuilding(currentBuildingId, spawnPos))
+        {
+            ClearSelected();
+        }
     }
 
     public void ClearSelected()

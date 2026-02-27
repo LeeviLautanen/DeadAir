@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ResourceData", menuName = "Game/Resource Data")]
+[CreateAssetMenu(fileName = "ResourceData", menuName = "Game/ResourceData")]
 public class ResourceData : ScriptableObject
 {
     [SerializeField] private string resourceId; // Unique identifier

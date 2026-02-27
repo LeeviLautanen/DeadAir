@@ -1,11 +1,17 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    public BuildingData Data => buildingData;
-    public int Priority => buildingData.ResourcePriority;
+    public int ResourcePriority => resourcePriority;
     public BuildingState CurrentState => currentState;
+    public string Id => buildingData.Id;
+    public string DisplayName => buildingData.DisplayName;
+    public List<ResourceAmount> ProducedResources => producedResources;
+    public List<ResourceAmount> ConsumedResources => consumedResources;
+    public List<ResourceAmount> CapacityEffects => capacityEffects;
+    public List<ResourceAmount> RequiredReservations => requiredReservations;
     public bool ValidBuildPlacement => placementOverlapCount == 0;
 
     protected static readonly Logger log = new(true, LogLevel.Info);
@@ -13,16 +19,33 @@ public class Building : MonoBehaviour
     protected BuildingManager buildingManager;
     protected BuildingData buildingData;
     [SerializeField] protected BuildingState currentState = BuildingState.Inactive;
-    protected float currentHealth;
-    protected float startupTimer;
+
+    private List<ResourceAmount> producedResources;
+    private List<ResourceAmount> consumedResources;
+    private List<ResourceAmount> capacityEffects;
+    private List<ResourceAmount> requiredReservations;
+    private float startupTime;
+    private int resourcePriority;
+    private float currentHealth;
+    private float maxHealth;
+    private float startupTimer;
     private float placementOverlapCount = 0;
 
     internal void Initialize(BuildingData data)
     {
         resourceManager = FindFirstObjectByType<ResourceManager>();
         buildingManager = FindFirstObjectByType<BuildingManager>();
+
         buildingData = data;
+        maxHealth = buildingData.MaxHealth;
+        resourcePriority = buildingData.ResourcePriority;
+        startupTime = buildingData.StartupTime;
         currentHealth = buildingData.MaxHealth;
+
+        producedResources = buildingData.ProducedResources;
+        consumedResources = buildingData.ConsumedResources;
+        capacityEffects = buildingData.CapacityEffects;
+        requiredReservations = buildingData.RequiredReservations;
     }
 
     public virtual void ColliderEnter(BuildingColliderType colliderType, Collider2D other)
@@ -106,8 +129,8 @@ public class Building : MonoBehaviour
                 break;
 
             case BuildingState.PendingResources:
-                if (resourceManager.HasEnoughResources(Data.ConsumedResources, true) &&
-                    resourceManager.TryReserveResources(Data.RequiredReservations, this))
+                if (resourceManager.HasEnoughResources(consumedResources, true) &&
+                    resourceManager.TryReserveResources(requiredReservations, this))
                 {
                     TransitionTo(BuildingState.Startup);
                 }
@@ -115,7 +138,7 @@ public class Building : MonoBehaviour
 
             case BuildingState.Operational:
                 if (!resourceManager.HasReservation(this) ||
-                    !resourceManager.TryConsumeResources(Data.ConsumedResources, true))
+                    !resourceManager.TryConsumeResources(consumedResources, true))
                 {
                     TransitionTo(BuildingState.PendingResources);
                 }
@@ -129,14 +152,14 @@ public class Building : MonoBehaviour
         {
             case BuildingState.Inactive:
                 log.Info($"Building {buildingData.DisplayName} is now inactive.");
-                resourceManager.ReleaseReservations(Data.RequiredReservations, this);
-                resourceManager.RemoveCapacityEffects(Data.CapacityEffects);
+                resourceManager.ReleaseReservations(requiredReservations, this);
+                resourceManager.RemoveCapacityEffects(capacityEffects);
                 resourceManager.UnregisterResourceUser(this);
                 break;
 
             case BuildingState.Startup:
                 log.Info($"Building {buildingData.DisplayName} is starting up.");
-                startupTimer = buildingData.StartupTime;
+                startupTimer = startupTime;
                 break;
 
             case BuildingState.PendingResources:
@@ -146,14 +169,14 @@ public class Building : MonoBehaviour
             case BuildingState.Operational:
                 log.Info($"Building {buildingData.DisplayName} is now operational.");
                 resourceManager.RegisterResourceUser(this);
-                resourceManager.ApplyCapacityEffects(Data.CapacityEffects);
+                resourceManager.ApplyCapacityEffects(capacityEffects);
                 break;
 
             case BuildingState.Destroyed:
                 log.Info($"Building {buildingData.DisplayName} destroyed.");
-                resourceManager.ReleaseReservations(Data.RequiredReservations, this);
+                resourceManager.ReleaseReservations(requiredReservations, this);
                 resourceManager.UnregisterResourceUser(this);
-                resourceManager.RemoveCapacityEffects(Data.CapacityEffects);
+                resourceManager.RemoveCapacityEffects(capacityEffects);
                 buildingManager.DestroyBuilding(this);
                 break;
         }

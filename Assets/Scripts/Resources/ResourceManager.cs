@@ -25,8 +25,8 @@ public class ResourceManager : MonoBehaviour
         // Handle pending registers
         foreach (Building building in registerBuffer)
         {
-            var list = resourceUserLists[building.Data.ResourcePriority];
-            log.Info($"Registering building {building.Data.DisplayName} to resource manager ({resourceUserLists[building.Data.ResourcePriority].Count}).");
+            var list = resourceUserLists[building.ResourcePriority];
+            log.Info($"Registering building {building.DisplayName} to resource manager ({resourceUserLists[building.ResourcePriority].Count}).");
             if (!list.Contains(building))
                 list.Add(building);
         }
@@ -35,7 +35,7 @@ public class ResourceManager : MonoBehaviour
         // Handle pending unregisters
         foreach (Building building in unregisterBuffer)
         {
-            var list = resourceUserLists[building.Data.ResourcePriority];
+            var list = resourceUserLists[building.ResourcePriority];
             if (list.Contains(building))
                 list.Remove(building);
         }
@@ -63,9 +63,9 @@ public class ResourceManager : MonoBehaviour
             foreach (var user in userList)
             {
                 if (user.CurrentState != BuildingState.Operational
-                    || user.Data.ProducedResources.Count == 0) continue;
+                    || user.ProducedResources.Count == 0) continue;
 
-                AddResources(user.Data.ProducedResources, true);
+                AddResources(user.ProducedResources, true);
             }
         }
 
@@ -144,7 +144,7 @@ public class ResourceManager : MonoBehaviour
         {
             if (!ReleaseReservation(reservation))
             {
-                log.Error($"Failed to release reservation of {reservation.Amount} of {reservation.Data.DisplayName} for building {reserver.Data.DisplayName}");
+                log.Error($"Filed to release reservation of {reservation.Amount} of {reservation.Data.DisplayName} for building {reserver.DisplayName}");
                 return false;
             }
         }
@@ -302,9 +302,9 @@ public class ResourceManager : MonoBehaviour
             foreach (Building building in resourceUserLists[i])
             {
                 if (building.CurrentState == BuildingState.Operational
-                    && building.Data.RequiredReservations.Exists(r => r.Data.Id == resourceId))
+                    && building.RequiredReservations.Exists(r => r.Data.Id == resourceId))
                 {
-                    ReleaseReservations(building.Data.RequiredReservations, building);
+                    ReleaseReservations(building.RequiredReservations, building);
                     building.TransitionTo(BuildingState.PendingResources);
                     if (resourceMaxLookup[resourceId] >= reservationLookup[resourceId]) return;
                 }
