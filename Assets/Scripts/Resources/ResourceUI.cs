@@ -65,11 +65,7 @@ public class ResourceUI : MonoBehaviour
 
     private void OnDisable()
     {
-        if (manager == null)
-        {
-            Debug.LogWarning("Resource UI manager was null on disable");
-            return;
-        }
+
     }
 
     private void OnResourceChanged(string id, float amount, float maxAmount, float reservedAmount)
