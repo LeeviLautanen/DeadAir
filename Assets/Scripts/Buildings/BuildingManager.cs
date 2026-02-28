@@ -8,13 +8,13 @@ public class BuildingManager : MonoBehaviour
 
     private static readonly Logger log = new(true, LogLevel.Info);
     private Dictionary<string, BuildingData> buildingDatabase;
-    private List<GameObject> instantiatedBuildings;
+    private List<Building> allBuildings;
     private ResourceManager resourceManager;
 
     private void Start()
     {
         InitializeBuildingDatabase();
-        instantiatedBuildings = new List<GameObject>();
+        allBuildings = new();
         resourceManager = GetComponent<ResourceManager>();
     }
 
@@ -51,7 +51,7 @@ public class BuildingManager : MonoBehaviour
 
         // Initialize the building with its data
         buildingScript.Initialize(buildingData);
-        instantiatedBuildings.Add(newBuilding);
+        allBuildings.Add(buildingScript);
 
         buildingScript.Activate();
 
@@ -67,7 +67,7 @@ public class BuildingManager : MonoBehaviour
     public void SaveBuildings()
     {
         BuildingSaveDataList saveDataList = new();
-        foreach (var buildingObj in instantiatedBuildings)
+        foreach (var buildingObj in allBuildings)
         {
             if (buildingObj.TryGetComponent(out Building buildingScript))
             {
@@ -92,12 +92,12 @@ public class BuildingManager : MonoBehaviour
         BuildingSaveDataList saveDataList = JsonUtility.FromJson<BuildingSaveDataList>(json);
 
         // Clear existing buildings
-        foreach (var buildingObj in instantiatedBuildings)
+        foreach (var buildingObj in allBuildings)
         {
             buildingObj.TryGetComponent(out Building buildingScript);
             buildingScript.DestroyBuilding();
         }
-        instantiatedBuildings.Clear();
+        allBuildings.Clear();
 
         // Instantiate buildings from save data
         foreach (var saveData in saveDataList.Buildings)
@@ -108,11 +108,25 @@ public class BuildingManager : MonoBehaviour
 
     public void DestroyBuilding(Building building)
     {
-        if (instantiatedBuildings.Contains(building.gameObject))
+        if (allBuildings.Contains(building))
         {
-            instantiatedBuildings.Remove(building.gameObject);
+            allBuildings.Remove(building);
             Destroy(building.gameObject);
         }
+    }
+
+    public List<Building> GetBuildingsByIds(List<string> buildingIds)
+    {
+        List<Building> matchingBuildings = new();
+        foreach (var building in allBuildings)
+        {
+            log.Info(building.Id);
+            if (buildingIds.Contains(building.Id))
+            {
+                matchingBuildings.Add(building);
+            }
+        }
+        return matchingBuildings;
     }
 
     private void InitializeBuildingDatabase()

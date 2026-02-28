@@ -3,20 +3,19 @@ digraph G {
 
     # States
     inactive [label= "Inactive"];
+    startup [label= "Startup"];
     operating [label= "Operating"];
     pending_resources [label= "Pending resources"];
-    pending_reservation [label= "Pending reservation"];
     
     # Transitions
-    inactive -> pending_reservation [label= "Activated"];
+    inactive -> pending_resources [label= "Activated"];
     
-    pending_reservation -> operating [label= "Reserved"];
-    pending_reservation -> pending_reservation [label= "Not reserved"];
-    
-    pending_resources -> pending_resources[label= "Not consumed"];
-    pending_resources -> operating [label= "Consumed"];
+    startup -> operating [label= "Delay complete"];
+    startup -> pending_resources [label= "Resources lost"];
+
+    pending_resources -> pending_resources[label= "Unavailable"];
+    pending_resources -> startup [label= "Acquired"];
 
     operating -> operating [label= "Consumed"];
-    operating -> pending_resources [label= "No resources"];
-    operating -> pending_reservation [label= "No reservation"];
+    operating -> pending_resources [label= "Resources lost"];
 }

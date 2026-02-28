@@ -4,7 +4,7 @@ using System;
 
 public class ResourceManager : MonoBehaviour
 {
-    private static readonly Logger log = new(false);
+    private static readonly Logger log = new(true, LogLevel.Warning);
     private static readonly System.Random rng = new();
     [SerializeField] private List<ResourceAmount> startingResources = new();
     private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
@@ -133,7 +133,6 @@ public class ResourceManager : MonoBehaviour
         {
             return false;
         }
-        log.Info($"Released reservation of {amount} of {reservation.Data.DisplayName} (reserved: {reservationLookup[reservation.Data.Id]}, max: {resourceMaxLookup[reservation.Data.Id]})");
         reservationLookup[reservation.Data.Id] = Mathf.Max(0f, reservationLookup[reservation.Data.Id] - amount);
         return true;
     }
@@ -144,7 +143,7 @@ public class ResourceManager : MonoBehaviour
         {
             if (!ReleaseReservation(reservation))
             {
-                log.Error($"Filed to release reservation of {reservation.Amount} of {reservation.Data.DisplayName} for building {reserver.DisplayName}");
+                log.Error($"Failed to release reservation of {reservation.Amount} of {reservation.Data.DisplayName} for building {reserver.DisplayName}");
                 return false;
             }
         }
@@ -318,7 +317,7 @@ public class ResourceManager : MonoBehaviour
         if (humans != null)
         {
             float maxHumans = resourceMaxLookup["humans"];
-            ResourceAmount newAmount = new() { Data = humans.Data, Amount = maxHumans * 0.1f };
+            ResourceAmount newAmount = new(humans.Data, maxHumans * 0.1f);
             List<ResourceAmount> rates = new() { newAmount };
             if (humans.Amount < maxHumans)
             {

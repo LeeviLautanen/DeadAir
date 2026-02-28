@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using NUnit.Framework;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Building : MonoBehaviour
@@ -17,6 +19,7 @@ public class Building : MonoBehaviour
     protected static readonly Logger log = new(true, LogLevel.Info);
     protected ResourceManager resourceManager;
     protected BuildingManager buildingManager;
+    protected TechManager techManager;
     protected BuildingData buildingData;
     [SerializeField] protected BuildingState currentState = BuildingState.Inactive;
 
@@ -27,7 +30,7 @@ public class Building : MonoBehaviour
     private float startupTime;
     private int resourcePriority;
     private float currentHealth;
-    private float maxHealth;
+    [SerializeField] private float maxHealth;
     private float startupTimer;
     private float placementOverlapCount = 0;
 
@@ -35,6 +38,8 @@ public class Building : MonoBehaviour
     {
         resourceManager = FindFirstObjectByType<ResourceManager>();
         buildingManager = FindFirstObjectByType<BuildingManager>();
+        techManager = FindFirstObjectByType<TechManager>();
+        TechManager.OnResearchCompleted += UpdateStats;
 
         buildingData = data;
         maxHealth = buildingData.MaxHealth;
@@ -42,10 +47,13 @@ public class Building : MonoBehaviour
         startupTime = buildingData.StartupTime;
         currentHealth = buildingData.MaxHealth;
 
-        producedResources = buildingData.ProducedResources;
-        consumedResources = buildingData.ConsumedResources;
-        capacityEffects = buildingData.CapacityEffects;
-        requiredReservations = buildingData.RequiredReservations;
+        // Make deep copies of the SO data
+        producedResources = buildingData.ProducedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
+        consumedResources = buildingData.ConsumedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
+        capacityEffects = buildingData.CapacityEffects.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
+        requiredReservations = buildingData.RequiredReservations.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
+
+        UpdateStats();
     }
 
     public virtual void ColliderEnter(BuildingColliderType colliderType, Collider2D other)
@@ -95,19 +103,19 @@ public class Building : MonoBehaviour
 
     public void Deactivate()
     {
-        if (currentState != BuildingState.Inactive && currentState != BuildingState.Destroyed)
+        if (currentState != BuildingState.Inactive)
             TransitionTo(BuildingState.Inactive);
     }
 
     public void TransitionTo(BuildingState newState)
     {
-        if (newState == currentState) return;
+        if (newState == currentState || currentState == BuildingState.Destroyed) return;
 
         currentState = newState;
         EnterState(newState);
     }
 
-    public virtual void DestroyBuilding()
+    public void DestroyBuilding()
     {
         TransitionTo(BuildingState.Destroyed);
     }
@@ -120,19 +128,25 @@ public class Building : MonoBehaviour
                 // Do nothing until activated
                 break;
 
-            case BuildingState.Startup:
-                startupTimer -= deltaTime;
-                if (startupTimer <= 0)
-                {
-                    TransitionTo(BuildingState.Operational);
-                }
-                break;
-
             case BuildingState.PendingResources:
                 if (resourceManager.HasEnoughResources(consumedResources, true) &&
                     resourceManager.TryReserveResources(requiredReservations, this))
                 {
                     TransitionTo(BuildingState.Startup);
+                }
+                break;
+
+            case BuildingState.Startup:
+                if (!resourceManager.HasEnoughResources(requiredReservations, false) ||
+                    !resourceManager.HasEnoughResources(consumedResources, true))
+                {
+                    TransitionTo(BuildingState.PendingResources);
+                }
+
+                startupTimer -= deltaTime;
+                if (startupTimer <= 0)
+                {
+                    TransitionTo(BuildingState.Operational);
                 }
                 break;
 
@@ -157,18 +171,17 @@ public class Building : MonoBehaviour
                 resourceManager.UnregisterResourceUser(this);
                 break;
 
+            case BuildingState.PendingResources:
+                log.Info($"Building {buildingData.DisplayName} is pending reservation.");
+                break;
+
             case BuildingState.Startup:
                 log.Info($"Building {buildingData.DisplayName} is starting up.");
                 startupTimer = startupTime;
                 break;
 
-            case BuildingState.PendingResources:
-                log.Info($"Building {buildingData.DisplayName} is pending reservation.");
-                break;
-
             case BuildingState.Operational:
                 log.Info($"Building {buildingData.DisplayName} is now operational.");
-                resourceManager.RegisterResourceUser(this);
                 resourceManager.ApplyCapacityEffects(capacityEffects);
                 break;
 
@@ -180,6 +193,47 @@ public class Building : MonoBehaviour
                 buildingManager.DestroyBuilding(this);
                 break;
         }
+    }
+
+    protected void UpdateStats()
+    {
+        bool hasResources = currentState == BuildingState.Operational || currentState == BuildingState.Startup;
+
+        // Max health
+        maxHealth = techManager.GetModifiedValue(buildingData.MaxHealth, ModifierType.MaxHealth, buildingData.Id);
+        currentHealth = maxHealth;
+
+        // Production
+        for (int i = 0; i < buildingData.ProducedResources.Count; i++)
+        {
+            float newAmount = techManager.GetModifiedValue(buildingData.ProducedResources[i].Amount, ModifierType.ProductionRate, buildingData.Id);
+            producedResources[i].Amount = newAmount;
+        }
+
+        // Consumption
+        for (int i = 0; i < buildingData.ConsumedResources.Count; i++)
+        {
+            float newAmount = techManager.GetModifiedValue(buildingData.ConsumedResources[i].Amount, ModifierType.ConsumptionRate, buildingData.Id);
+            consumedResources[i].Amount = newAmount;
+        }
+
+        // Capacity
+        if (hasResources) resourceManager.RemoveCapacityEffects(capacityEffects);
+        for (int i = 0; i < buildingData.CapacityEffects.Count; i++)
+        {
+            float newAmount = techManager.GetModifiedValue(buildingData.CapacityEffects[i].Amount, ModifierType.Capacity, buildingData.Id);
+            capacityEffects[i].Amount = newAmount;
+        }
+        if (hasResources) resourceManager.ApplyCapacityEffects(capacityEffects);
+
+        // Reservations
+        if (hasResources) resourceManager.ReleaseReservations(requiredReservations, this);
+        for (int i = 0; i < buildingData.RequiredReservations.Count; i++)
+        {
+            float newAmount = techManager.GetModifiedValue(buildingData.RequiredReservations[i].Amount, ModifierType.Reservation, buildingData.Id);
+            requiredReservations[i].Amount = newAmount;
+        }
+        if (hasResources) resourceManager.TryReserveResources(requiredReservations, this);
     }
 
     private void Damage(float damage)
