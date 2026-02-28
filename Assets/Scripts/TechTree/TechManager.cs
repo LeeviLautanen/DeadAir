@@ -1,13 +1,22 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class TechManager : MonoBehaviour
+public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
 {
+    public static event System.Action OnResearchCompleted;
+    public bool IsVisible => isVisible;
+
     [Header("Prequisite line settings")]
     public Color lineColor = Color.black;
     public float lineWidth = 10f;
-    public static event System.Action OnResearchCompleted;
+
+    [Header("Tree movement settings")]
+    public RectTransform nodeContainerRect;
+    public float zoomSpeed = 0.1f;
+    public float minZoom = 0.5f;
+    public float maxZoom = 2f;
 
     private static readonly Logger log = new(true, LogLevel.Info);
     private GameObject lineContainer;
@@ -15,10 +24,14 @@ public class TechManager : MonoBehaviour
     private Dictionary<UpgradeNode, List<UpgradeNodeUILine>> nodeLines = new();
     private Dictionary<string, Dictionary<ModifierType, float>> flatModifiers = new();
     private Dictionary<string, Dictionary<ModifierType, float>> percentMultipliers = new();
-    private bool isVisible = false;
+    private bool isVisible;
+    private Canvas upgradeCanvas;
 
     private void Start()
     {
+        upgradeCanvas = GetComponent<Canvas>();
+        SetVisible(false);
+
         GetComponentsInChildren(allNodes);
         lineContainer = GameObject.Find("LineContainer");
         UpgradeNode.OnUpgradeButtonClicked += HandleUpgradeButtonClicked;
@@ -43,20 +56,28 @@ public class TechManager : MonoBehaviour
             }
 
             if (IsNodeUnlocked(node))
-            {
                 node.Unlock();
-            }
             else
-            {
                 node.Lock();
-            }
         }
     }
 
     public void SetVisible(bool visible)
     {
         isVisible = visible;
-        gameObject.GetComponent<Canvas>().enabled = visible;
+        upgradeCanvas.enabled = visible;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        nodeContainerRect.anchoredPosition += eventData.delta;
+    }
+
+    public void OnScroll(PointerEventData eventData)
+    {
+        float oldScale = nodeContainerRect.localScale.x;
+        float newScale = Mathf.Clamp(oldScale + eventData.scrollDelta.y * zoomSpeed, minZoom, maxZoom);
+        nodeContainerRect.localScale = Vector3.one * newScale;
     }
 
     public float GetModifiedValue(float baseValue, ModifierType statType, string buildingId)
@@ -64,7 +85,6 @@ public class TechManager : MonoBehaviour
         float flat = 0f;
         float percent = 1f;
 
-        // Apply modifiers for the specific building type
         if (flatModifiers.ContainsKey(buildingId) && flatModifiers[buildingId].ContainsKey(statType))
             flat = flatModifiers[buildingId][statType];
 
@@ -78,8 +98,7 @@ public class TechManager : MonoBehaviour
     {
         foreach (var mod in modifiers)
         {
-            List<string> targetIds = mod.TargetBuildingIds;
-            foreach (var target in targetIds)
+            foreach (var target in mod.TargetBuildingIds)
             {
                 if (mod.IsPercent)
                 {
@@ -110,30 +129,23 @@ public class TechManager : MonoBehaviour
         if (!clickedNode.IsUnlocked || clickedNode.IsResearched)
             return;
 
-        // Apply modifiers
         ApplyModifiers(clickedNode.Modifiers);
         clickedNode.MarkAsResearched();
         OnResearchCompleted?.Invoke();
 
-        // Unlock any nodes that have this node as a prequisite
         foreach (var node in allNodes)
         {
-            if (!node.prequisites.Contains(clickedNode)) continue;
-
-            if (IsNodeUnlocked(node))
-            {
+            if (node.prequisites.Contains(clickedNode) && IsNodeUnlocked(node))
                 node.Unlock();
-            }
         }
     }
 
     private bool IsNodeUnlocked(UpgradeNode node)
     {
         foreach (var preq in node.prequisites)
-        {
             if (!preq.IsResearched)
                 return false;
-        }
+
         return true;
     }
 

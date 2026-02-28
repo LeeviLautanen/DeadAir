@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
@@ -7,16 +8,18 @@ public class CameraController : MonoBehaviour
     public float zoomSpeed = 5f;
     public float minZoom = 5f;
     public float maxZoom = 20f;
-
     public InputActionAsset inputActions;
+
     private InputAction cameraMoveAction;
     private InputAction cameraZoomAction;
-
+    private TechManager techManager;
     private Camera mainCamera;
     private float zoomMultiplier;
 
-    void Awake()
+    private void Awake()
     {
+        techManager = FindFirstObjectByType<TechManager>();
+
         mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
         zoomMultiplier = mainCamera.orthographicSize;
 
@@ -32,8 +35,11 @@ public class CameraController : MonoBehaviour
         cameraZoomAction = actionMap.FindAction("CameraZoom");
     }
 
-    void Update()
+    private void Update()
     {
+        if (techManager.IsVisible)
+            return;
+
         Vector2 move = cameraMoveAction.ReadValue<Vector2>();
         transform.position += moveSpeed * zoomMultiplier * Time.deltaTime * (Vector3)move;
 

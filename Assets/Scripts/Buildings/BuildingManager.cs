@@ -25,17 +25,11 @@ public class BuildingManager : MonoBehaviour
     {
         if (!buildingDatabase.ContainsKey(buildingId))
         {
-            log.Error($"Building with ID '{buildingId}' not found!");
+            log.Error($"Building with ID '{buildingId}' doesnt exist in building database");
             return null;
         }
 
         var buildingData = buildingDatabase[buildingId];
-        if (buildingData == null)
-        {
-            log.Error($"Building data for ID '{buildingId}' is null!");
-            return null;
-        }
-
         if (!resourceManager.TryConsumeResources(buildingData.ConstructionCost))
         {
             log.Warning("Not enough resources to build " + buildingData.DisplayName);
@@ -44,17 +38,7 @@ public class BuildingManager : MonoBehaviour
 
         GameObject newBuilding = Instantiate(buildingData.Prefab, position, rotation);
 
-        // Get or add building component and initialize with data
-        newBuilding.TryGetComponent(out Building buildingScript);
-        if (buildingScript == null)
-        {
-            log.Error("Building prefab does not have the building script");
-            return null;
-        }
-
-        buildingScript.Activate();
-
-        //log.Info($"Created {buildingData.DisplayName} at {position}");
+        log.Info($"Created {buildingData.DisplayName} at {position}");
         return newBuilding;
     }
 
