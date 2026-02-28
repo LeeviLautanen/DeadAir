@@ -4,9 +4,9 @@ using System;
 
 public class ResourceManager : MonoBehaviour
 {
-    private static readonly Logger log = new(true, LogLevel.Warning);
+    private static readonly Logger log = new(true, LogLevel.Info);
     private static readonly System.Random rng = new();
-    [SerializeField] private List<ResourceAmount> startingResources = new();
+    [SerializeField] private List<ResourceData> allResources = new();
     private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
     private readonly Dictionary<string, float> resourceMaxLookup = new();
     private readonly Dictionary<string, float> reservationLookup = new();
@@ -203,6 +203,9 @@ public class ResourceManager : MonoBehaviour
         {
             if (resourceLookup.TryGetValue(resource.Data.Id, out ResourceAmount entry))
             {
+                // Ignore if we are already over the cap
+                if (entry.Amount >= resourceMaxLookup[entry.Data.Id]) continue;
+
                 float amount = resource.Amount * (isRate ? GetDeltaTime() : 1f);
                 if (entry.Amount + amount > resourceMaxLookup[entry.Data.Id])
                 {
@@ -291,11 +294,19 @@ public class ResourceManager : MonoBehaviour
 
     public void ChangeResourceMax(string resourceId, float delta)
     {
-        resourceMaxLookup.ContainsKey(resourceId);
+        if (!resourceMaxLookup.ContainsKey(resourceId))
+        {
+            log.Error($"Tried to change max of non-existing resource '{resourceId}'");
+            return;
+        }
+
+        // Update the resource cap
         resourceMaxLookup[resourceId] = Mathf.Max(0f, resourceMaxLookup[resourceId] + delta);
 
+        // If new cap is more than reservations, stop here
         if (resourceMaxLookup[resourceId] >= reservationLookup[resourceId]) return;
 
+        // Release reservations until reservations are less than the new cap
         for (int i = resourceUserLists.Length - 1; i >= 0; i--)
         {
             foreach (Building building in resourceUserLists[i])
@@ -304,7 +315,6 @@ public class ResourceManager : MonoBehaviour
                     && building.RequiredReservations.Exists(r => r.Data.Id == resourceId))
                 {
                     ReleaseReservations(building.RequiredReservations, building);
-                    building.TransitionTo(BuildingState.PendingResources);
                     if (resourceMaxLookup[resourceId] >= reservationLookup[resourceId]) return;
                 }
             }
@@ -340,14 +350,12 @@ public class ResourceManager : MonoBehaviour
         for (int i = 0; i < resourceUserLists.Length; i++)
             resourceUserLists[i] = new List<Building>();
 
-        foreach (ResourceAmount stack in startingResources)
+        // Initialize lookups
+        foreach (ResourceData data in allResources)
         {
-            if (stack.Data != null)
-            {
-                resourceLookup[stack.Data.Id] = stack;
-                resourceMaxLookup[stack.Data.Id] = stack.Data.DefaultMaxAmount;
-                reservationLookup[stack.Data.Id] = 0f;
-            }
+            resourceLookup[data.Id] = new ResourceAmount(data, 0f);
+            resourceMaxLookup[data.Id] = 0f;
+            reservationLookup[data.Id] = 0f;
         }
     }
 }

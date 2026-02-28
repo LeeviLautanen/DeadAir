@@ -10,20 +10,24 @@ public class TechManager : MonoBehaviour
     public static event System.Action OnResearchCompleted;
 
     private static readonly Logger log = new(true, LogLevel.Info);
-    private BuildingManager buildingManager;
     private GameObject lineContainer;
     private List<UpgradeNode> allNodes = new();
     private Dictionary<UpgradeNode, List<UpgradeNodeUILine>> nodeLines = new();
     private Dictionary<string, Dictionary<ModifierType, float>> flatModifiers = new();
     private Dictionary<string, Dictionary<ModifierType, float>> percentMultipliers = new();
+    private bool isVisible = false;
 
     private void Start()
     {
-        buildingManager = FindFirstObjectByType<BuildingManager>();
-
         GetComponentsInChildren(allNodes);
         lineContainer = GameObject.Find("LineContainer");
         UpgradeNode.OnUpgradeButtonClicked += HandleUpgradeButtonClicked;
+
+        // Set up reserach view toggle button
+        GameObject.Find("ResearchButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
+        {
+            SetVisible(!isVisible);
+        });
 
         // Draw lines between prequisites nodes
         foreach (var node in allNodes)
@@ -47,6 +51,27 @@ public class TechManager : MonoBehaviour
                 node.Lock();
             }
         }
+    }
+
+    public void SetVisible(bool visible)
+    {
+        isVisible = visible;
+        gameObject.GetComponent<Canvas>().enabled = visible;
+    }
+
+    public float GetModifiedValue(float baseValue, ModifierType statType, string buildingId)
+    {
+        float flat = 0f;
+        float percent = 1f;
+
+        // Apply modifiers for the specific building type
+        if (flatModifiers.ContainsKey(buildingId) && flatModifiers[buildingId].ContainsKey(statType))
+            flat = flatModifiers[buildingId][statType];
+
+        if (percentMultipliers.ContainsKey(buildingId) && percentMultipliers[buildingId].ContainsKey(statType))
+            percent = percentMultipliers[buildingId][statType];
+
+        return (baseValue + flat) * percent;
     }
 
     private void ApplyModifiers(List<UpgradeModifier> modifiers)
@@ -78,21 +103,6 @@ public class TechManager : MonoBehaviour
                 }
             }
         }
-    }
-
-    public float GetModifiedValue(float baseValue, ModifierType statType, string buildingId)
-    {
-        float flat = 0f;
-        float percent = 1f;
-
-        // Apply modifiers for the specific building type
-        if (flatModifiers.ContainsKey(buildingId) && flatModifiers[buildingId].ContainsKey(statType))
-            flat = flatModifiers[buildingId][statType];
-
-        if (percentMultipliers.ContainsKey(buildingId) && percentMultipliers[buildingId].ContainsKey(statType))
-            percent = percentMultipliers[buildingId][statType];
-
-        return (baseValue + flat) * percent;
     }
 
     private void HandleUpgradeButtonClicked(UpgradeNode clickedNode)

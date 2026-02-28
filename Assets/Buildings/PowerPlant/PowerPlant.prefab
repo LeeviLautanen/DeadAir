@@ -200,8 +200,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9120461976362767843}
-  - component: {fileID: 5722922078217300730}
   - component: {fileID: 260250146376394818}
+  - component: {fileID: 5722922078217300730}
   m_Layer: 0
   m_Name: PowerPlant
   m_TagString: Untagged
@@ -227,19 +227,6 @@ Transform:
   - {fileID: 4542097182269838086}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5722922078217300730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2672589904300108679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 634f8a4923f0ee3498573b32abf2dc07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: 0
 --- !u!50 &260250146376394818
 Rigidbody2D:
   serializedVersion: 5
@@ -267,6 +254,21 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &5722922078217300730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2672589904300108679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 634f8a4923f0ee3498573b32abf2dc07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: ad3e0c905937253479cd28201a58ca15, type: 2}
+  currentState: 0
+  maxHealth: 0
 --- !u!1 &7210754631646447054
 GameObject:
   m_ObjectHideFlags: 0

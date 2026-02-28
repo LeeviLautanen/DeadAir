@@ -340,5 +340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634f8a4923f0ee3498573b32abf2dc07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Building
+  data: {fileID: 11400000, guid: 6875997f6cbb445448349d5f623e630a, type: 2}
   currentState: 0
   maxHealth: 0

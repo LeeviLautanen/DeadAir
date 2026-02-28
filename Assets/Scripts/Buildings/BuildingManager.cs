@@ -8,7 +8,7 @@ public class BuildingManager : MonoBehaviour
 
     private static readonly Logger log = new(true, LogLevel.Info);
     private Dictionary<string, BuildingData> buildingDatabase;
-    private List<Building> allBuildings;
+    [SerializeField] private List<Building> allBuildings;
     private ResourceManager resourceManager;
 
     private void Start()
@@ -16,6 +16,9 @@ public class BuildingManager : MonoBehaviour
         InitializeBuildingDatabase();
         allBuildings = new();
         resourceManager = GetComponent<ResourceManager>();
+
+        Building.OnCreated += OnBuildingCreated;
+        Building.OnDestroyed += OnBuildingDestroyed;
     }
 
     public GameObject CreateBuilding(string buildingId, Vector3 position, Quaternion rotation = default)
@@ -48,10 +51,6 @@ public class BuildingManager : MonoBehaviour
             log.Error("Building prefab does not have the building script");
             return null;
         }
-
-        // Initialize the building with its data
-        buildingScript.Initialize(buildingData);
-        allBuildings.Add(buildingScript);
 
         buildingScript.Activate();
 
@@ -106,15 +105,6 @@ public class BuildingManager : MonoBehaviour
         }
     }
 
-    public void DestroyBuilding(Building building)
-    {
-        if (allBuildings.Contains(building))
-        {
-            allBuildings.Remove(building);
-            Destroy(building.gameObject);
-        }
-    }
-
     public List<Building> GetBuildingsByIds(List<string> buildingIds)
     {
         List<Building> matchingBuildings = new();
@@ -127,6 +117,17 @@ public class BuildingManager : MonoBehaviour
             }
         }
         return matchingBuildings;
+    }
+
+    private void OnBuildingCreated(Building building)
+    {
+        allBuildings.Add(building);
+        building.Activate(); // Activate building by default
+    }
+
+    private void OnBuildingDestroyed(Building building)
+    {
+        allBuildings.Remove(building);
     }
 
     private void InitializeBuildingDatabase()

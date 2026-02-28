@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ResourceUI : MonoBehaviour
 {
-    private ResourceManager manager;
+    private ResourceManager resourceManager;
     private readonly Dictionary<string, TMP_Text> resourceTexts = new();
 
     private void Awake()
@@ -25,11 +25,11 @@ public class ResourceUI : MonoBehaviour
     {
         foreach (var kvp in resourceTexts)
         {
-            if (manager.ContainsResource(kvp.Key))
+            if (resourceManager.ContainsResource(kvp.Key))
             {
-                float amount = manager.GetResourceAmount(kvp.Key);
-                float maxAmount = manager.GetResourceMax(kvp.Key);
-                float reservedAmount = manager.GetResourceReserved(kvp.Key);
+                float amount = resourceManager.GetResourceAmount(kvp.Key);
+                float maxAmount = resourceManager.GetResourceMax(kvp.Key);
+                float reservedAmount = resourceManager.GetResourceReserved(kvp.Key);
                 kvp.Value.SetText(Format(kvp.Key, amount, maxAmount, reservedAmount));
             }
             else
@@ -41,8 +41,8 @@ public class ResourceUI : MonoBehaviour
 
     private void OnEnable()
     {
-        manager = FindFirstObjectByType<ResourceManager>();
-        if (manager == null)
+        resourceManager = FindFirstObjectByType<ResourceManager>();
+        if (resourceManager == null)
         {
             Debug.LogWarning("Resource UI manager was null on enable");
             return;
@@ -50,10 +50,10 @@ public class ResourceUI : MonoBehaviour
 
         foreach (var kvp in resourceTexts)
         {
-            if (manager.ContainsResource(kvp.Key))
+            if (resourceManager.ContainsResource(kvp.Key))
             {
-                float amount = manager.GetResourceAmount(kvp.Key);
-                float maxAmount = manager.GetResourceMax(kvp.Key);
+                float amount = resourceManager.GetResourceAmount(kvp.Key);
+                float maxAmount = resourceManager.GetResourceMax(kvp.Key);
                 kvp.Value.text = Format(kvp.Key, amount, maxAmount);
             }
             else
