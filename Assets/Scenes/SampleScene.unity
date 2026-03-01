@@ -358,12 +358,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 93531061}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15a516f98e5b5fc4cb5457c0be765cb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteManager
-  MeteoritePrefab: {fileID: 442019905741593186, guid: 967ac5278c53b82449aee041a49ea18d, type: 3}
+  MeteoritePrefab: {fileID: 2838757934400324701, guid: a2ecc256c071e3c4ca34c02790dae405, type: 3}
   SpawnRange: {x: 0, y: 200}
   SpawnAngleRange: 30
   spawnAmount: 40

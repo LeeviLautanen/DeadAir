@@ -102,7 +102,7 @@ public class ResourceManager : MonoBehaviour
     public bool TryReserveResources(List<ResourceAmount> reservations, Building reserver)
     {
         // Prevent double reservations from the same building
-        if (reservationDict[reserver])
+        if (reservationDict.TryGetValue(reserver, out bool has) && has)
             return true;
 
         int processed = 0;
@@ -293,7 +293,7 @@ public class ResourceManager : MonoBehaviour
     public bool ApplyCapacityEffects(List<ResourceAmount> capacities, Building applier)
     {
         // Prevent double capacity effects from the same building
-        if (capacityDict[applier])
+        if (capacityDict.TryGetValue(applier, out bool has) && has)
             return true;
 
         foreach (ResourceAmount capacity in capacities)
