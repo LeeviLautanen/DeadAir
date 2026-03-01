@@ -101,6 +101,10 @@ public class ResourceManager : MonoBehaviour
 
     public bool TryReserveResources(List<ResourceAmount> reservations, Building reserver)
     {
+        // Prevent double reservations from the same building
+        if (reservationDict[reserver])
+            return true;
+
         int processed = 0;
         for (int i = 0; i < reservations.Count; i++)
         {
@@ -288,10 +292,15 @@ public class ResourceManager : MonoBehaviour
 
     public bool ApplyCapacityEffects(List<ResourceAmount> capacities, Building applier)
     {
+        // Prevent double capacity effects from the same building
+        if (capacityDict[applier])
+            return true;
+
         foreach (ResourceAmount capacity in capacities)
         {
             ChangeCapacity(capacity.Data.Id, capacity.Amount);
         }
+
         capacityDict[applier] = true;
         return true;
     }
