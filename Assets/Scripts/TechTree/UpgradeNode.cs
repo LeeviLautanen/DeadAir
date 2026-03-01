@@ -20,6 +20,8 @@ public class UpgradeNode : MonoBehaviour
     }
     public bool IsResearched => isResearched;
     public List<UpgradeModifier> Modifiers => data.Modifiers;
+    public float ResearchCost => data.ResearchCost;
+    public string DisplayName => data.DisplayName;
     public static Action<UpgradeNode> OnUpgradeButtonClicked;
 
     private static readonly Logger log = new(true, LogLevel.Info);
@@ -29,6 +31,8 @@ public class UpgradeNode : MonoBehaviour
     private Image upgradeBackground;
     [SerializeField] private bool isUnlocked;
     [SerializeField] private bool isResearched;
+    [SerializeField] private Color selectedColor;
+    [SerializeField] private Color researchedColor;
 
     private void Awake()
     {
@@ -53,7 +57,13 @@ public class UpgradeNode : MonoBehaviour
     {
         isResearched = true;
         upgradeButton.interactable = false;
-        upgradeBackground.color = Color.green;
+        upgradeBackground.color = researchedColor;
+    }
+
+    public void MarkAsSelected()
+    {
+        upgradeButton.interactable = false;
+        upgradeBackground.color = selectedColor;
     }
 
     public void Unlock()

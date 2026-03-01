@@ -4,7 +4,7 @@ using System;
 
 public class ResourceManager : MonoBehaviour
 {
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(true, LogLevel.Warning);
     private static readonly System.Random rng = new();
     [SerializeField] private List<ResourceData> allResources = new();
     private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
@@ -12,6 +12,7 @@ public class ResourceManager : MonoBehaviour
     private readonly Dictionary<string, float> reservationLookup = new();
     private readonly List<Building>[] resourceUserLists = new List<Building>[10];
     private readonly Dictionary<Building, bool> reservationDict = new();
+    private readonly Dictionary<Building, bool> capacityDict = new();
     private readonly List<Building> unregisterBuffer = new();
     private readonly List<Building> registerBuffer = new();
 
@@ -153,6 +154,17 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
+    public void ChangeReservation(string resourceId, float delta)
+    {
+        if (!reservationLookup.ContainsKey(resourceId))
+        {
+            log.Error($"Tried to change reservation of non-existing resource '{resourceId}'");
+            return;
+        }
+
+        reservationLookup[resourceId] = Mathf.Max(0f, reservationLookup[resourceId] + delta);
+    }
+
     public bool HasReservation(Building building)
     {
         return reservationDict.TryGetValue(building, out bool has) && has;
@@ -274,25 +286,32 @@ public class ResourceManager : MonoBehaviour
         return -1f;
     }
 
-    public bool ApplyCapacityEffects(List<ResourceAmount> capacities)
+    public bool ApplyCapacityEffects(List<ResourceAmount> capacities, Building applier)
     {
         foreach (ResourceAmount capacity in capacities)
         {
-            ChangeResourceMax(capacity.Data.Id, capacity.Amount);
+            ChangeCapacity(capacity.Data.Id, capacity.Amount);
         }
+        capacityDict[applier] = true;
         return true;
     }
 
-    public bool RemoveCapacityEffects(List<ResourceAmount> capacities)
+    public bool RemoveCapacityEffects(List<ResourceAmount> capacities, Building remover)
     {
         foreach (ResourceAmount capacity in capacities)
         {
-            ChangeResourceMax(capacity.Data.Id, -capacity.Amount);
+            ChangeCapacity(capacity.Data.Id, -capacity.Amount);
         }
+        capacityDict[remover] = false;
         return true;
     }
 
-    public void ChangeResourceMax(string resourceId, float delta)
+    public bool HasCapacityEffects(Building building)
+    {
+        return capacityDict.TryGetValue(building, out bool has) && has;
+    }
+
+    public void ChangeCapacity(string resourceId, float delta)
     {
         if (!resourceMaxLookup.ContainsKey(resourceId))
         {

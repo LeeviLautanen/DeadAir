@@ -40,8 +40,6 @@ public class BuildingPlacer : MonoBehaviour
         if (buildingManager == null || buildingId == currentBuildingId) return;
 
         selectedBuildingData = buildingManager.GetBuildingData(buildingId);
-
-
         if (selectedBuildingData == null)
         {
             Debug.LogError($"No building data found for id: {buildingId}");
@@ -65,6 +63,7 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
         ghostBuilding = ghostGO.GetComponent<Building>();
+        ghostBuilding.PlacementMode = true;
     }
 
     public void TryPlaceGhost()

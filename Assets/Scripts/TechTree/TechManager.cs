@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using NUnit.Framework;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -20,17 +20,22 @@ public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
 
     private static readonly Logger log = new(true, LogLevel.Info);
     private GameObject lineContainer;
+    private TMP_Text researchProgressText;
     private List<UpgradeNode> allNodes = new();
     private Dictionary<UpgradeNode, List<UpgradeNodeUILine>> nodeLines = new();
     private Dictionary<string, Dictionary<ModifierType, float>> flatModifiers = new();
     private Dictionary<string, Dictionary<ModifierType, float>> percentMultipliers = new();
     private bool isVisible;
     private Canvas upgradeCanvas;
+    private float researchAmount;
+    private UpgradeNode selectedNode;
 
     private void Start()
     {
         upgradeCanvas = GetComponent<Canvas>();
         SetVisible(false);
+
+        researchProgressText = GameObject.Find("ResearchProgressText").GetComponent<TMP_Text>();
 
         GetComponentsInChildren(allNodes);
         lineContainer = GameObject.Find("LineContainer");
@@ -66,6 +71,44 @@ public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
     {
         isVisible = visible;
         upgradeCanvas.enabled = visible;
+    }
+
+    public void Research(float amount)
+    {
+        if (selectedNode == null)
+            return;
+
+        researchAmount += amount;
+
+        researchProgressText.text = $"{selectedNode.DisplayName}: {GetResearchProgress() * 100f:0}%";
+
+        if (researchAmount >= selectedNode.ResearchCost)
+        {
+            ApplyModifiers(selectedNode.Modifiers);
+            selectedNode.MarkAsResearched();
+            OnResearchCompleted?.Invoke();
+
+            foreach (var node in allNodes)
+            {
+                if (node.prequisites.Contains(selectedNode) && IsNodeUnlocked(node))
+                    node.Unlock();
+            }
+
+            researchProgressText.text = $"No research selected";
+            researchAmount = 0f;
+            selectedNode = null;
+        }
+    }
+
+    public float GetResearchProgress()
+    {
+        if (selectedNode == null)
+            return 0f;
+
+        if (selectedNode.ResearchCost <= 0f)
+            return 1f;
+
+        return Mathf.Clamp01(researchAmount / selectedNode.ResearchCost);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -126,18 +169,16 @@ public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
 
     private void HandleUpgradeButtonClicked(UpgradeNode clickedNode)
     {
-        if (!clickedNode.IsUnlocked || clickedNode.IsResearched)
+        if (!clickedNode.IsUnlocked || clickedNode.IsResearched || clickedNode == selectedNode)
             return;
 
-        ApplyModifiers(clickedNode.Modifiers);
-        clickedNode.MarkAsResearched();
-        OnResearchCompleted?.Invoke();
-
-        foreach (var node in allNodes)
+        if (selectedNode != null)
         {
-            if (node.prequisites.Contains(clickedNode) && IsNodeUnlocked(node))
-                node.Unlock();
+            selectedNode.Unlock();
+            researchAmount = 0f;
         }
+        selectedNode = clickedNode;
+        selectedNode.MarkAsSelected();
     }
 
     private bool IsNodeUnlocked(UpgradeNode node)

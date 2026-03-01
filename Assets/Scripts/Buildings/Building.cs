@@ -13,10 +13,11 @@ public class Building : MonoBehaviour
     public List<ResourceAmount> CapacityEffects => capacityEffects;
     public List<ResourceAmount> RequiredReservations => requiredReservations;
     public bool ValidBuildPlacement => placementOverlapCount == 0;
+    public bool PlacementMode;
     public static Action<Building> OnCreated;
     public static Action<Building> OnDestroyed;
 
-    protected static readonly Logger log = new(true, LogLevel.Info);
+    protected static readonly Logger log = new(true, LogLevel.Warning);
     protected ResourceManager resourceManager;
     protected BuildingManager buildingManager;
     protected TechManager techManager;
@@ -34,13 +35,15 @@ public class Building : MonoBehaviour
     private float startupTimer;
     private float placementOverlapCount = 0;
 
-    private void Start()
+    protected virtual void Start()
     {
         if (data == null)
         {
             Debug.LogError("BuildingData SO not assigned on " + gameObject.name);
             return;
         }
+
+        if (PlacementMode) return;
 
         resourceManager = FindFirstObjectByType<ResourceManager>();
         buildingManager = FindFirstObjectByType<BuildingManager>();
@@ -127,8 +130,8 @@ public class Building : MonoBehaviour
                 break;
 
             case BuildingState.PendingResources:
-                if (resourceManager.HasEnoughResources(consumedResources, true) &&
-                    resourceManager.TryReserveResources(requiredReservations, this))
+                if (resourceManager.HasEnoughResources(requiredReservations, false) &&
+                    resourceManager.HasEnoughResources(consumedResources, true))
                 {
                     TransitionTo(BuildingState.Startup);
                 }
@@ -149,6 +152,7 @@ public class Building : MonoBehaviour
                 break;
 
             case BuildingState.Operational:
+                // Try to consume resources
                 if (!resourceManager.HasReservation(this) ||
                     !resourceManager.TryConsumeResources(consumedResources, true))
                 {
@@ -163,10 +167,10 @@ public class Building : MonoBehaviour
         switch (state)
         {
             case BuildingState.Inactive:
-                log.Info($"Building {data.DisplayName} is now inactive.");
                 resourceManager.ReleaseReservations(requiredReservations, this);
-                resourceManager.RemoveCapacityEffects(capacityEffects);
+                resourceManager.RemoveCapacityEffects(capacityEffects, this);
                 resourceManager.UnregisterResourceUser(this);
+                log.Info($"Building {data.DisplayName} is now inactive.");
                 break;
 
             case BuildingState.PendingResources:
@@ -174,28 +178,33 @@ public class Building : MonoBehaviour
                 break;
 
             case BuildingState.Startup:
-                log.Info($"Building {data.DisplayName} is starting up.");
                 startupTimer = startupTime;
+                log.Info($"Building {data.DisplayName} is starting up.");
                 break;
 
             case BuildingState.Operational:
+                // Try to reserve resources
+                if (!resourceManager.TryReserveResources(requiredReservations, this))
+                    TransitionTo(BuildingState.PendingResources);
+
+                resourceManager.ApplyCapacityEffects(capacityEffects, this);
                 log.Info($"Building {data.DisplayName} is now operational.");
-                resourceManager.ApplyCapacityEffects(capacityEffects);
                 break;
 
             case BuildingState.Destroyed:
-                log.Info($"Building {data.DisplayName} destroyed.");
                 resourceManager.ReleaseReservations(requiredReservations, this);
                 resourceManager.UnregisterResourceUser(this);
-                resourceManager.RemoveCapacityEffects(capacityEffects);
+                resourceManager.RemoveCapacityEffects(capacityEffects, this);
                 OnDestroyed?.Invoke(this);
+                log.Info($"Building {data.DisplayName} destroyed.");
+                Destroy(gameObject);
                 break;
         }
     }
 
     protected void UpdateStats()
     {
-        bool hasResources = currentState == BuildingState.Operational || currentState == BuildingState.Startup;
+        bool hasResources = currentState == BuildingState.Operational;
 
         // Max health
         maxHealth = techManager.GetModifiedValue(data.MaxHealth, ModifierType.MaxHealth, data.Id);
@@ -216,22 +225,26 @@ public class Building : MonoBehaviour
         }
 
         // Capacity
-        if (hasResources) resourceManager.RemoveCapacityEffects(capacityEffects);
         for (int i = 0; i < data.CapacityEffects.Count; i++)
         {
             float newAmount = techManager.GetModifiedValue(data.CapacityEffects[i].Amount, ModifierType.Capacity, data.Id);
+            float delta = newAmount - capacityEffects[i].Amount;
             capacityEffects[i].Amount = newAmount;
+
+            if (resourceManager.HasCapacityEffects(this))
+                resourceManager.ChangeCapacity(data.CapacityEffects[i].Data.Id, delta);
         }
-        if (hasResources) resourceManager.ApplyCapacityEffects(capacityEffects);
 
         // Reservations
-        if (hasResources) resourceManager.ReleaseReservations(requiredReservations, this);
         for (int i = 0; i < data.RequiredReservations.Count; i++)
         {
             float newAmount = techManager.GetModifiedValue(data.RequiredReservations[i].Amount, ModifierType.Reservation, data.Id);
+            float delta = newAmount - requiredReservations[i].Amount;
             requiredReservations[i].Amount = newAmount;
+
+            if (resourceManager.HasReservation(this))
+                resourceManager.ChangeReservation(data.RequiredReservations[i].Data.Id, delta);
         }
-        if (hasResources) resourceManager.TryReserveResources(requiredReservations, this);
     }
 
     private void TransitionTo(BuildingState newState)

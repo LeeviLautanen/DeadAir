@@ -352,3 +352,5 @@ MonoBehaviour:
   upgradeText: {fileID: 4103968829678119604}
   isUnlocked: 0
   isResearched: 0
+  selectedColor: {r: 0.7971698, g: 0.8613127, b: 1, a: 1}
+  researchedColor: {r: 0.8254717, g: 1, b: 0.88655657, a: 1}

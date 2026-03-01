@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ApartmentUpgrade1
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Apartment capacity +10
-  researchCost: 0
+  ResearchCost: 10
   Modifiers:
   - TargetBuildingIds:
     - apartment

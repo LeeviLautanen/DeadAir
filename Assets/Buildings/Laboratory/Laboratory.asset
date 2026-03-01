@@ -10,26 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
-  m_Name: Bunker
-  m_EditorClassIdentifier: 
-  Id: bunker
-  DisplayName: Bunker
-  ConstructionCost: []
-  MaxHealth: 1000
+  m_Name: Laboratory
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingData
+  Id: laboratory
+  DisplayName: Laboratory
+  ConstructionCost:
+  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    Amount: 50
+  MaxHealth: 100
   ResourcePriority: 0
-  StartupTime: 0
-  Prefab: {fileID: 8392107632934456976, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
-  ProducedResources:
+  StartupTime: 1
+  Prefab: {fileID: 5548335663501128034, guid: ab5db255ed42f5b48bc9d08386af7325, type: 3}
+  ProducedResources: []
+  ConsumedResources:
   - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    Amount: 50
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 50
-  ConsumedResources: []
-  CapacityEffects:
-  - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    Amount: 1000
+    Amount: 5
+  CapacityEffects: []
+  RequiredReservations:
   - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
-    Amount: 500
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 500
-  RequiredReservations: []
+    Amount: 30

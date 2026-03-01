@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ShieldController : Building
@@ -9,10 +8,10 @@ public class ShieldController : Building
 
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D shieldCollider;
-    private bool shieldIsActive => shieldCollider.enabled;
+    private bool isShieldActive;
     private float shieldHealth = 100f;
 
-    private void Awake()
+    protected override void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         foreach (var collider in GetComponentsInChildren<BuildingCollider>())
@@ -27,6 +26,8 @@ public class ShieldController : Building
         {
             Debug.LogError("No shield collider found on shield building");
         }
+
+        base.Start();
     }
 
     public override void ColliderEnter(BuildingColliderType colliderType, Collider2D other)
@@ -52,18 +53,20 @@ public class ShieldController : Building
 
     public void ActivateShield()
     {
-        if (shieldIsActive || shieldCollider == null) return;
+        if (isShieldActive || shieldCollider == null) return;
 
         log.Info("Activating shield");
+        isShieldActive = true;
         shieldCollider.enabled = true;
         spriteRenderer.sprite = shieldOnTexture;
     }
 
     public void DeactivateShield()
     {
-        if (!shieldIsActive || shieldCollider == null) return;
+        if (!isShieldActive || shieldCollider == null) return;
 
         log.Info("Deactivating shield");
+        isShieldActive = false;
         shieldCollider.enabled = false;
         spriteRenderer.sprite = shieldOffTexture;
     }
@@ -83,7 +86,7 @@ public class ShieldController : Building
             case BuildingState.Operational:
                 RepairShield(RecoverSpeed * Time.deltaTime);
 
-                if (!shieldIsActive && shieldHealth > 50f)
+                if (!isShieldActive && shieldHealth > 50f)
                 {
                     ActivateShield();
                 }

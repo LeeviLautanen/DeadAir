@@ -5,6 +5,6 @@ using UnityEngine;
 public class UpgradeData : ScriptableObject
 {
     public string DisplayName;
-    public int researchCost;
+    public int ResearchCost;
     public List<UpgradeModifier> Modifiers = new();
 }

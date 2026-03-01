@@ -11,10 +11,10 @@ digraph G {
     inactive -> pending_resources [label= "Activated"];
     
     startup -> operating [label= "Delay complete"];
-    startup -> pending_resources [label= "Resources lost"];
+    startup -> pending_resources [label= "Unavailable"];
 
     pending_resources -> pending_resources[label= "Unavailable"];
-    pending_resources -> startup [label= "Acquired"];
+    pending_resources -> startup [label= "Available"];
 
     operating -> operating [label= "Consumed"];
     operating -> pending_resources [label= "Resources lost"];

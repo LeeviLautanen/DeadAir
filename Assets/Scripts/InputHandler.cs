@@ -69,6 +69,10 @@ public class InputHandler : MonoBehaviour
         {
             buildingPlacer.SelectBuilding("power_plant");
         }
+        else if (Keyboard.current.digit5Key.wasPressedThisFrame)
+        {
+            buildingPlacer.SelectBuilding("laboratory");
+        }
     }
 
     private void HandleSaveControls()
