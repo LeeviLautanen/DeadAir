@@ -202,6 +202,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Meteorite
   Damage: 5
-  Speed: 100
+  Speed: 50
   HasCollided: 0
   Lifetime: 5

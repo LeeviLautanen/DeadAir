@@ -351,6 +351,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc360b2015866894f94dcb8b0ca843fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameTimeMultiplier: 1
+  DayLengthSeconds: 5
 --- !u!114 &93531071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -365,10 +367,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteManager
   MeteoritePrefab: {fileID: 2838757934400324701, guid: a2ecc256c071e3c4ca34c02790dae405, type: 3}
   SpawnRange: {x: 0, y: 200}
+  SpawnHeight: 40
   SpawnAngleRange: 30
-  spawnAmount: 40
-  spawnInterval: 10
-  spawnDuration: 2
 --- !u!114 &93531072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1527,7 +1527,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1276494580}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
   m_Name: 
@@ -2104,7 +2104,7 @@ MonoBehaviour:
   moveSpeed: 2
   zoomSpeed: 1
   minZoom: 5
-  maxZoom: 20
+  maxZoom: 40
   inputActions: {fileID: -944628639613478452, guid: aaf4b48aff095c54282076415bca1172, type: 3}
 --- !u!1 &1472587898
 GameObject:

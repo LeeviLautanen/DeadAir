@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
+  m_GroupName: Default Local Group
+  m_GUID: 559bcb984ce91134997ae9f976a6212a
+  m_SerializeEntries:
+  - m_GUID: 9209b8483dd433b4cb2ab7b62b7d31f6
+    m_Address: Assets/Meteorites/AttackWaves/Wave2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9f2429824ac4e9d4fb5665a5b40cde6c
+    m_Address: Assets/Meteorites/AttackWaves/Wave3.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8d0c9d15eeeae44093ac44fd2ecb80e
+    m_Address: Assets/Meteorites/AttackWaves/Wave1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: bb9f0fd9ec652af4fb514a1b33e859c9, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a2611074d5a528b4d970e283f8d4dded, type: 2}
+    - {fileID: 11400000, guid: c0e95fb93375def4d86befc10d47e2ad, type: 2}

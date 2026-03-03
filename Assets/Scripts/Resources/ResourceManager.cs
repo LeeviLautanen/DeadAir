@@ -6,18 +6,27 @@ public class ResourceManager : MonoBehaviour
 {
     private static readonly Logger log = new(true, LogLevel.Warning);
     private static readonly System.Random rng = new();
+
+    private TimeManager timeManager;
+
     [SerializeField] private List<ResourceData> allResources = new();
+    private readonly List<Building>[] resourceUserLists = new List<Building>[10];
+
     private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
     private readonly Dictionary<string, float> resourceMaxLookup = new();
     private readonly Dictionary<string, float> reservationLookup = new();
-    private readonly List<Building>[] resourceUserLists = new List<Building>[10];
+
+
     private readonly Dictionary<Building, bool> reservationDict = new();
     private readonly Dictionary<Building, bool> capacityDict = new();
+
     private readonly List<Building> unregisterBuffer = new();
     private readonly List<Building> registerBuffer = new();
 
     private void Awake()
     {
+        timeManager = FindFirstObjectByType<TimeManager>();
+
         InitializeResources();
     }
 
@@ -370,7 +379,7 @@ public class ResourceManager : MonoBehaviour
 
     private float GetDeltaTime()
     {
-        return Time.deltaTime;
+        return timeManager.GetDeltaTime();
     }
 
     private void InitializeResources()

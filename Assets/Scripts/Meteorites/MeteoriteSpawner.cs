@@ -1,30 +1,29 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MeteoriteSpawner : MonoBehaviour
 {
     public GameObject MeteoritePrefab;
     public Vector2 SpawnRange = new(-10, 10);
-    public float SpawnAngleRange = 30f;
-    public int spawnAmount = 5;
-    public float spawnInterval = 5f;
-    public float spawnDuration = 2f; // total time (seconds) over which a wave's meteorites will be spawned
+    public float SpawnHeight = 40f;
+    public float SpawnAngleRange = 20f;
+    private List<MeteoriteWaveData> attackWaves = new();
 
-    private void Start()
-    {
-        StartCoroutine(SpawnWaves());
-    }
+    private TimeManager timeManager;
 
-    private IEnumerator SpawnWaves()
+    private async void Start()
     {
-        while (true)
+        timeManager = FindFirstObjectByType<TimeManager>();
+
+        attackWaves = await Utility.LoadAllByLabel<MeteoriteWaveData>("AttackWaveSO");
+        foreach (MeteoriteWaveData wave in attackWaves)
         {
-            yield return StartCoroutine(SpawnWave());
-            yield return new WaitForSeconds(spawnInterval);
+            timeManager.ScheduleEvent(() => StartCoroutine(SpawnWave(wave.Amount, wave.Duration)), wave.Day, wave.Hour);
         }
     }
 
-    private IEnumerator SpawnWave()
+    private IEnumerator SpawnWave(int spawnAmount, float spawnDuration)
     {
         if (spawnAmount <= 0)
             yield break;
@@ -66,7 +65,7 @@ public class MeteoriteSpawner : MonoBehaviour
 
     private void SpawnMeteorite(float position, float angle)
     {
-        Vector3 spawnPosition = new(position, 40, -1);
+        Vector3 spawnPosition = new(position, SpawnHeight, -1);
         Quaternion spawnRotation = Quaternion.AngleAxis(angle, Vector3.forward) * MeteoritePrefab.transform.rotation;
         Instantiate(MeteoritePrefab, spawnPosition, spawnRotation);
     }

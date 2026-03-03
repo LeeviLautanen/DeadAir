@@ -1,13 +1,12 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float zoomSpeed = 5f;
-    public float minZoom = 5f;
-    public float maxZoom = 20f;
+    public float minZoom = 7f;
+    public float maxZoom = 30f;
     public InputActionAsset inputActions;
 
     private InputAction cameraMoveAction;
@@ -16,7 +15,7 @@ public class CameraController : MonoBehaviour
     private Camera mainCamera;
     private float zoomMultiplier;
 
-    private void Awake()
+    private void Start()
     {
         techManager = FindFirstObjectByType<TechManager>();
 
