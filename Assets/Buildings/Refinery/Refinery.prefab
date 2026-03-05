@@ -264,7 +264,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634f8a4923f0ee3498573b32abf2dc07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 6b55141d5be5af849b469853701608d0, type: 2}
+  PlacementMode: 0
+  data: {fileID: 11400000, guid: 093fc80c4ae8422499891a66499f2ede, type: 2}
   currentState: 0
   maxHealth: 0
 --- !u!1 &7625024810254709403

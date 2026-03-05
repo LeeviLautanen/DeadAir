@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ddaa1a1c0c9dd34ea2f844b2ad20134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Meteorite
-  Damage: 5
+  Damage: 50
   Speed: 50
   HasCollided: 0
   Lifetime: 5

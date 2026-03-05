@@ -21,9 +21,9 @@ MonoBehaviour:
   Prefab: {fileID: 8392107632934456976, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
   ProducedResources:
   - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    Amount: 50
+    Amount: 5
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 50
+    Amount: 5
   ConsumedResources: []
   CapacityEffects:
   - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}

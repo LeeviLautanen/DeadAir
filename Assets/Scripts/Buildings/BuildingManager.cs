@@ -7,18 +7,22 @@ public class BuildingManager : MonoBehaviour
     public List<BuildingData> availableBuildings;
 
     private static readonly Logger log = new(true, LogLevel.Warning);
-    private Dictionary<string, BuildingData> buildingDatabase;
-    [SerializeField] private List<Building> allBuildings;
     private ResourceManager resourceManager;
+    private InputHandler inputHandler;
+    private Dictionary<string, BuildingData> buildingDatabase;
+    [SerializeField] private List<Building> allBuildings = new();
+    private readonly string saveFilePath = "./buildings.json";
 
     private void Start()
     {
         InitializeBuildingDatabase();
-        allBuildings = new();
-        resourceManager = GetComponent<ResourceManager>();
+        resourceManager = FindFirstObjectByType<ResourceManager>();
+        inputHandler = FindFirstObjectByType<InputHandler>();
 
         Building.OnCreated += OnBuildingCreated;
         Building.OnDestroyed += OnBuildingDestroyed;
+
+        inputHandler.SaveActionTriggered += HandleSave;
     }
 
     public GameObject CreateBuilding(string buildingId, Vector3 position, Quaternion rotation = default)
@@ -47,48 +51,6 @@ public class BuildingManager : MonoBehaviour
         return buildingDatabase.ContainsKey(buildingId) ? buildingDatabase[buildingId] : null;
     }
 
-    public void SaveBuildings()
-    {
-        BuildingSaveDataList saveDataList = new();
-        foreach (var buildingObj in allBuildings)
-        {
-            if (buildingObj.TryGetComponent(out Building buildingScript))
-            {
-                Vector3 position = buildingObj.transform.position;
-                saveDataList.Buildings.Add(new BuildingSaveData(buildingScript.Id, position));
-            }
-        }
-        string json = JsonUtility.ToJson(saveDataList);
-        System.IO.File.WriteAllText("./buildings.json", json);
-    }
-
-    public void LoadBuildings()
-    {
-        string path = "./buildings.json";
-        if (!System.IO.File.Exists(path))
-        {
-            log.Warning("No save file found for buildings.");
-            return;
-        }
-
-        string json = System.IO.File.ReadAllText(path);
-        BuildingSaveDataList saveDataList = JsonUtility.FromJson<BuildingSaveDataList>(json);
-
-        // Clear existing buildings
-        foreach (var buildingObj in allBuildings)
-        {
-            buildingObj.TryGetComponent(out Building buildingScript);
-            buildingScript.DestroyBuilding();
-        }
-        allBuildings.Clear();
-
-        // Instantiate buildings from save data
-        foreach (var saveData in saveDataList.Buildings)
-        {
-            CreateBuilding(saveData.BuildingId, saveData.Position);
-        }
-    }
-
     public List<Building> GetBuildingsByIds(List<string> buildingIds)
     {
         List<Building> matchingBuildings = new();
@@ -101,6 +63,65 @@ public class BuildingManager : MonoBehaviour
             }
         }
         return matchingBuildings;
+    }
+
+    private void HandleSave(SaveAction action)
+    {
+        switch (action)
+        {
+            case SaveAction.Save:
+                SaveBuildings();
+                break;
+
+            case SaveAction.Load:
+                LoadBuildings();
+                break;
+
+            case SaveAction.Clear:
+                System.IO.File.Delete(saveFilePath);
+                break;
+        }
+    }
+
+    private void SaveBuildings()
+    {
+        BuildingSaveDataList saveDataList = new();
+        foreach (var buildingObj in allBuildings)
+        {
+            if (buildingObj.TryGetComponent(out Building buildingScript))
+            {
+                Vector3 position = buildingObj.transform.position;
+                saveDataList.Buildings.Add(new BuildingSaveData(buildingScript.Id, position));
+            }
+        }
+        string json = JsonUtility.ToJson(saveDataList);
+        System.IO.File.WriteAllText(saveFilePath, json);
+    }
+
+    private void LoadBuildings()
+    {
+        if (!System.IO.File.Exists(saveFilePath))
+        {
+            log.Warning("No save file found for buildings.");
+            return;
+        }
+
+        string json = System.IO.File.ReadAllText(saveFilePath);
+        BuildingSaveDataList saveDataList = JsonUtility.FromJson<BuildingSaveDataList>(json);
+
+        // Clear existing buildings
+        while (allBuildings.Count > 0)
+        {
+            allBuildings[0].TryGetComponent(out Building buildingScript);
+            buildingScript.DestroyBuilding();
+        }
+        allBuildings.Clear();
+
+        // Instantiate buildings from save data
+        foreach (var saveData in saveDataList.Buildings)
+        {
+            CreateBuilding(saveData.BuildingId, saveData.Position);
+        }
     }
 
     private void OnBuildingCreated(Building building)

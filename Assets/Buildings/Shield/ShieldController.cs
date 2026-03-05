@@ -76,13 +76,6 @@ public class ShieldController : Building
         base.UpdateState(deltaTime);
         switch (currentState)
         {
-            case BuildingState.Inactive:
-                // Do nothing until activated
-                break;
-
-            case BuildingState.PendingResources:
-                break;
-
             case BuildingState.Operational:
                 RepairShield(RecoverSpeed * Time.deltaTime);
 
@@ -106,9 +99,6 @@ public class ShieldController : Building
 
             case BuildingState.PendingResources:
                 DeactivateShield();
-                break;
-
-            case BuildingState.Operational:
                 break;
         }
     }

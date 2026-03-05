@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class BuildingPlacer : MonoBehaviour
 {
@@ -20,6 +20,51 @@ public class BuildingPlacer : MonoBehaviour
         inputHandler = FindFirstObjectByType<InputHandler>();
         buildingManager = FindFirstObjectByType<BuildingManager>();
         buildingTypeText = GameObject.Find("BuildingTypeText").GetComponent<TMP_Text>();
+
+        inputHandler.NumberKeyPressed += HandleNumberKey;
+        inputHandler.RegisterClickHandler(HandleMouseClick, priority: 100);
+    }
+
+    private void HandleNumberKey(Key key)
+    {
+        switch (key)
+        {
+            case Key.Digit1:
+                SelectBuilding("apartment");
+                break;
+            case Key.Digit2:
+                SelectBuilding("refinery");
+                break;
+            case Key.Digit3:
+                SelectBuilding("shield");
+                break;
+            case Key.Digit4:
+                SelectBuilding("power_plant");
+                break;
+            case Key.Digit5:
+                SelectBuilding("laboratory");
+                break;
+        }
+    }
+
+    private bool HandleMouseClick(InputHandler.MouseClick click)
+    {
+        // Ignore mouse if we arent placing a building
+        if (!IsPlacing)
+            return false;
+
+        if (click.Button == InputHandler.MouseButton.Left)
+        {
+            TryPlaceGhost();
+            return true;
+        }
+        else if (click.Button == InputHandler.MouseButton.Right)
+        {
+            ClearSelected();
+            return true;
+        }
+
+        return false;
     }
 
     private void Update()
@@ -35,7 +80,7 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    public void SelectBuilding(string buildingId)
+    private void SelectBuilding(string buildingId)
     {
         if (buildingManager == null || buildingId == currentBuildingId) return;
 
@@ -66,7 +111,7 @@ public class BuildingPlacer : MonoBehaviour
         ghostBuilding.PlacementMode = true;
     }
 
-    public void TryPlaceGhost()
+    private void TryPlaceGhost()
     {
         if (buildingManager == null || IsPlacing == false || !ghostBuilding.ValidBuildPlacement) return;
 
@@ -77,7 +122,7 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    public void ClearSelected()
+    private void ClearSelected()
     {
         IsPlacing = false;
         currentBuildingId = null;

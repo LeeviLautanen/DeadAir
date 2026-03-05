@@ -72,8 +72,9 @@ public class ResourceManager : MonoBehaviour
         {
             foreach (var user in userList)
             {
-                if (user.CurrentState != BuildingState.Operational
-                    || user.ProducedResources.Count == 0) continue;
+                bool isNotOperational = user.CurrentState != BuildingState.Operational;
+                bool hasNoProduction = user.ProducedResources.Count == 0;
+                if (isNotOperational || hasNoProduction) continue;
 
                 AddResources(user.ProducedResources, true);
             }

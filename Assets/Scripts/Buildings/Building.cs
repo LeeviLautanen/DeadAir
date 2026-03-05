@@ -8,26 +8,28 @@ public class Building : MonoBehaviour
     public BuildingState CurrentState => currentState;
     public string Id => data.Id;
     public string DisplayName => data.DisplayName;
+    public float MaxHealth => maxHealth;
+    public float CurrentHealth => currentHealth;
     public List<ResourceAmount> ProducedResources => producedResources;
     public List<ResourceAmount> ConsumedResources => consumedResources;
     public List<ResourceAmount> CapacityEffects => capacityEffects;
     public List<ResourceAmount> RequiredReservations => requiredReservations;
     public bool ValidBuildPlacement => placementOverlapCount == 0;
-    public bool PlacementMode;
+    public bool PlacementMode = false;
     public static Action<Building> OnCreated;
     public static Action<Building> OnDestroyed;
 
-    protected static readonly Logger log = new(true, LogLevel.Warning);
+    protected static readonly Logger log = new(true, LogLevel.Info);
     protected ResourceManager resourceManager;
     protected BuildingManager buildingManager;
     protected TechManager techManager;
     [SerializeField] protected BuildingData data;
     [SerializeField] protected BuildingState currentState = BuildingState.Inactive;
 
-    private List<ResourceAmount> producedResources;
-    private List<ResourceAmount> consumedResources;
-    private List<ResourceAmount> capacityEffects;
-    private List<ResourceAmount> requiredReservations;
+    private List<ResourceAmount> producedResources = new();
+    private List<ResourceAmount> consumedResources = new();
+    private List<ResourceAmount> capacityEffects = new();
+    private List<ResourceAmount> requiredReservations = new();
     private float startupTime;
     private int resourcePriority;
     private float currentHealth;
@@ -63,6 +65,15 @@ public class Building : MonoBehaviour
 
         OnCreated?.Invoke(this);
         UpdateStats();
+
+        log.Info(consumedResources.Count);
+    }
+
+    public virtual List<KeyValuePair<string, string>> GetInspectFields()
+    {
+        return new List<KeyValuePair<string, string>> {
+            new("Health", currentHealth.ToString())
+        };
     }
 
     public virtual void ColliderEnter(BuildingColliderType colliderType, Collider2D other)
@@ -204,8 +215,6 @@ public class Building : MonoBehaviour
 
     protected void UpdateStats()
     {
-        bool hasResources = currentState == BuildingState.Operational;
-
         // Max health
         maxHealth = techManager.GetModifiedValue(data.MaxHealth, ModifierType.MaxHealth, data.Id);
         currentHealth = maxHealth;
