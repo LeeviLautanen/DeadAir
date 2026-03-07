@@ -14,6 +14,7 @@ public class BuildingPlacer : MonoBehaviour
     private TMP_Text buildingTypeText;
     private GameObject ghostGO;
     private Building ghostBuilding;
+    private SpriteRenderer ghostSpriteRenderer;
 
     private void Start()
     {
@@ -77,6 +78,19 @@ public class BuildingPlacer : MonoBehaviour
                 Vector3 ghostPos = new(mousePos.x, ghostGO.transform.position.y, -3);
                 ghostGO.transform.position = ghostPos;
             }
+
+            if (!ghostBuilding.ValidBuildPlacement && ghostSpriteRenderer.color.a == 1.0f)
+            {
+                Color oldColor = ghostSpriteRenderer.color;
+                oldColor.a = 0.5f;
+                ghostSpriteRenderer.color = oldColor;
+            }
+            else if (ghostBuilding.ValidBuildPlacement && ghostSpriteRenderer.color.a == 0.5f)
+            {
+                Color oldColor = ghostSpriteRenderer.color;
+                oldColor.a = 1.0f;
+                ghostSpriteRenderer.color = oldColor;
+            }
         }
     }
 
@@ -108,6 +122,7 @@ public class BuildingPlacer : MonoBehaviour
             }
         }
         ghostBuilding = ghostGO.GetComponent<Building>();
+        ghostSpriteRenderer = ghostGO.GetComponentInChildren<SpriteRenderer>();
         ghostBuilding.PlacementMode = true;
     }
 
