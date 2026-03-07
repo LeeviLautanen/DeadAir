@@ -8,6 +8,8 @@ public class MeteoriteSpawner : MonoBehaviour
     public Vector2 SpawnRange = new(-10, 10);
     public float SpawnHeight = 40f;
     public float SpawnAngleRange = 20f;
+    public float rotationSpeedMin = 30f;
+    public float rotationSpeedMax = 180f;
     private List<MeteoriteWaveData> attackWaves = new();
 
     private TimeManager timeManager;
@@ -67,6 +69,10 @@ public class MeteoriteSpawner : MonoBehaviour
     {
         Vector3 spawnPosition = new(position, SpawnHeight, -1);
         Quaternion spawnRotation = Quaternion.AngleAxis(angle, Vector3.forward) * MeteoritePrefab.transform.rotation;
-        Instantiate(MeteoritePrefab, spawnPosition, spawnRotation);
+        GameObject meteor = Instantiate(MeteoritePrefab, spawnPosition, spawnRotation);
+
+        float rotationSpeed = Random.Range(rotationSpeedMin, rotationSpeedMax);
+        rotationSpeed = Random.value > 0.5f ? -rotationSpeed : rotationSpeed; // Randomize direction
+        meteor.GetComponent<Rigidbody2D>().angularVelocity = rotationSpeed;
     }
 }

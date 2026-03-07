@@ -359,7 +359,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 93531061}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15a516f98e5b5fc4cb5457c0be765cb7, type: 3}
   m_Name: 
@@ -368,6 +368,8 @@ MonoBehaviour:
   SpawnRange: {x: 0, y: 200}
   SpawnHeight: 40
   SpawnAngleRange: 30
+  rotationSpeedMin: 40
+  rotationSpeedMax: 150
 --- !u!114 &93531072
 MonoBehaviour:
   m_ObjectHideFlags: 0
