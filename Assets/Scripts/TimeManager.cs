@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
@@ -7,6 +8,9 @@ public class TimeManager : MonoBehaviour
     public int CurrentDay => currentDay;
     public float GameTimeMultiplier = 1f;
     public float DayLengthSeconds = 60f;
+    public Light SunLight;
+    public float DayBrightness = 1f;
+    public float NightBrightness = 0.2f;
 
     private static readonly Logger log = new(true, LogLevel.Warning);
     private int currentDay = 1;
@@ -30,6 +34,10 @@ public class TimeManager : MonoBehaviour
     private void Update()
     {
         dayProgress += GetDeltaTime() / DayLengthSeconds;
+
+        float newIntensity = Mathf.Lerp(NightBrightness, DayBrightness, Mathf.Sin(dayProgress * Mathf.PI * 2f - Mathf.PI / 2f) * 0.5f + 0.5f);
+        log.Info($"Updating sun intensity to {newIntensity:F2} (Day Progress: {dayProgress:F2})");
+        if (SunLight != null) SunLight.intensity = newIntensity;
 
         ProcessScheduledEvents();
 

@@ -351,7 +351,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameTimeMultiplier: 1
-  DayLengthSeconds: 15
+  DayLengthSeconds: 5
+  SunLight: {fileID: 1082982120}
+  DayBrightness: 1
+  NightBrightness: 0.2
 --- !u!114 &93531071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -359,7 +362,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 93531061}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15a516f98e5b5fc4cb5457c0be765cb7, type: 3}
   m_Name: 
@@ -809,6 +812,7 @@ Transform:
   m_Children:
   - {fileID: 337924327}
   - {fileID: 1692612749}
+  - {fileID: 1082982121}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &337924325
@@ -854,7 +858,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1827,7 +1831,7 @@ GameObject:
   - component: {fileID: 1082982120}
   - component: {fileID: 1082982119}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Sun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1936,11 +1940,11 @@ Transform:
   m_GameObject: {fileID: 1082982118}
   serializedVersion: 2
   m_LocalRotation: {x: 0.38103238, y: -0.39204207, z: 0.18281206, w: 0.81712735}
-  m_LocalPosition: {x: 0, y: 20, z: -22.7}
+  m_LocalPosition: {x: -47.2, y: 20, z: -48.99771}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 320547669}
   m_LocalEulerAnglesHint: {x: 50, y: -51.262, z: 0}
 --- !u!1 &1086496101
 GameObject:
@@ -3112,7 +3116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RenderShadows: 1
+  m_RenderShadows: 0
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
@@ -4125,7 +4129,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5031,7 +5035,6 @@ SceneRoots:
   - {fileID: 1445513120}
   - {fileID: 1932253584}
   - {fileID: 320547669}
-  - {fileID: 1082982121}
   - {fileID: 93531063}
   - {fileID: 1472587899}
   - {fileID: 1140090985}
