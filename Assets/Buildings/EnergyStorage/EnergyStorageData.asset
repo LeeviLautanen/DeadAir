@@ -20,7 +20,7 @@ MonoBehaviour:
   MaxHealth: 100
   ResourcePriority: 0
   StartupTime: 0
-  Prefab: {fileID: 0}
+  Prefab: {fileID: 2090995044971168592, guid: 1054f02b0834e7b43bcda121960e20f3, type: 3}
   ProducedResources: []
   ConsumedResources: []
   CapacityEffects:

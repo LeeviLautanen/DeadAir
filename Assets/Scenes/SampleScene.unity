@@ -315,6 +315,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ad3e0c905937253479cd28201a58ca15, type: 2}
   - {fileID: 11400000, guid: 093fc80c4ae8422499891a66499f2ede, type: 2}
   - {fileID: 11400000, guid: 6b55141d5be5af849b469853701608d0, type: 2}
+  - {fileID: 11400000, guid: 2ab079b39f30e534aa65ba40c4a399b6, type: 2}
   allBuildings: []
 --- !u!114 &93531066
 MonoBehaviour:
@@ -387,6 +388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3310900241aed8498bf747902f31ed7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LaboratoryManager
+  MinLabResearchRateIncrease: 0.1
   researchRateMultiplier: 1
 --- !u!1 &104735562
 GameObject:
@@ -2133,6 +2135,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6717258526406071837, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
+      propertyPath: data
+      value: 
+      objectReference: {fileID: 11400000, guid: e5ba837ed2a07bd48af612552a19e054, type: 2}
     - target: {fileID: 8392107632934456976, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_Name
       value: Bunker

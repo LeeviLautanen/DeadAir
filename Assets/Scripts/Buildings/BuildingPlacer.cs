@@ -46,7 +46,7 @@ public class BuildingPlacer : MonoBehaviour
                 SelectBuilding("laboratory");
                 break;
             case Key.Digit6:
-                SelectBuilding("laboratory");
+                SelectBuilding("interceptor_cannon");
                 break;
             case Key.Digit7:
                 SelectBuilding("energy_storage");

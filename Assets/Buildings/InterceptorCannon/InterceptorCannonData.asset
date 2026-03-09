@@ -10,20 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
-  m_Name: MaterialStorageData
+  m_Name: InterceptorCannonData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  Id: material_storage
-  DisplayName: Material storage
+  Id: interceptor_cannon
+  DisplayName: Interceptor cannon
   ConstructionCost:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 30
+    Amount: 50
   MaxHealth: 100
   ResourcePriority: 0
-  StartupTime: 0
-  Prefab: {fileID: 2342297968833454867, guid: e1fe2808df5842a41a4aa40d782e3f07, type: 3}
+  StartupTime: 1
+  Prefab: {fileID: 4104337362272144408, guid: b9e51466d9830ca4185629f37a859764, type: 3}
   ProducedResources: []
-  ConsumedResources: []
-  CapacityEffects:
+  ConsumedResources:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 200
-  RequiredReservations: []
+    Amount: 2
+  - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    Amount: 2
+  CapacityEffects: []
+  RequiredReservations:
+  - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
+    Amount: 15

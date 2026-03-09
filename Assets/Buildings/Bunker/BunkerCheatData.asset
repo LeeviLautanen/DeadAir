@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
+  m_Name: BunkerCheatData
+  m_EditorClassIdentifier: 
+  Id: bunker
+  DisplayName: Bunker
+  ConstructionCost: []
+  MaxHealth: 1000000
+  ResourcePriority: 0
+  StartupTime: 0
+  Prefab: {fileID: 8392107632934456976, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
+  ProducedResources:
+  - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    Amount: 500
+  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    Amount: 500
+  ConsumedResources: []
+  CapacityEffects:
+  - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    Amount: 100000
+  - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
+    Amount: 500000
+  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    Amount: 5000000
+  RequiredReservations: []

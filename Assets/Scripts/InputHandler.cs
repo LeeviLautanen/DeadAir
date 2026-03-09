@@ -18,6 +18,10 @@ public class InputHandler : MonoBehaviour
     public event Action<Key> NumberKeyPressed;
     public event Action<SaveAction> SaveActionTriggered;
 
+    private static readonly Key[] numberKeys =
+    {
+        Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4, Key.Digit5, Key.Digit6, Key.Digit7, Key.Digit8, Key.Digit9
+    };
     private readonly List<(int priority, ClickHandler handler)> clickHandlers = new();
     private Camera mainCamera;
     private Vector3 screenPosCache = Vector3.zero;
@@ -73,11 +77,14 @@ public class InputHandler : MonoBehaviour
     {
         if (Keyboard.current == null) return;
 
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) NumberKeyPressed?.Invoke(Key.Digit1);
-        else if (Keyboard.current.digit2Key.wasPressedThisFrame) NumberKeyPressed?.Invoke(Key.Digit2);
-        else if (Keyboard.current.digit3Key.wasPressedThisFrame) NumberKeyPressed?.Invoke(Key.Digit3);
-        else if (Keyboard.current.digit4Key.wasPressedThisFrame) NumberKeyPressed?.Invoke(Key.Digit4);
-        else if (Keyboard.current.digit5Key.wasPressedThisFrame) NumberKeyPressed?.Invoke(Key.Digit5);
+        for (int i = 0; i < numberKeys.Length; i++)
+        {
+            if (Keyboard.current[numberKeys[i]].wasPressedThisFrame)
+            {
+                NumberKeyPressed?.Invoke(numberKeys[i]);
+                break;
+            }
+        }
     }
 
     private void HandleSaveControls()
