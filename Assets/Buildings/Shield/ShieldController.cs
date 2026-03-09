@@ -6,6 +6,7 @@ public class ShieldController : Building
     public Sprite shieldOffTexture;
     public float RecoverSpeed = 10f;
 
+    private static readonly new Logger log = new(true, LogLevel.Warning);
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D shieldCollider;
     private bool isShieldActive;
@@ -24,7 +25,7 @@ public class ShieldController : Building
         }
         if (shieldCollider == null)
         {
-            Debug.LogError("No shield collider found on shield building");
+            log.Error("No shield collider found on shield building");
         }
 
         base.Start();

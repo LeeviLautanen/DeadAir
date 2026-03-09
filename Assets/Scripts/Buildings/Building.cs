@@ -14,7 +14,6 @@ public class Building : MonoBehaviour
     public List<ResourceAmount> ConsumedResources => consumedResources;
     public List<ResourceAmount> CapacityEffects => capacityEffects;
     public List<ResourceAmount> RequiredReservations => requiredReservations;
-    public bool ValidBuildPlacement => placementOverlapCount == 0;
     public bool PlacementMode = false;
     public static Action<Building> OnCreated;
     public static Action<Building> OnDestroyed;
@@ -37,6 +36,13 @@ public class Building : MonoBehaviour
     private float startupTimer;
     private float placementOverlapCount = 0;
 
+    protected virtual void Awake()
+    {
+        resourceManager = FindFirstObjectByType<ResourceManager>();
+        buildingManager = FindFirstObjectByType<BuildingManager>();
+        techManager = FindFirstObjectByType<TechManager>();
+    }
+
     protected virtual void Start()
     {
         if (data == null)
@@ -47,9 +53,6 @@ public class Building : MonoBehaviour
 
         if (PlacementMode) return;
 
-        resourceManager = FindFirstObjectByType<ResourceManager>();
-        buildingManager = FindFirstObjectByType<BuildingManager>();
-        techManager = FindFirstObjectByType<TechManager>();
         TechManager.OnResearchCompleted += UpdateStats;
 
         maxHealth = data.MaxHealth;
@@ -63,17 +66,18 @@ public class Building : MonoBehaviour
         capacityEffects = data.CapacityEffects.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
         requiredReservations = data.RequiredReservations.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
 
+        log.Info($"Creating building {data.DisplayName}");
         OnCreated?.Invoke(this);
         UpdateStats();
-
-        log.Info(consumedResources.Count);
     }
 
-    public virtual List<KeyValuePair<string, string>> GetInspectFields()
+    public bool IsValidPlacement()
     {
-        return new List<KeyValuePair<string, string>> {
-            new("Health", currentHealth.ToString())
-        };
+        bool hasSpace = placementOverlapCount == 0;
+        bool hasResources = resourceManager.HasEnoughResources(requiredReservations, false) &&
+                            resourceManager.HasEnoughResources(data.ConstructionCost, false);
+
+        return hasSpace && hasResources;
     }
 
     public virtual void ColliderEnter(BuildingColliderType colliderType, Collider2D other)
@@ -97,7 +101,6 @@ public class Building : MonoBehaviour
             case BuildingColliderType.Placement:
                 if (other.gameObject.layer != LayerMask.NameToLayer("Placement")) break;
                 placementOverlapCount++;
-                log.Info(placementOverlapCount);
                 break;
         }
     }
@@ -109,13 +112,13 @@ public class Building : MonoBehaviour
             case BuildingColliderType.Placement:
                 if (other.gameObject.layer != LayerMask.NameToLayer("Placement")) break;
                 placementOverlapCount = Mathf.Max(placementOverlapCount - 1, 0);
-                log.Info(placementOverlapCount);
                 break;
         }
     }
 
     public void Activate()
     {
+        log.Info($"Activating building {data.DisplayName}");
         resourceManager.RegisterResourceUser(this);
         if (currentState == BuildingState.Inactive)
             TransitionTo(BuildingState.PendingResources);
@@ -123,6 +126,7 @@ public class Building : MonoBehaviour
 
     public void Deactivate()
     {
+        log.Info($"Deactivating building {data.DisplayName}");
         if (currentState != BuildingState.Inactive)
             TransitionTo(BuildingState.Inactive);
     }

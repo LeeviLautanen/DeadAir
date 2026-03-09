@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
-  m_Name: Apartment
-  m_EditorClassIdentifier: 
-  Id: apartment
-  DisplayName: Apartment
+  m_Name: EnergyStorageData
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingData
+  Id: energy_storage
+  DisplayName: Energy storage
   ConstructionCost:
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     Amount: 30
   MaxHealth: 100
   ResourcePriority: 0
   StartupTime: 0
-  Prefab: {fileID: 2672589904300108679, guid: 3be4f90b12012c243a9bf239c5f7bd34, type: 3}
+  Prefab: {fileID: 0}
   ProducedResources: []
   ConsumedResources: []
   CapacityEffects:
-  - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
-    Amount: 20
+  - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    Amount: 200
   RequiredReservations: []

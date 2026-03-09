@@ -45,6 +45,15 @@ public class BuildingPlacer : MonoBehaviour
             case Key.Digit5:
                 SelectBuilding("laboratory");
                 break;
+            case Key.Digit6:
+                SelectBuilding("laboratory");
+                break;
+            case Key.Digit7:
+                SelectBuilding("energy_storage");
+                break;
+            case Key.Digit8:
+                SelectBuilding("material_storage");
+                break;
         }
     }
 
@@ -79,13 +88,14 @@ public class BuildingPlacer : MonoBehaviour
                 ghostGO.transform.position = ghostPos;
             }
 
-            if (!ghostBuilding.ValidBuildPlacement && ghostSpriteRenderer.color.a == 1.0f)
+            if (!ghostBuilding.IsValidPlacement() && ghostSpriteRenderer.color.a == 1.0f)
             {
                 Color oldColor = ghostSpriteRenderer.color;
                 oldColor.a = 0.5f;
+                oldColor.r += 0.5f;
                 ghostSpriteRenderer.color = oldColor;
             }
-            else if (ghostBuilding.ValidBuildPlacement && ghostSpriteRenderer.color.a == 0.5f)
+            else if (ghostBuilding.IsValidPlacement() && ghostSpriteRenderer.color.a == 0.5f)
             {
                 Color oldColor = ghostSpriteRenderer.color;
                 oldColor.a = 1.0f;
@@ -111,7 +121,7 @@ public class BuildingPlacer : MonoBehaviour
         currentBuildingId = buildingId;
         buildingTypeText.text = selectedBuildingData.DisplayName;
 
-        GameObject buildingPrefab = buildingManager.availableBuildings.Find(b => b.Id == buildingId).Prefab;
+        GameObject buildingPrefab = buildingManager.GetBuildingData(buildingId).Prefab;
         ghostGO = Instantiate(buildingPrefab);
         foreach (Collider2D collider in ghostGO.GetComponentsInChildren<Collider2D>())
         {
@@ -128,7 +138,7 @@ public class BuildingPlacer : MonoBehaviour
 
     private void TryPlaceGhost()
     {
-        if (buildingManager == null || IsPlacing == false || !ghostBuilding.ValidBuildPlacement) return;
+        if (buildingManager == null || IsPlacing == false || !ghostBuilding.IsValidPlacement()) return;
 
         Vector3 spawnPos = new(ghostGO.transform.position.x, 0, -1);
         if (buildingManager.CreateBuilding(currentBuildingId, spawnPos))

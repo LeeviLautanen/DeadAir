@@ -2,11 +2,10 @@ public class LaboratoryController : Building
 {
     private LaboratoryManager laboratoryManager;
 
-    protected override void Start()
+    protected override void Awake()
     {
+        base.Awake();
         laboratoryManager = FindFirstObjectByType<LaboratoryManager>();
-
-        base.Start();
     }
 
     protected override void EnterState(BuildingState state)

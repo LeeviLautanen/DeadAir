@@ -4,7 +4,7 @@ using System;
 
 public class ResourceManager : MonoBehaviour
 {
-    private static readonly Logger log = new(true, LogLevel.Warning);
+    private static readonly Logger log = new(true, LogLevel.Info);
     private static readonly System.Random rng = new();
 
     private TimeManager timeManager;
@@ -15,7 +15,6 @@ public class ResourceManager : MonoBehaviour
     private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
     private readonly Dictionary<string, float> resourceMaxLookup = new();
     private readonly Dictionary<string, float> reservationLookup = new();
-
 
     private readonly Dictionary<Building, bool> reservationDict = new();
     private readonly Dictionary<Building, bool> capacityDict = new();

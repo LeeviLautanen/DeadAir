@@ -9,15 +9,19 @@ public class BuildingManager : MonoBehaviour
     private static readonly Logger log = new(true, LogLevel.Warning);
     private ResourceManager resourceManager;
     private InputHandler inputHandler;
-    private Dictionary<string, BuildingData> buildingDatabase;
+    private Dictionary<string, BuildingData> buildingDatabase = new();
     [SerializeField] private List<Building> allBuildings = new();
     private readonly string saveFilePath = "./buildings.json";
 
     private void Start()
     {
-        InitializeBuildingDatabase();
         resourceManager = FindFirstObjectByType<ResourceManager>();
         inputHandler = FindFirstObjectByType<InputHandler>();
+
+        foreach (var buildingData in availableBuildings)
+        {
+            buildingDatabase.Add(buildingData.Id, buildingData);
+        }
 
         Building.OnCreated += OnBuildingCreated;
         Building.OnDestroyed += OnBuildingDestroyed;
@@ -133,15 +137,6 @@ public class BuildingManager : MonoBehaviour
     private void OnBuildingDestroyed(Building building)
     {
         allBuildings.Remove(building);
-    }
-
-    private void InitializeBuildingDatabase()
-    {
-        buildingDatabase = new Dictionary<string, BuildingData>();
-        foreach (var building in availableBuildings)
-        {
-            buildingDatabase[building.Id] = building;
-        }
     }
 }
 

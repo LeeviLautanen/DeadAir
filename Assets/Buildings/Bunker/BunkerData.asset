@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
-  m_Name: Bunker
+  m_Name: BunkerData
   m_EditorClassIdentifier: 
   Id: bunker
   DisplayName: Bunker
@@ -29,7 +29,7 @@ MonoBehaviour:
   - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
     Amount: 1000
   - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
-    Amount: 500
+    Amount: 50
   - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     Amount: 500
   RequiredReservations: []

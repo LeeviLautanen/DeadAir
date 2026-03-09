@@ -117,22 +117,28 @@ public class BuildingSelector : MonoBehaviour
 
         nameText.text = current.DisplayName;
 
+        // Activate button text
+        if (current.CurrentState == BuildingState.Inactive)
+            activateButton.GetComponentInChildren<TMP_Text>().SetText("Activate");
+        else
+            activateButton.GetComponentInChildren<TMP_Text>().SetText("Deactivate");
+
+        // Status text
         if (current.CurrentState == BuildingState.Operational)
         {
             statusText.SetText("Status: Operational");
-            activateButton.GetComponentInChildren<TMP_Text>().SetText("Deactivate");
-            activateButton.interactable = true;
         }
         else if (current.CurrentState == BuildingState.Startup)
         {
             statusText.SetText("Status: Starting up");
-            activateButton.interactable = false;
+        }
+        else if (current.CurrentState == BuildingState.PendingResources)
+        {
+            statusText.SetText("Status: Waiting for resources");
         }
         else if (current.CurrentState == BuildingState.Inactive)
         {
             statusText.SetText("Status: Inactive");
-            activateButton.GetComponentInChildren<TMP_Text>().SetText("Activate");
-            activateButton.interactable = true;
         }
 
         int integrityPercent = Mathf.FloorToInt(100 * current.CurrentHealth / current.MaxHealth);

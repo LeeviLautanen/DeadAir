@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
-  m_Name: Laboratory
+  m_Name: LaboratoryData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   Id: laboratory
   DisplayName: Laboratory

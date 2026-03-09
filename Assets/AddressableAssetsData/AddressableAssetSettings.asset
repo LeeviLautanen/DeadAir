@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: 559bcb984ce91134997ae9f976a6212a
   m_currentHash:
     serializedVersion: 2
-    Hash: fc2ef435143b6d54c7c3d8ca40cf1d54
+    Hash: 29e0d53de084f1e80e85567b22bf4634
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -101,6 +101,7 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - AttackWaveSO
+    - BuildingDataSO
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: cdba8ac9ce9ea134f97ac6ab7e902611, type: 2}

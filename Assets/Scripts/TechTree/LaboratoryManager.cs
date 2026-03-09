@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LaboratoryManager : MonoBehaviour
 {
+    public float MinLabResearchRateIncrease = 0.1f;
+
     private static readonly Logger log = new(true, LogLevel.Info);
     private TechManager techManager;
     private readonly Dictionary<Building, bool> laboratories = new();
@@ -37,11 +39,10 @@ public class LaboratoryManager : MonoBehaviour
         if (labCount <= 0)
             return 0f;
 
-        const float minChange = 0.1f;
         float changeAmount = 0f;
         for (int i = 1; i < labCount + 1; i++)
         {
-            changeAmount += Mathf.Max(minChange, 1f / i);
+            changeAmount += Mathf.Max(MinLabResearchRateIncrease, 1f / i);
         }
 
         log.Info($"Calculated research rate: {changeAmount} for {labCount} labs");

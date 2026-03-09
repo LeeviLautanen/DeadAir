@@ -308,11 +308,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableBuildings:
   - {fileID: 11400000, guid: 82a624732f9ceca4db98e9ee212e8773, type: 2}
+  - {fileID: 11400000, guid: 6875997f6cbb445448349d5f623e630a, type: 2}
+  - {fileID: 11400000, guid: a65d23a663d8c024496742a010ddc35c, type: 2}
+  - {fileID: 11400000, guid: 4a87dd17c9f641e43977988304b150d7, type: 2}
+  - {fileID: 11400000, guid: 992851fe363088b4d9deeadf7110f680, type: 2}
+  - {fileID: 11400000, guid: ad3e0c905937253479cd28201a58ca15, type: 2}
   - {fileID: 11400000, guid: 093fc80c4ae8422499891a66499f2ede, type: 2}
   - {fileID: 11400000, guid: 6b55141d5be5af849b469853701608d0, type: 2}
-  - {fileID: 11400000, guid: ad3e0c905937253479cd28201a58ca15, type: 2}
-  - {fileID: 11400000, guid: 4a87dd17c9f641e43977988304b150d7, type: 2}
-  - {fileID: 11400000, guid: 6875997f6cbb445448349d5f623e630a, type: 2}
   allBuildings: []
 --- !u!114 &93531066
 MonoBehaviour:
@@ -351,7 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameTimeMultiplier: 1
-  DayLengthSeconds: 5
+  DayLengthSeconds: 15
   SunLight: {fileID: 1082982120}
   DayBrightness: 1
   NightBrightness: 0.2
@@ -370,8 +372,8 @@ MonoBehaviour:
   MeteoritePrefab: {fileID: 2838757934400324701, guid: a2ecc256c071e3c4ca34c02790dae405, type: 3}
   SpawnRange: {x: 0, y: 200}
   SpawnHeight: 40
-  SpawnAngleRange: 30
-  rotationSpeedMin: 40
+  SpawnAngleRange: 15
+  rotationSpeedMin: 90
   rotationSpeedMax: 150
 --- !u!114 &93531072
 MonoBehaviour:
@@ -858,7 +860,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: feeb63328db968d48ab590d5206dc622, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1877,7 +1879,7 @@ Light:
   serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.75
+  m_Intensity: 0.55
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -4129,7 +4131,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 761d8e1f988ed2345a28312145c79c6e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
