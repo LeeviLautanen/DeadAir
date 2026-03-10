@@ -2535,6 +2535,7 @@ GameObject:
   m_Component:
   - component: {fileID: 849228979}
   - component: {fileID: 849228980}
+  - component: {fileID: 849228982}
   - component: {fileID: 849228981}
   m_Layer: 5
   m_Name: Counters
@@ -2563,7 +2564,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 150}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &849228980
 MonoBehaviour:
@@ -2580,10 +2581,10 @@ MonoBehaviour:
   m_Padding:
     m_Left: 10
     m_Right: 0
-    m_Top: 0
+    m_Top: 10
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -2603,6 +2604,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3edba2773600f34429be05e9a86e7761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceUI
+--- !u!114 &849228982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 849228978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &876573826
 GameObject:
   m_ObjectHideFlags: 0
@@ -4008,7 +4023,7 @@ PrefabInstance:
     - target: {fileID: 6717258526406071837, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: data
       value: 
-      objectReference: {fileID: 11400000, guid: 6875997f6cbb445448349d5f623e630a, type: 2}
+      objectReference: {fileID: 11400000, guid: b57a018d421da0c428a040ef5d0d34e3, type: 2}
     - target: {fileID: 8392107632934456976, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_Name
       value: Bunker
@@ -4314,7 +4329,7 @@ GameObject:
   - component: {fileID: 1276494582}
   - component: {fileID: 1276494581}
   m_Layer: 5
-  m_Name: ResourceCanvas
+  m_Name: HudCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5902,7 +5917,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Shield recharge rate +10%_21
+      value: Shield recharge rate +10%_23
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data
@@ -7232,7 +7247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Shield recharge rate +10%_20
+      value: Shield recharge rate +10%_21
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data
