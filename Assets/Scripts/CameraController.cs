@@ -7,46 +7,39 @@ public class CameraController : MonoBehaviour
     public float zoomSpeed = 5f;
     public float minZoom = 7f;
     public float maxZoom = 30f;
-    public InputActionAsset inputActions;
 
-    private InputAction cameraMoveAction;
-    private InputAction cameraZoomAction;
     private TechManager techManager;
+    private InputHandler inputHandler;
     private Camera mainCamera;
     private float zoomMultiplier;
 
     private void Start()
     {
         techManager = FindFirstObjectByType<TechManager>();
+        inputHandler = FindFirstObjectByType<InputHandler>();
+
+        inputHandler.RegisterMoveHandler(HandleMoveInput, priority: 0);
+        inputHandler.RegisterScrollHandler(HandleScrollInput, priority: 0);
 
         mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
         zoomMultiplier = mainCamera.orthographicSize;
-
-        if (inputActions == null)
-        {
-            Debug.LogError("NO INPUT ASSET FOR CAMERA CONTROLLER DUMBASS");
-            enabled = false;
-            return;
-        }
-
-        InputActionMap actionMap = inputActions.FindActionMap("CameraMovement");
-        cameraMoveAction = actionMap.FindAction("CameraMove");
-        cameraZoomAction = actionMap.FindAction("CameraZoom");
     }
 
-    private void Update()
+    private bool HandleMoveInput(Vector2 move)
     {
-        if (techManager.IsVisible)
-            return;
-
-        Vector2 move = cameraMoveAction.ReadValue<Vector2>();
         transform.position += moveSpeed * zoomMultiplier * Time.deltaTime * (Vector3)move;
+        return true;
+    }
 
-        Vector2 scroll = cameraZoomAction.ReadValue<Vector2>();
-        if (scroll.y != 0f)
+    private bool HandleScrollInput(Vector2 scroll)
+    {
+        if (scroll.y == 0f)
         {
-            mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize - scroll.y * zoomSpeed, minZoom, maxZoom);
-            zoomMultiplier = mainCamera.orthographicSize;
+            return false;
         }
+
+        mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize - scroll.y * zoomSpeed, minZoom, maxZoom);
+        zoomMultiplier = mainCamera.orthographicSize;
+        return true;
     }
 }

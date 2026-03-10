@@ -217,7 +217,7 @@ public class Building : MonoBehaviour
         }
     }
 
-    protected void UpdateStats()
+    protected virtual void UpdateStats()
     {
         // Max health
         maxHealth = techManager.GetModifiedValue(data.MaxHealth, ModifierType.MaxHealth, data.Id);

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
+public class TechManager : MonoBehaviour, IDragHandler
 {
     public static event System.Action OnResearchCompleted;
     public bool IsVisible => isVisible;
@@ -14,11 +15,13 @@ public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
 
     [Header("Tree movement settings")]
     public RectTransform nodeContainerRect;
+    public float moveSpeed = 1000f;
     public float zoomSpeed = 0.1f;
     public float minZoom = 0.5f;
     public float maxZoom = 2f;
 
     private static readonly Logger log = new(true, LogLevel.Info);
+    private InputHandler inputHandler;
     private GameObject lineContainer;
     private TMP_Text researchProgressText;
     private List<UpgradeNode> allNodes = new();
@@ -36,16 +39,22 @@ public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
         SetVisible(false);
 
         researchProgressText = GameObject.Find("ResearchProgressText").GetComponent<TMP_Text>();
-
-        GetComponentsInChildren(allNodes);
         lineContainer = GameObject.Find("LineContainer");
-        UpgradeNode.OnUpgradeButtonClicked += HandleUpgradeButtonClicked;
+
+        // Get all nodes
+        GetComponentsInChildren(allNodes);
+        UpgradeNode.OnUpgradeNodeClicked += HandleUpgradeNodeClicked;
 
         // Set up reserach view toggle button
         GameObject.Find("ResearchButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
         {
             SetVisible(!isVisible);
         });
+
+        // Input handling
+        inputHandler = FindFirstObjectByType<InputHandler>();
+        inputHandler.RegisterMoveHandler(HandleMoveInput, priority: 10);
+        inputHandler.RegisterScrollHandler(HandleScrollInput, priority: 10);
 
         // Draw lines between prequisites nodes
         foreach (var node in allNodes)
@@ -65,6 +74,12 @@ public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
             else
                 node.Lock();
         }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (isVisible)
+            nodeContainerRect.anchoredPosition += eventData.delta;
     }
 
     public void SetVisible(bool visible)
@@ -111,16 +126,24 @@ public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
         return Mathf.Clamp01(researchAmount / selectedNode.ResearchCost);
     }
 
-    public void OnDrag(PointerEventData eventData)
+    private bool HandleMoveInput(Vector2 move)
     {
-        nodeContainerRect.anchoredPosition += eventData.delta;
+        if (!isVisible)
+            return false;
+
+        nodeContainerRect.anchoredPosition -= moveSpeed * Time.deltaTime * move * nodeContainerRect.localScale;
+        return true;
     }
 
-    public void OnScroll(PointerEventData eventData)
+    private bool HandleScrollInput(Vector2 scroll)
     {
+        if (!isVisible)
+            return false;
+
         float oldScale = nodeContainerRect.localScale.x;
-        float newScale = Mathf.Clamp(oldScale + eventData.scrollDelta.y * zoomSpeed, minZoom, maxZoom);
+        float newScale = Mathf.Clamp(oldScale + scroll.y * zoomSpeed, minZoom, maxZoom);
         nodeContainerRect.localScale = Vector3.one * newScale;
+        return true;
     }
 
     public float GetModifiedValue(float baseValue, ModifierType statType, string buildingId)
@@ -167,7 +190,7 @@ public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
         }
     }
 
-    private void HandleUpgradeButtonClicked(UpgradeNode clickedNode)
+    private void HandleUpgradeNodeClicked(UpgradeNode clickedNode)
     {
         if (!clickedNode.IsUnlocked || clickedNode.IsResearched || clickedNode == selectedNode)
             return;
@@ -179,6 +202,13 @@ public class TechManager : MonoBehaviour, IDragHandler, IScrollHandler
         }
         selectedNode = clickedNode;
         selectedNode.MarkAsSelected();
+        researchProgressText.text = $"{selectedNode.DisplayName}: 0%"; // Makes UI less confusing
+
+        // Research free nodes immediately
+        if (clickedNode.ResearchCost == 0f)
+        {
+            Research(clickedNode.ResearchCost);
+        }
     }
 
     private bool IsNodeUnlocked(UpgradeNode node)

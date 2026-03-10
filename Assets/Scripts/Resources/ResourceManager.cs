@@ -22,6 +22,8 @@ public class ResourceManager : MonoBehaviour
     private readonly List<Building> unregisterBuffer = new();
     private readonly List<Building> registerBuffer = new();
 
+    private List<ResourceAmount> humanAdjustmentList = new(); // This is terrible but prevents GC
+
     private void Awake()
     {
         timeManager = FindFirstObjectByType<TimeManager>();
@@ -364,15 +366,18 @@ public class ResourceManager : MonoBehaviour
         if (humans != null)
         {
             float maxHumans = resourceMaxLookup["humans"];
-            ResourceAmount newAmount = new(humans.Data, maxHumans * 0.1f);
-            List<ResourceAmount> rates = new() { newAmount };
+
+            if (humanAdjustmentList.Count == 0)
+                humanAdjustmentList.Add(new ResourceAmount(humans.Data, 0f));
+
+            humanAdjustmentList[0].Amount = maxHumans * 5f * GetDeltaTime();
             if (humans.Amount < maxHumans)
             {
-                AddResources(rates, true);
+                AddResources(humanAdjustmentList, true);
             }
             else if (humans.Amount > maxHumans)
             {
-                TryConsumeResources(rates, true);
+                TryConsumeResources(humanAdjustmentList, true);
             }
         }
     }

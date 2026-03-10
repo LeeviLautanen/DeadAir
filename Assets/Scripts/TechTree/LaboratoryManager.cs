@@ -10,43 +10,51 @@ public class LaboratoryManager : MonoBehaviour
     private TechManager techManager;
     private readonly Dictionary<Building, bool> laboratories = new();
     [SerializeField] private float researchRateMultiplier = 1f;
-    private float researchRate = 0f;
+    private float totalResearchRate = 0f;
     private int laboratoryCount;
 
     private void Start()
     {
         techManager = FindFirstObjectByType<TechManager>();
+        TechManager.OnResearchCompleted += HandleResearchCompleted;
     }
 
     private void Update()
     {
         if (laboratoryCount > 0)
-            techManager.Research(researchRate * researchRateMultiplier * Time.deltaTime);
+            techManager.Research(totalResearchRate * Time.deltaTime);
     }
 
     public void SetLaboratoryState(Building lab, bool isOperational)
     {
         laboratories[lab] = isOperational;
+        UpdateResearchRate();
+    }
 
+    private void UpdateResearchRate()
+    {
         // Prevent two calls from the same lab counting as two
         laboratoryCount = laboratories.Values.Count(v => v);
 
-        researchRate = GetResearchRate(laboratoryCount);
-    }
-
-    private float GetResearchRate(int labCount)
-    {
-        if (labCount <= 0)
-            return 0f;
+        if (laboratoryCount <= 0)
+        {
+            totalResearchRate = 0f;
+            return;
+        }
 
         float changeAmount = 0f;
-        for (int i = 1; i < labCount + 1; i++)
+        for (int i = 1; i < laboratoryCount + 1; i++)
         {
             changeAmount += Mathf.Max(MinLabResearchRateIncrease, 1f / i);
         }
 
-        log.Info($"Calculated research rate: {changeAmount} for {labCount} labs");
+        totalResearchRate = changeAmount * researchRateMultiplier;
+        log.Info($"Raw research: {changeAmount}, upgrade multiplier: {researchRateMultiplier}, final research rate: {totalResearchRate}, lab count: {laboratoryCount}");
+    }
 
-        return changeAmount;
+    private void HandleResearchCompleted()
+    {
+        researchRateMultiplier = techManager.GetModifiedValue(1f, ModifierType.ResearchRate, "laboratory");
+        UpdateResearchRate();
     }
 }

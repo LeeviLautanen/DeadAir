@@ -22,11 +22,11 @@ public class UpgradeNode : MonoBehaviour
     public List<UpgradeModifier> Modifiers => data.Modifiers;
     public float ResearchCost => data.ResearchCost;
     public string DisplayName => data.DisplayName;
-    public static Action<UpgradeNode> OnUpgradeButtonClicked;
+    public static Action<UpgradeNode> OnUpgradeNodeClicked;
 
     private static readonly Logger log = new(true, LogLevel.Info);
     [SerializeField] private UpgradeData data;
-    [SerializeField] private TMP_Text upgradeText;
+    private TMP_Text upgradeText;
     private Button upgradeButton;
     private Image upgradeBackground;
     [SerializeField] private bool isUnlocked;
@@ -39,17 +39,22 @@ public class UpgradeNode : MonoBehaviour
         upgradeBackground = GetComponent<Image>();
 
         upgradeButton = GetComponent<Button>();
-        upgradeButton.onClick.AddListener(() => OnUpgradeButtonClicked?.Invoke(this));
+        upgradeButton.onClick.AddListener(() => OnUpgradeNodeClicked?.Invoke(this));
+
+        upgradeText = GetComponentInChildren<TMP_Text>();
 
         Lock();
     }
 
     private void OnValidate()
     {
+        // This shit is weird
+        upgradeText = GetComponentInChildren<TMP_Text>();
+
         if (upgradeText && data)
         {
             upgradeText.text = data.DisplayName;
-            gameObject.name = data.DisplayName;
+            gameObject.name = $"{data.DisplayName}_{transform.GetSiblingIndex()}";
         }
     }
 
@@ -71,7 +76,7 @@ public class UpgradeNode : MonoBehaviour
         isUnlocked = true;
         upgradeButton.interactable = true;
         upgradeBackground.color = Color.white;
-        upgradeText.gameObject.SetActive(true);
+        upgradeText.alpha = 1f;
     }
 
     public void Lock()
@@ -79,6 +84,6 @@ public class UpgradeNode : MonoBehaviour
         isUnlocked = false;
         upgradeButton.interactable = false;
         upgradeBackground.color = Color.gray;
-        upgradeText.gameObject.SetActive(false);
+        upgradeText.alpha = 0f;
     }
 }

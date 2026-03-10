@@ -7,8 +7,9 @@ public enum ModifierType
     ConsumptionRate,
     Capacity,
     Reservation,
+    ShieldRechargeRate,
     ResearchRate,
-    TurretDamage
+    InterceptorEffectiveness
 }
 
 [System.Serializable]

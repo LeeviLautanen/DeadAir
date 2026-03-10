@@ -4,7 +4,7 @@ public class ShieldController : Building
 {
     public Sprite shieldOnTexture;
     public Sprite shieldOffTexture;
-    public float RecoverSpeed = 10f;
+    public float RechargeRate = 10f;
 
     private static readonly new Logger log = new(true, LogLevel.Warning);
     private SpriteRenderer spriteRenderer;
@@ -78,7 +78,7 @@ public class ShieldController : Building
         switch (currentState)
         {
             case BuildingState.Operational:
-                RepairShield(RecoverSpeed * Time.deltaTime);
+                RepairShield(RechargeRate * Time.deltaTime);
 
                 if (!isShieldActive && shieldHealth > 50f)
                 {
@@ -102,6 +102,14 @@ public class ShieldController : Building
                 DeactivateShield();
                 break;
         }
+    }
+
+    protected override void UpdateStats()
+    {
+        base.UpdateStats();
+
+        // Shield recharge rate
+        RechargeRate = techManager.GetModifiedValue(10f, ModifierType.ShieldRechargeRate, data.Id);
     }
 
     private void DamageShield(float damage)
