@@ -39,7 +39,6 @@ public class ResourceUI : MonoBehaviour
                 float maxAmount = resourceManager.GetResourceMax(kvp.Key);
                 float reservedAmount = resourceManager.GetResourceReserved(kvp.Key);
                 float rate = resourceManager.GetResourceRate(kvp.Key);
-                log.Info(rate);
                 kvp.Value.SetText(Format(kvp.Key, amount, maxAmount, reservedAmount, rate));
             }
             else
@@ -58,21 +57,13 @@ public class ResourceUI : MonoBehaviour
 
     private string Format(string name, float amount, float maxAmount = 0, float reservedAmount = 0, float rate = 0)
     {
-        if (maxAmount > 0 && reservedAmount > 0 && rate > 0)
-        {
-            return $"{name}: {amount:F0} / {maxAmount:F0} (Available: {amount - reservedAmount:F0})";
-        }
-        else if (maxAmount > 0 && reservedAmount > 0)
+        if (maxAmount > 0 && reservedAmount > 0)
         {
             return $"{name}: {amount:F0} / {maxAmount:F0} (Available: {amount - reservedAmount:F0}, Δ: {rate:F1}/s)";
         }
-        else if (maxAmount > 0 && rate > 0)
-        {
-            return $"{name}: {amount:F0} / {maxAmount:F0} (Δ: {rate:F1}/s)";
-        }
         else if (maxAmount > 0)
         {
-            return $"{name}: {amount:F0} / {maxAmount:F0}";
+            return $"{name}: {amount:F0} / {maxAmount:F0} (Δ: {rate:F1}/s)";
         }
         else
         {
