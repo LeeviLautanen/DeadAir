@@ -108,7 +108,7 @@ public class ResourceManager : MonoBehaviour
         unregisterBuffer.Add(building);
     }
 
-    public bool TryReserveResource(ResourceAmount reservation)
+    public bool TryReserveResource(IResourceAmount reservation)
     {
         resourceLookup.TryGetValue(reservation.Data.Id, out ResourceAmount entry);
         float amount = reservation.Amount;
@@ -122,7 +122,7 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool TryReserveResources(List<ResourceAmount> reservations, Building reserver)
+    public bool TryReserveResources(IReadOnlyList<IResourceAmount> reservations, Building reserver)
     {
         // Prevent double reservations from the same building
         if (reservationDict.TryGetValue(reserver, out bool has) && has)
@@ -143,7 +143,7 @@ public class ResourceManager : MonoBehaviour
             // rollback
             for (int i = 0; i < processed; i++)
             {
-                ResourceAmount reservation = reservations[i];
+                var reservation = reservations[i];
                 reservationLookup[reservation.Data.Id] -= reservation.Amount;
             }
             return false;
@@ -154,7 +154,7 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool ReleaseReservation(ResourceAmount reservation)
+    public bool ReleaseReservation(IResourceAmount reservation)
     {
         float amount = reservation.Amount;
         if (amount > reservationLookup[reservation.Data.Id])
@@ -165,9 +165,9 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool ReleaseReservations(List<ResourceAmount> reservations, Building reserver)
+    public bool ReleaseReservations(IReadOnlyList<IResourceAmount> reservations, Building reserver)
     {
-        foreach (ResourceAmount reservation in reservations)
+        foreach (var reservation in reservations)
         {
             if (!ReleaseReservation(reservation))
             {
@@ -197,13 +197,13 @@ public class ResourceManager : MonoBehaviour
         return reservationDict.TryGetValue(building, out bool has) && has;
     }
 
-    public bool TryConsumeResources(List<ResourceAmount> costs, bool isRate = false)
+    public bool TryConsumeResources(IReadOnlyList<IResourceAmount> costs, bool isRate = false)
     {
         int costsProcessed = 0;
         for (int i = 0; i < costs.Count; i++)
         {
-            ResourceAmount cost = costs[i];
-            if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
+            var cost = costs[i];
+            if (resourceLookup.TryGetValue(cost.Data.Id, out var entry))
             {
                 float amount = cost.Amount * (isRate ? GetDeltaTime() : 1f);
                 if (amount > (entry.Amount + reservationLookup[entry.Data.Id]))
@@ -224,8 +224,8 @@ public class ResourceManager : MonoBehaviour
             // rollback
             for (int i = 0; i < costsProcessed; i++)
             {
-                ResourceAmount cost = costs[i];
-                if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
+                var cost = costs[i];
+                if (resourceLookup.TryGetValue(cost.Data.Id, out var entry))
                 {
                     entry.Amount += cost.Amount * (isRate ? GetDeltaTime() : 1f);
                 }
@@ -236,9 +236,9 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool AddResources(List<ResourceAmount> amounts, bool isRate = false)
+    public bool AddResources(IReadOnlyList<IResourceAmount> amounts, bool isRate = false)
     {
-        foreach (ResourceAmount resource in amounts)
+        foreach (var resource in amounts)
         {
             if (resourceLookup.TryGetValue(resource.Data.Id, out ResourceAmount entry))
             {
@@ -260,9 +260,9 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool HasEnoughResources(List<ResourceAmount> costs, bool isRate = false)
+    public bool HasEnoughResources(IReadOnlyList<IResourceAmount> costs, bool isRate = false)
     {
-        foreach (ResourceAmount cost in costs)
+        foreach (var cost in costs)
         {
             if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
             {
@@ -322,13 +322,13 @@ public class ResourceManager : MonoBehaviour
         return -1f;
     }
 
-    public bool ApplyCapacityEffects(List<ResourceAmount> capacities, Building applier)
+    public bool ApplyCapacityEffects(IReadOnlyList<IResourceAmount> capacities, Building applier)
     {
         // Prevent double capacity effects from the same building
         if (capacityDict.TryGetValue(applier, out bool has) && has)
             return true;
 
-        foreach (ResourceAmount capacity in capacities)
+        foreach (var capacity in capacities)
         {
             ChangeCapacity(capacity.Data.Id, capacity.Amount);
         }
@@ -337,9 +337,9 @@ public class ResourceManager : MonoBehaviour
         return true;
     }
 
-    public bool RemoveCapacityEffects(List<ResourceAmount> capacities, Building remover)
+    public bool RemoveCapacityEffects(IReadOnlyList<IResourceAmount> capacities, Building remover)
     {
-        foreach (ResourceAmount capacity in capacities)
+        foreach (var capacity in capacities)
         {
             ChangeCapacity(capacity.Data.Id, -capacity.Amount);
         }
