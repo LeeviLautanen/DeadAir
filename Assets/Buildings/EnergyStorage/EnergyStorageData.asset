@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
   m_Name: EnergyStorageData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  Id: energy_storage
-  DisplayName: Energy storage
+  id: energy_storage
+  displayName: Energy storage
+  description: 
+  maxHealth: 100
+  resourcePriority: 0
+  startupTime: 0
+  prefab: {fileID: 2090995044971168592, guid: 1054f02b0834e7b43bcda121960e20f3, type: 3}
   ConstructionCost:
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 30
-  MaxHealth: 100
-  ResourcePriority: 0
-  StartupTime: 0
-  Prefab: {fileID: 2090995044971168592, guid: 1054f02b0834e7b43bcda121960e20f3, type: 3}
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 30
   ProducedResources: []
   ConsumedResources: []
   CapacityEffects:
-  - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    Amount: 200
+  - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    amount: 100
   RequiredReservations: []

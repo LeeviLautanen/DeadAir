@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
   m_Name: MaterialStorageData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  Id: material_storage
-  DisplayName: Material storage
+  id: material_storage
+  displayName: Material storage
+  description: 
+  maxHealth: 100
+  resourcePriority: 0
+  startupTime: 0
+  prefab: {fileID: 2342297968833454867, guid: e1fe2808df5842a41a4aa40d782e3f07, type: 3}
   ConstructionCost:
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 30
-  MaxHealth: 100
-  ResourcePriority: 0
-  StartupTime: 0
-  Prefab: {fileID: 2342297968833454867, guid: e1fe2808df5842a41a4aa40d782e3f07, type: 3}
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 30
   ProducedResources: []
   ConsumedResources: []
   CapacityEffects:
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 200
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 100
   RequiredReservations: []

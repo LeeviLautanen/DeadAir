@@ -6,6 +6,7 @@ public class Building : MonoBehaviour
 {
     public int ResourcePriority => resourcePriority;
     public BuildingState CurrentState => currentState;
+    public BuildingData Data => data;
     public string Id => data.Id;
     public string DisplayName => data.DisplayName;
     public float MaxHealth => maxHealth;

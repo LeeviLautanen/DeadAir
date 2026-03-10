@@ -12,18 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
   m_Name: ApartmentData
   m_EditorClassIdentifier: 
-  Id: apartment
-  DisplayName: Apartment
+  id: apartment
+  displayName: Apartment
+  description: 
+  maxHealth: 100
+  resourcePriority: 0
+  startupTime: 1
+  prefab: {fileID: 2672589904300108679, guid: 3be4f90b12012c243a9bf239c5f7bd34, type: 3}
   ConstructionCost:
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 30
-  MaxHealth: 100
-  ResourcePriority: 0
-  StartupTime: 0
-  Prefab: {fileID: 2672589904300108679, guid: 3be4f90b12012c243a9bf239c5f7bd34, type: 3}
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 30
   ProducedResources: []
   ConsumedResources: []
   CapacityEffects:
-  - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
-    Amount: 20
+  - data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
+    amount: 30
   RequiredReservations: []

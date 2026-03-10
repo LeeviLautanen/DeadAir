@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -7,6 +9,7 @@ public class BuildingSelector : MonoBehaviour
 {
     private static readonly Logger log = new(true, LogLevel.Info);
     private InputHandler inputHandler;
+    private TechManager techManager;
     private Building current;
     private Canvas infoCanvas;
     private GameObject infoContainer;
@@ -23,6 +26,7 @@ public class BuildingSelector : MonoBehaviour
     private void Start()
     {
         inputHandler = FindFirstObjectByType<InputHandler>();
+        techManager = FindFirstObjectByType<TechManager>();
 
         infoCanvas = gameObject.GetComponent<Canvas>();
         infoContainer = gameObject.transform.Find("InfoContainer").gameObject;
@@ -115,7 +119,7 @@ public class BuildingSelector : MonoBehaviour
         if (current == null)
             return;
 
-        nameText.text = current.DisplayName;
+        nameText.text = current.Data.DisplayName;
 
         // Activate button text
         if (current.CurrentState == BuildingState.Inactive)
@@ -145,24 +149,28 @@ public class BuildingSelector : MonoBehaviour
         if (integrityPercent > 0 && integrityPercent <= 100)
             integrityText.SetText($"Integrity: {integrityPercent}%");
 
-        if (current.ConsumedResources.Count == 0)
-            consumedResourcesText.SetText("");
-        else
-            consumedResourcesText.SetText("Consumes:\n" + string.Join("\n", current.ConsumedResources.Select(r => $"{r.Data.DisplayName} {r.Amount}/s")));
+        consumedResourcesText.SetText(
+            FormatSection("Consumes", current.Data.ConsumedResources,
+                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConsumptionRate, current.Data.Id)}/s"));
 
-        if (current.ProducedResources.Count == 0)
-            producedResourcesText.SetText("");
-        else
-            producedResourcesText.SetText("Produces:\n" + string.Join("\n", current.ProducedResources.Select(r => $"{r.Data.DisplayName} {r.Amount}/s")));
+        producedResourcesText.SetText(
+            FormatSection("Produces", current.Data.ProducedResources,
+                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ProductionRate, current.Data.Id)}/s"));
 
-        if (current.CapacityEffects.Count == 0)
-            capacityText.SetText("");
-        else
-            capacityText.SetText("Storage:\n" + string.Join("\n", current.CapacityEffects.Select(r => $"{r.Data.DisplayName} {r.Amount}")));
+        capacityText.SetText(
+            FormatSection("Storage", current.Data.CapacityEffects,
+                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Capacity, current.Data.Id)}"));
 
-        if (current.RequiredReservations.Count == 0)
-            reservationsText.SetText("");
-        else
-            reservationsText.SetText("Operational requirements:\n" + string.Join("\n", current.RequiredReservations.Select(r => $"{r.Data.DisplayName} {r.Amount}")));
+        reservationsText.SetText(
+            FormatSection("Operational requirements", current.Data.RequiredReservations,
+                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Reservation, current.Data.Id)}"));
+    }
+
+    private string FormatSection<T>(string header, IEnumerable<T> items, Func<T, string> formatter)
+    {
+        if (!items.Any())
+            return "";
+
+        return header + ":\n" + string.Join("\n", items.Select(formatter));
     }
 }

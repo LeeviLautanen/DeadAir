@@ -5,16 +5,19 @@ using System.Collections.Generic;
 public class BuildingData : ScriptableObject
 {
     [Header("Properties")]
-    public string Id;
-    public string DisplayName;
-    public List<ReadonlyResourceAmount> ConstructionCost;
-    public int MaxHealth = 100;
+    [SerializeField] private string id;
+    [SerializeField] private string displayName;
+    [SerializeField] private string description;
+    [SerializeField] private int maxHealth = 100;
     [Range(0, 10)]
-    public int ResourcePriority = 0;
-    public float StartupTime = 1f;
+    [SerializeField] private int resourcePriority = 0;
+    [SerializeField] private float startupTime = 1f;
 
     [Header("Visual")]
-    public GameObject Prefab;
+    [SerializeField] private GameObject prefab;
+
+    [Header("Construction")]
+    public List<ReadonlyResourceAmount> ConstructionCost;
 
     [Header("Production")]
     public List<ReadonlyResourceAmount> ProducedResources;
@@ -31,6 +34,15 @@ public class BuildingData : ScriptableObject
     // Limit the consumption priority to fit allowed range
     private void OnValidate()
     {
-        ResourcePriority = Mathf.Clamp(ResourcePriority, 0, 10);
+        resourcePriority = Mathf.Clamp(resourcePriority, 0, 10);
     }
+
+    // Getters
+    public string Id => id;
+    public string DisplayName => displayName;
+    public string Description => description;
+    public int MaxHealth => maxHealth;
+    public int ResourcePriority => resourcePriority;
+    public float StartupTime => startupTime;
+    public GameObject Prefab => prefab;
 }

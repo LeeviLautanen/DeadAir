@@ -12,18 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
   m_Name: RefineryData
   m_EditorClassIdentifier: 
-  Id: refinery
-  DisplayName: Refinery
+  id: refinery
+  displayName: Refinery
+  description: 
+  maxHealth: 100
+  resourcePriority: 0
+  startupTime: 3
+  prefab: {fileID: 2672589904300108679, guid: b4aa49893e8a2244480071f2aefa34ac, type: 3}
   ConstructionCost:
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 50
-  MaxHealth: 100
-  ResourcePriority: 0
-  StartupTime: 1
-  Prefab: {fileID: 2672589904300108679, guid: b4aa49893e8a2244480071f2aefa34ac, type: 3}
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 50
   ProducedResources:
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 5
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 10
   ConsumedResources: []
-  CapacityEffects: []
+  CapacityEffects:
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 20
   RequiredReservations: []

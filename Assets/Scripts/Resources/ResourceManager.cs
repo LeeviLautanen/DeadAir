@@ -391,7 +391,7 @@ public class ResourceManager : MonoBehaviour
             if (humanAdjustmentList.Count == 0)
                 humanAdjustmentList.Add(new ResourceAmount(humans.Data, 0f));
 
-            humanAdjustmentList[0].Amount = maxHumans * 5f * GetDeltaTime();
+            humanAdjustmentList[0].Amount = maxHumans * 10f;
             if (humans.Amount < maxHumans)
             {
                 AddResources(humanAdjustmentList, true);

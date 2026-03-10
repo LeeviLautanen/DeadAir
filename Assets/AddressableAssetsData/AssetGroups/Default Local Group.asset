@@ -15,65 +15,17 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 559bcb984ce91134997ae9f976a6212a
   m_SerializeEntries:
-  - m_GUID: 093fc80c4ae8422499891a66499f2ede
-    m_Address: Assets/Buildings/Refinery/RefineryData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BuildingDataSO
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4a87dd17c9f641e43977988304b150d7
-    m_Address: Assets/Buildings/Laboratory/LaboratoryData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BuildingDataSO
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6875997f6cbb445448349d5f623e630a
-    m_Address: Assets/Buildings/Bunker/BunkerData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BuildingDataSO
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6b55141d5be5af849b469853701608d0
-    m_Address: Assets/Buildings/Shield/ShieldData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BuildingDataSO
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 82a624732f9ceca4db98e9ee212e8773
-    m_Address: Assets/Buildings/Apartment/ApartmentData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BuildingDataSO
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9209b8483dd433b4cb2ab7b62b7d31f6
     m_Address: Assets/Meteorites/AttackWaves/Wave2.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - AttackWaveSO
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 992851fe363088b4d9deeadf7110f680
-    m_Address: Assets/Buildings/MaterialStorage/MaterialStorageData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BuildingDataSO
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9f2429824ac4e9d4fb5665a5b40cde6c
     m_Address: Assets/Meteorites/AttackWaves/Wave3.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - AttackWaveSO
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: a65d23a663d8c024496742a010ddc35c
-    m_Address: Assets/Buildings/EnergyStorage/EnergyStorageData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BuildingDataSO
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ad3e0c905937253479cd28201a58ca15
-    m_Address: Assets/Buildings/PowerPlant/PowerPlantData.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - BuildingDataSO
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e8d0c9d15eeeae44093ac44fd2ecb80e
     m_Address: Assets/Meteorites/AttackWaves/Wave1.asset

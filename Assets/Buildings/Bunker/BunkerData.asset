@@ -12,24 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
   m_Name: BunkerData
   m_EditorClassIdentifier: 
-  Id: bunker
-  DisplayName: Bunker
+  id: bunker
+  displayName: Bunker
+  description: 
+  maxHealth: 100
+  resourcePriority: 0
+  startupTime: 1
+  prefab: {fileID: 8392107632934456976, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
   ConstructionCost: []
-  MaxHealth: 1000
-  ResourcePriority: 0
-  StartupTime: 0
-  Prefab: {fileID: 8392107632934456976, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
   ProducedResources:
-  - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    Amount: 0
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 0
+  - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    amount: 0
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 0
   ConsumedResources: []
   CapacityEffects:
-  - Data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    Amount: 500
-  - Data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
-    Amount: 30
-  - Data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    Amount: 200
+  - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    amount: 100
+  - data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
+    amount: 30
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 50
   RequiredReservations: []
