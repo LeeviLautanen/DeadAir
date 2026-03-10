@@ -4,11 +4,19 @@ using System.Collections.Generic;
 
 public class ResourceUI : MonoBehaviour
 {
+    private static readonly Logger log = new(true, LogLevel.Info);
     private ResourceManager resourceManager;
     private readonly Dictionary<string, TMP_Text> resourceTexts = new();
 
-    private void Awake()
+    private void Start()
     {
+        resourceManager = FindFirstObjectByType<ResourceManager>();
+        if (resourceManager == null)
+        {
+            Debug.LogWarning("Resource UI manager was null on enable");
+            return;
+        }
+
         resourceTexts["humans"] = GameObject.Find("HumansCounter").GetComponent<TMP_Text>();
         resourceTexts["materials"] = GameObject.Find("MaterialsCounter").GetComponent<TMP_Text>();
         resourceTexts["energy"] = GameObject.Find("EnergyCounter").GetComponent<TMP_Text>();
@@ -30,42 +38,15 @@ public class ResourceUI : MonoBehaviour
                 float amount = resourceManager.GetResourceAmount(kvp.Key);
                 float maxAmount = resourceManager.GetResourceMax(kvp.Key);
                 float reservedAmount = resourceManager.GetResourceReserved(kvp.Key);
-                kvp.Value.SetText(Format(kvp.Key, amount, maxAmount, reservedAmount));
+                float rate = resourceManager.GetResourceRate(kvp.Key);
+                log.Info(rate);
+                kvp.Value.SetText(Format(kvp.Key, amount, maxAmount, reservedAmount, rate));
             }
             else
             {
                 kvp.Value.SetText(kvp.Key + ":");
             }
         }
-    }
-
-    private void OnEnable()
-    {
-        resourceManager = FindFirstObjectByType<ResourceManager>();
-        if (resourceManager == null)
-        {
-            Debug.LogWarning("Resource UI manager was null on enable");
-            return;
-        }
-
-        foreach (var kvp in resourceTexts)
-        {
-            if (resourceManager.ContainsResource(kvp.Key))
-            {
-                float amount = resourceManager.GetResourceAmount(kvp.Key);
-                float maxAmount = resourceManager.GetResourceMax(kvp.Key);
-                kvp.Value.text = Format(kvp.Key, amount, maxAmount);
-            }
-            else
-            {
-                kvp.Value.text = $"{kvp.Key}:";
-            }
-        }
-    }
-
-    private void OnDisable()
-    {
-
     }
 
     private void OnResourceChanged(string id, float amount, float maxAmount, float reservedAmount)
@@ -75,11 +56,19 @@ public class ResourceUI : MonoBehaviour
         resourceTexts[id].text = Format(id, amount, maxAmount, reservedAmount);
     }
 
-    private string Format(string name, float amount, float maxAmount = 0, float reservedAmount = 0)
+    private string Format(string name, float amount, float maxAmount = 0, float reservedAmount = 0, float rate = 0)
     {
-        if (maxAmount > 0 && reservedAmount > 0)
+        if (maxAmount > 0 && reservedAmount > 0 && rate > 0)
         {
             return $"{name}: {amount:F0} / {maxAmount:F0} (Available: {amount - reservedAmount:F0})";
+        }
+        else if (maxAmount > 0 && reservedAmount > 0)
+        {
+            return $"{name}: {amount:F0} / {maxAmount:F0} (Available: {amount - reservedAmount:F0}, Δ: {rate:F1}/s)";
+        }
+        else if (maxAmount > 0 && rate > 0)
+        {
+            return $"{name}: {amount:F0} / {maxAmount:F0} (Δ: {rate:F1}/s)";
         }
         else if (maxAmount > 0)
         {

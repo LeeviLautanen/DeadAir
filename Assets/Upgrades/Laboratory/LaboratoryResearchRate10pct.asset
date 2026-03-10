@@ -18,6 +18,6 @@ MonoBehaviour:
   Modifiers:
   - TargetBuildingIds:
     - laboratory
-    ModType: 7
-    Value: 10
+    ModType: 6
+    Value: 100
     IsPercent: 1

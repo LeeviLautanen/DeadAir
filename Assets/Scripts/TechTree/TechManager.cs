@@ -174,7 +174,7 @@ public class TechManager : MonoBehaviour, IDragHandler
                     if (!percentMultipliers[target].ContainsKey(mod.ModType))
                         percentMultipliers[target][mod.ModType] = 1f;
 
-                    percentMultipliers[target][mod.ModType] *= 1f + mod.Value; // multiplicative stacking                    
+                    percentMultipliers[target][mod.ModType] += mod.Value / 100f; // Percent increase
                 }
                 else
                 {
@@ -184,7 +184,7 @@ public class TechManager : MonoBehaviour, IDragHandler
                     if (!flatModifiers[target].ContainsKey(mod.ModType))
                         flatModifiers[target][mod.ModType] = 0f;
 
-                    flatModifiers[target][mod.ModType] += mod.Value;
+                    flatModifiers[target][mod.ModType] += mod.Value; // Direct value increase
                 }
             }
         }

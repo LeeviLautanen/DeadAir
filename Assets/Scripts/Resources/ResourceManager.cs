@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Mono.Cecil;
 
 public class ResourceManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class ResourceManager : MonoBehaviour
     private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
     private readonly Dictionary<string, float> resourceMaxLookup = new();
     private readonly Dictionary<string, float> reservationLookup = new();
+    private readonly Dictionary<string, float> resourceRateLookup = new();
 
     private readonly Dictionary<Building, bool> reservationDict = new();
     private readonly Dictionary<Building, bool> capacityDict = new();
@@ -33,6 +35,11 @@ public class ResourceManager : MonoBehaviour
 
     private void Update()
     {
+        foreach (var amount in resourceLookup.Values)
+        {
+            resourceRateLookup[amount.Data.Id] = amount.Amount;
+        }
+
         // Handle pending registers
         foreach (Building building in registerBuffer)
         {
@@ -82,6 +89,11 @@ public class ResourceManager : MonoBehaviour
         }
 
         SmoothResources();
+
+        foreach (var amount in resourceLookup.Values)
+        {
+            resourceRateLookup[amount.Data.Id] = amount.Amount - resourceRateLookup[amount.Data.Id];
+        }
     }
 
     public void RegisterResourceUser(Building building)
@@ -274,6 +286,15 @@ public class ResourceManager : MonoBehaviour
         if (resourceLookup.TryGetValue(resourceId, out ResourceAmount entry))
         {
             return entry.Amount;
+        }
+        return -1f;
+    }
+
+    public float GetResourceRate(string resourceId)
+    {
+        if (resourceRateLookup.TryGetValue(resourceId, out float rate))
+        {
+            return rate / GetDeltaTime();
         }
         return -1f;
     }
