@@ -22,6 +22,7 @@ public class BuildingSelector : MonoBehaviour
     private TMP_Text reservationsText;
     private UnityEngine.UI.Button destroyButton;
     private UnityEngine.UI.Button activateButton;
+    private bool isPanelOpen;
 
     private void Start()
     {
@@ -85,14 +86,15 @@ public class BuildingSelector : MonoBehaviour
             if (hit.collider != null && hit.collider.transform.parent.TryGetComponent<Building>(out var b))
             {
                 OpenPanel(b);
+                return true;
             }
-            else
+            else if (isPanelOpen)
             {
                 ClosePanel();
+                return true;
             }
-            return true;
         }
-        else if (click.Button == InputHandler.MouseButton.Right)
+        else if (click.Button == InputHandler.MouseButton.Right && isPanelOpen)
         {
             ClosePanel();
             return true;
@@ -103,6 +105,7 @@ public class BuildingSelector : MonoBehaviour
     private void OpenPanel(Building b)
     {
         log.Info("Panel opened for building " + b.name);
+        isPanelOpen = true;
         current = b;
         infoCanvas.enabled = true;
         UpdateUI();
@@ -110,6 +113,7 @@ public class BuildingSelector : MonoBehaviour
 
     private void ClosePanel()
     {
+        isPanelOpen = false;
         current = null;
         infoCanvas.enabled = false;
     }

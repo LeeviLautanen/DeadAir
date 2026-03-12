@@ -14,6 +14,10 @@ public class InputHandler : MonoBehaviour
 {
     public Vector2 MouseWorldPosition { get; private set; }
     public InputActionAsset inputActions;
+    public static readonly Key[] numberKeys =
+    {
+        Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4, Key.Digit5, Key.Digit6, Key.Digit7, Key.Digit8, Key.Digit9
+    };
 
     // Consuming events
     public delegate bool ClickHandler(MouseClick click);
@@ -27,14 +31,11 @@ public class InputHandler : MonoBehaviour
     public event Action<SaveAction> SaveActionTriggered;
     public event Action<MouseButton> MouseButtonReleased;
 
-    private static readonly Key[] numberKeys =
-    {
-        Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4, Key.Digit5, Key.Digit6, Key.Digit7, Key.Digit8, Key.Digit9
-    };
     private readonly List<(int priority, ClickHandler handler)> clickHandlers = new();
     private readonly List<(int priority, MoveHandler handler)> moveHandlers = new();
     private readonly List<(int priority, ScrollHandler handler)> scrollHandlers = new();
 
+    private static readonly Logger log = new(true, LogLevel.Info);
     private InputAction cameraMoveAction;
     private InputAction cameraZoomAction;
     private Camera mainCamera;
@@ -98,7 +99,10 @@ public class InputHandler : MonoBehaviour
                 {
                     bool handled = handler(cachedClick);
                     if (handled)
+                    {
+                        log.Info($"Click handled by {handler.Method.DeclaringType.Name} with priority {priority}");
                         break;
+                    }
                 }
                 catch (Exception e)
                 {
