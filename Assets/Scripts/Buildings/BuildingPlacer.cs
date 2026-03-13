@@ -4,107 +4,53 @@ using UnityEngine.InputSystem;
 
 public class BuildingPlacer : MonoBehaviour
 {
-    public bool IsPlacing { get; private set; }
+    public bool IsPlacing => isPlacing;
 
     private static readonly Logger log = new(true, LogLevel.Warning);
     private BuildingManager buildingManager;
     private InputHandler inputHandler;
     private string currentBuildingId;
     private BuildingData selectedBuildingData;
-    private TMP_Text buildingTypeText;
     private GameObject ghostGO;
     private Building ghostBuilding;
+    private Material ghostNormalMat;
+    private Material ghostInvalidPlacementMat;
     private SpriteRenderer ghostSpriteRenderer;
+    private bool isPlacing;
+    private bool isInvalidVisual;
 
     private void Start()
     {
         inputHandler = FindFirstObjectByType<InputHandler>();
         buildingManager = FindFirstObjectByType<BuildingManager>();
-        buildingTypeText = GameObject.Find("BuildingTypeText").GetComponent<TMP_Text>();
 
-        inputHandler.NumberKeyPressed += HandleNumberKey;
-        inputHandler.RegisterClickHandler(HandleMouseClick, priority: 100);
-    }
-
-    private void HandleNumberKey(Key key)
-    {
-        switch (key)
-        {
-            case Key.Digit1:
-                SelectBuilding("apartment");
-                break;
-            case Key.Digit2:
-                SelectBuilding("refinery");
-                break;
-            case Key.Digit3:
-                SelectBuilding("shield");
-                break;
-            case Key.Digit4:
-                SelectBuilding("power_plant");
-                break;
-            case Key.Digit5:
-                SelectBuilding("laboratory");
-                break;
-            case Key.Digit6:
-                SelectBuilding("interceptor_cannon");
-                break;
-            case Key.Digit7:
-                SelectBuilding("energy_storage");
-                break;
-            case Key.Digit8:
-                SelectBuilding("material_storage");
-                break;
-        }
-    }
-
-    private bool HandleMouseClick(InputHandler.MouseClick click)
-    {
-        // Ignore mouse if we arent placing a building
-        if (!IsPlacing)
-            return false;
-
-        if (click.Button == InputHandler.MouseButton.Left)
-        {
-            TryPlaceGhost();
-            return true;
-        }
-        else if (click.Button == InputHandler.MouseButton.Right)
-        {
-            ClearSelected();
-            return true;
-        }
-
-        return false;
+        ghostNormalMat = new(Shader.Find("Sprites/Default"));
+        ghostInvalidPlacementMat = new(Shader.Find("Shader Graphs/InvalidPlacementShader"));
     }
 
     private void Update()
     {
-        if (IsPlacing)
+        if (IsPlacing && ghostGO != null)
         {
-            Vector3 mousePos = inputHandler.MouseWorldPosition;
-            if (ghostGO != null)
-            {
-                Vector3 ghostPos = new(mousePos.x, ghostGO.transform.position.y, -3);
-                ghostGO.transform.position = ghostPos;
-            }
+            Vector2 mousePos = inputHandler.MouseWorldPosition;
+            Vector3 ghostPos = new(mousePos.x, ghostGO.transform.position.y, -3);
+            ghostGO.transform.position = ghostPos;
 
-            if (!ghostBuilding.IsValidPlacement() && ghostSpriteRenderer.color.a == 1.0f)
+            bool isValidPlacement = ghostBuilding.IsValidPlacement();
+            if (!isValidPlacement && !isInvalidVisual)
             {
-                Color oldColor = ghostSpriteRenderer.color;
-                oldColor.a = 0.5f;
-                oldColor.r += 0.5f;
-                ghostSpriteRenderer.color = oldColor;
+                ghostSpriteRenderer.material = ghostInvalidPlacementMat;
+                isInvalidVisual = true;
             }
-            else if (ghostBuilding.IsValidPlacement() && ghostSpriteRenderer.color.a == 0.5f)
+            else if (isValidPlacement && isInvalidVisual)
             {
-                Color oldColor = ghostSpriteRenderer.color;
-                oldColor.a = 1.0f;
-                ghostSpriteRenderer.color = oldColor;
+                ghostSpriteRenderer.material = ghostNormalMat;
+                isInvalidVisual = false;
             }
         }
     }
 
-    private void SelectBuilding(string buildingId)
+    public void SelectBuilding(string buildingId)
     {
         if (buildingManager == null || buildingId == currentBuildingId) return;
 
@@ -115,11 +61,10 @@ public class BuildingPlacer : MonoBehaviour
             return;
         }
 
-        if (IsPlacing || ghostGO != null) ClearSelected();
+        if (isPlacing || ghostGO != null) ClearSelected();
 
-        IsPlacing = true;
+        isPlacing = true;
         currentBuildingId = buildingId;
-        buildingTypeText.text = selectedBuildingData.DisplayName;
 
         GameObject buildingPrefab = buildingManager.GetBuildingData(buildingId).Prefab;
         ghostGO = Instantiate(buildingPrefab);
@@ -131,27 +76,31 @@ public class BuildingPlacer : MonoBehaviour
                 collider.enabled = false;
             }
         }
-        ghostBuilding = ghostGO.GetComponent<Building>();
         ghostSpriteRenderer = ghostGO.GetComponentInChildren<SpriteRenderer>();
+        ghostBuilding = ghostGO.GetComponent<Building>();
         ghostBuilding.PlacementMode = true;
     }
 
-    private void TryPlaceGhost()
+    public bool TryPlaceGhost()
     {
-        if (buildingManager == null || IsPlacing == false || !ghostBuilding.IsValidPlacement()) return;
+        if (buildingManager == null || IsPlacing == false || !ghostBuilding.IsValidPlacement())
+        {
+            return false;
+        }
 
         Vector3 spawnPos = new(ghostGO.transform.position.x, 0, -1);
         if (buildingManager.CreateBuilding(currentBuildingId, spawnPos))
         {
-            ClearSelected();
+            return true;
         }
+        return false;
     }
 
-    private void ClearSelected()
+    public void ClearSelected()
     {
-        IsPlacing = false;
+        isPlacing = false;
         currentBuildingId = null;
-        buildingTypeText.text = "";
+        isInvalidVisual = false;
         if (ghostGO != null)
         {
             Destroy(ghostGO);

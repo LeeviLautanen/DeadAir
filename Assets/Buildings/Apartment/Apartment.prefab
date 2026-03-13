@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 634f8a4923f0ee3498573b32abf2dc07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlacementMode: 0
   data: {fileID: 11400000, guid: 82a624732f9ceca4db98e9ee212e8773, type: 2}
   currentState: 0
   maxHealth: 0
@@ -228,7 +229,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -17,6 +17,7 @@ public class BuildMenuElement : MonoBehaviour
         }
     }
     public string BuildingId => buildingId;
+    public BuildingData Data => prefab.GetComponent<Building>().Data;
     public Color normalColor = Color.white;
     public Color selectedColor = Color.gray7;
 

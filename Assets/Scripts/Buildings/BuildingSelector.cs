@@ -70,7 +70,7 @@ public class BuildingSelector : MonoBehaviour
                 ClosePanel();
         };
 
-        inputHandler.RegisterClickHandler(HandleMouseClick, 50);
+        inputHandler.RegisterClickHandler(HandleMouseClick, 0);
 
         ClosePanel();
     }
@@ -85,8 +85,11 @@ public class BuildingSelector : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(inputHandler.MouseWorldPosition, Vector2.zero);
             if (hit.collider != null && hit.collider.transform.parent.TryGetComponent<Building>(out var b))
             {
-                OpenPanel(b);
-                return true;
+                if (b.IsValidPlacement())
+                {
+                    OpenPanel(b);
+                    return true;
+                }
             }
             else if (isPanelOpen)
             {

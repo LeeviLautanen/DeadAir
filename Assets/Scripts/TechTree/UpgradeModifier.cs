@@ -9,7 +9,8 @@ public enum ModifierType
     Reservation,
     ShieldRechargeRate,
     ResearchRate,
-    InterceptorEffectiveness
+    InterceptorEffectiveness,
+    ConstructionCost
 }
 
 [System.Serializable]

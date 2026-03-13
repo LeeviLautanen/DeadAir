@@ -15,6 +15,8 @@ public class BuildMenuManager : MonoBehaviour
 
     private static readonly Logger log = new(true, LogLevel.Info);
     private InputHandler inputHandler;
+    private BuildMenuInfo buildMenuInfo;
+    private BuildingPlacer buildingPlacer;
     [SerializeField] private List<BuildMenuElement> allElements = new();
     private Canvas buildMenuCanvas;
     private BuildMenuElement selectedElement;
@@ -22,8 +24,9 @@ public class BuildMenuManager : MonoBehaviour
 
     private void Start()
     {
+        buildMenuInfo = FindFirstObjectByType<BuildMenuInfo>();
+        buildingPlacer = FindFirstObjectByType<BuildingPlacer>();
         buildMenuCanvas = GetComponent<Canvas>();
-        SetVisible(true);
 
         // Get all nodes
         GetComponentsInChildren(allElements);
@@ -31,8 +34,10 @@ public class BuildMenuManager : MonoBehaviour
 
         // Input handling
         inputHandler = FindFirstObjectByType<InputHandler>();
-        inputHandler.RegisterClickHandler(HandleMouseClick, 0);
+        inputHandler.RegisterClickHandler(HandleMouseClick, 1);
         inputHandler.NumberKeyPressed += HandleNumberKey;
+
+        SetVisible(true);
     }
 
     public void SetVisible(bool visible)
@@ -46,9 +51,21 @@ public class BuildMenuManager : MonoBehaviour
         if (!IsVisible)
             return false;
 
-        if (click.Button == InputHandler.MouseButton.Right && selectedElement != null)
+        if (click.Button == InputHandler.MouseButton.Left)
         {
-            selectedElement.IsSelected = false;
+            if (buildingPlacer.TryPlaceGhost())
+            {
+                ClearSelected();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (click.Button == InputHandler.MouseButton.Right)
+        {
+            ClearSelected();
             return true;
         }
 
@@ -68,6 +85,17 @@ public class BuildMenuManager : MonoBehaviour
         }
     }
 
+    private void ClearSelected()
+    {
+        if (selectedElement != null)
+        {
+            selectedElement.IsSelected = false;
+            selectedElement = null;
+            buildMenuInfo.ClosePanel();
+            buildingPlacer.ClearSelected();
+        }
+    }
+
     private void HandleElementClicked(BuildMenuElement clickedElement)
     {
         if (selectedElement != null)
@@ -77,6 +105,10 @@ public class BuildMenuManager : MonoBehaviour
 
         selectedElement = clickedElement;
         selectedElement.IsSelected = true;
+
+        buildMenuInfo.OpenPanel(clickedElement.Data);
+        buildingPlacer.SelectBuilding(clickedElement.Data.Id);
+
         log.Info($"Element clicked: {clickedElement.BuildingId}");
     }
 }
