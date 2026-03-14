@@ -5,7 +5,7 @@ using Mono.Cecil;
 
 public class ResourceManager : MonoBehaviour
 {
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(ResourceManager));
     private static readonly System.Random rng = new();
 
     private TimeManager timeManager;

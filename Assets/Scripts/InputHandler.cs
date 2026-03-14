@@ -35,7 +35,7 @@ public class InputHandler : MonoBehaviour
     private readonly List<(int priority, MoveHandler handler)> moveHandlers = new();
     private readonly List<(int priority, ScrollHandler handler)> scrollHandlers = new();
 
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(InputHandler));
     private InputAction cameraMoveAction;
     private InputAction cameraZoomAction;
     private Camera mainCamera;

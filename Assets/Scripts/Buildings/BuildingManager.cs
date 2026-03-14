@@ -6,7 +6,7 @@ public class BuildingManager : MonoBehaviour
     [Header("Available Buildings")]
     public List<BuildingData> availableBuildings;
 
-    private static readonly Logger log = new(true, LogLevel.Warning);
+    private static readonly Logger log = new(nameof(BuildingManager));
     private ResourceManager resourceManager;
     private InputHandler inputHandler;
     private Dictionary<string, BuildingData> buildingDatabase = new();

@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 
 public class BuildMenuInfo : MonoBehaviour
 {
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(BuildMenuInfo));
     private InputHandler inputHandler;
     private TechManager techManager;
     private BuildingData current;

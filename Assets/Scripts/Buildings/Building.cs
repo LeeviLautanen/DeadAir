@@ -19,7 +19,7 @@ public class Building : MonoBehaviour
     public static Action<Building> OnCreated;
     public static Action<Building> OnDestroyed;
 
-    protected static readonly Logger log = new(true, LogLevel.Info);
+    protected static readonly Logger log = new(nameof(Building));
     protected ResourceManager resourceManager;
     protected BuildingManager buildingManager;
     protected TechManager techManager;

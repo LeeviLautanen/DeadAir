@@ -13,7 +13,7 @@ public class BuildMenuManager : MonoBehaviour
         }
     }
 
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(BuildMenuManager));
     private InputHandler inputHandler;
     private BuildMenuInfo buildMenuInfo;
     private BuildingPlacer buildingPlacer;

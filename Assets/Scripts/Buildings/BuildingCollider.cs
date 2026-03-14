@@ -4,7 +4,7 @@ public class BuildingCollider : MonoBehaviour
 {
     public BuildingColliderType Type;
 
-    private static readonly Logger log = new(true, LogLevel.Warning);
+    private static readonly Logger log = new(nameof(BuildingCollider));
     private Building owner;
 
     private void Awake()

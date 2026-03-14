@@ -21,7 +21,7 @@ public class BuildMenuElement : MonoBehaviour
     public Color normalColor = Color.white;
     public Color selectedColor = Color.gray7;
 
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(BuildMenuElement));
     [Header("Element data")]
     [SerializeField] private GameObject prefab;
     string buildingId;

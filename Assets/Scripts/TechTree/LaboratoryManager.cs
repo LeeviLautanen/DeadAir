@@ -6,7 +6,7 @@ public class LaboratoryManager : MonoBehaviour
 {
     public float MinLabResearchRateIncrease = 0.1f;
 
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(LaboratoryManager));
     private TechManager techManager;
     private readonly Dictionary<Building, bool> laboratories = new();
     [SerializeField] private float researchRateMultiplier = 1f;

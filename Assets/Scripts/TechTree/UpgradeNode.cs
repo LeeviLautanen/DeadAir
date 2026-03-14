@@ -24,7 +24,7 @@ public class UpgradeNode : MonoBehaviour
     public string DisplayName => data.DisplayName;
     public static Action<UpgradeNode> OnUpgradeNodeClicked;
 
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(UpgradeNode));
     [SerializeField] private UpgradeData data;
     private TMP_Text upgradeText;
     private Button upgradeButton;

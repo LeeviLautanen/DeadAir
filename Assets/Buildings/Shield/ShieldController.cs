@@ -6,7 +6,7 @@ public class ShieldController : Building
     public Sprite shieldOffTexture;
     public float RechargeRate = 10f;
 
-    private static readonly new Logger log = new(true, LogLevel.Warning);
+    private static readonly new Logger log = new(nameof(ShieldController));
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D shieldCollider;
     private bool isShieldActive;

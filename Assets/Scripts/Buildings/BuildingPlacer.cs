@@ -6,7 +6,7 @@ public class BuildingPlacer : MonoBehaviour
 {
     public bool IsPlacing => isPlacing;
 
-    private static readonly Logger log = new(true, LogLevel.Warning);
+    private static readonly Logger log = new(nameof(BuildingPlacer));
     private BuildingManager buildingManager;
     private InputHandler inputHandler;
     private string currentBuildingId;
@@ -88,7 +88,7 @@ public class BuildingPlacer : MonoBehaviour
             return false;
         }
 
-        Vector3 spawnPos = new(ghostGO.transform.position.x, 0, -1);
+        Vector3 spawnPos = new(ghostGO.transform.position.x, 0, -2);
         if (buildingManager.CreateBuilding(currentBuildingId, spawnPos))
         {
             return true;

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ResourceUI : MonoBehaviour
 {
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(ResourceUI));
     private ResourceManager resourceManager;
     private readonly Dictionary<string, TMP_Text> resourceTexts = new();
 

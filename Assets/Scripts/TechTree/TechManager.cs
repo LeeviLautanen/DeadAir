@@ -20,7 +20,7 @@ public class TechManager : MonoBehaviour, IDragHandler
     public float minZoom = 0.5f;
     public float maxZoom = 2f;
 
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(TechManager));
     private InputHandler inputHandler;
     private GameObject lineContainer;
     private TMP_Text researchProgressText;

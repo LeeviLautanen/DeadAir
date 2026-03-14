@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 
 public class BuildingSelector : MonoBehaviour
 {
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(BuildingSelector));
     private InputHandler inputHandler;
     private TechManager techManager;
     private Building current;

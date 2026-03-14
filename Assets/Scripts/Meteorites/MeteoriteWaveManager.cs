@@ -11,10 +11,12 @@ public class MeteoriteWaveManager : MonoBehaviour
     public float SpawnAngleRange = 20f;
     public float rotationSpeedMin = 30f;
     public float rotationSpeedMax = 180f;
+    public float speedRandomizationMult = 0.1f;
 
-    private static readonly Logger log = new(true, LogLevel.Info);
+    private static readonly Logger log = new(nameof(MeteoriteWaveManager));
     private TimeManager timeManager;
     private TechManager techManager;
+    private MeteoriteParticleSystem meteoriteParticleSystem;
     private List<MeteoriteWaveData> attackWaves = new();
     private Dictionary<Building, bool> interceptors = new();
     private int interceptorCount;
@@ -25,6 +27,7 @@ public class MeteoriteWaveManager : MonoBehaviour
     {
         timeManager = FindFirstObjectByType<TimeManager>();
         techManager = FindFirstObjectByType<TechManager>();
+        meteoriteParticleSystem = FindFirstObjectByType<MeteoriteParticleSystem>();
 
         attackWaves = await Utility.LoadAllByLabel<MeteoriteWaveData>("AttackWaveSO");
         foreach (MeteoriteWaveData wave in attackWaves)
@@ -123,8 +126,14 @@ public class MeteoriteWaveManager : MonoBehaviour
         Quaternion spawnRotation = Quaternion.AngleAxis(angle, Vector3.forward) * MeteoritePrefab.transform.rotation;
         GameObject meteor = Instantiate(MeteoritePrefab, spawnPosition, spawnRotation);
 
+        // Randomize rotation
         float rotationSpeed = Random.Range(rotationSpeedMin, rotationSpeedMax);
-        rotationSpeed = Random.value > 0.5f ? -rotationSpeed : rotationSpeed; // Randomize direction
+        rotationSpeed = Random.value > 0.5f ? -rotationSpeed : rotationSpeed;
         meteor.GetComponent<Rigidbody2D>().angularVelocity = rotationSpeed;
+
+        // Randomize speed
+        Meteorite meteoriteComponent = meteor.GetComponent<Meteorite>();
+        float speedChange = Random.Range(-1f, 1f) * speedRandomizationMult;
+        meteoriteComponent.Speed += meteoriteComponent.Speed * speedChange;
     }
 }
