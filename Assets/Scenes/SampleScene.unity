@@ -272,8 +272,9 @@ GameObject:
   - component: {fileID: 93531067}
   - component: {fileID: 93531069}
   - component: {fileID: 93531072}
-  - component: {fileID: 93531071}
+  - component: {fileID: 93531074}
   - component: {fileID: 93531073}
+  - component: {fileID: 93531071}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -390,9 +391,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteManager
   MeteoritePrefab: {fileID: 2838757934400324701, guid: a2ecc256c071e3c4ca34c02790dae405, type: 3}
-  SpawnRange: {x: 0, y: 200}
-  SpawnHeight: 100
-  SpawnAngleRange: 15
+  SpawnRange: {x: 40, y: 160}
+  SpawnHeight: 220
+  SpawnAngleRange: 30
   rotationSpeedMin: 120
   rotationSpeedMax: 200
   speedRandomizationMult: 0.1
@@ -425,6 +426,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteParticleSystem
   prefab: {fileID: 5028681982771986946, guid: 7bf0d1822db950a40aebe0233d9d666e, type: 3}
+  poolSize: 50
+--- !u!114 &93531074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 93531061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8cc4db57afa5614281dc133a078897d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioPoolManager
+  prefabSource: {fileID: 2821225486586042492, guid: 0346d5beadca7324493c90b14a329ad4, type: 3}
   poolSize: 50
 --- !u!1001 &95699162
 PrefabInstance:
@@ -7477,6 +7492,7 @@ GameObject:
   - component: {fileID: 1445513119}
   - component: {fileID: 1445513117}
   - component: {fileID: 1445513121}
+  - component: {fileID: 1445513122}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -7588,7 +7604,7 @@ Transform:
   m_GameObject: {fileID: 1445513115}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000021075227, y: -0, z: 0.000000021071623, w: 1}
-  m_LocalPosition: {x: 100, y: 12.34, z: -27.26001}
+  m_LocalPosition: {x: 100, y: 12.34, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7611,6 +7627,14 @@ MonoBehaviour:
   minZoom: 5
   maxZoom: 40
   targetFramteRate: 60
+--- !u!81 &1445513122
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445513115}
+  m_Enabled: 1
 --- !u!1001 &1458952380
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8976,7 +9000,7 @@ GameObject:
   - component: {fileID: 1692612749}
   - component: {fileID: 1692612748}
   - component: {fileID: 1692612750}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}

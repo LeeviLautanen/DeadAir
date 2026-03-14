@@ -12,11 +12,11 @@ TagManager:
   - 
   - Water
   - UI
-  - Damage
-  - Placement
   - Ground
-  - 
-  - 
+  - BuildingDamage
+  - BuildingPlacement
+  - Shield
+  - Meteorite
   - 
   - 
   - 

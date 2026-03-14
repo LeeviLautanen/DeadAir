@@ -6,7 +6,9 @@ public class AudioPoolManager : MonoBehaviour
     public static AudioPoolManager Instance { get; private set; }
     public AudioSource prefabSource;
     public int poolSize = 50;
-    List<AudioSource> pool = new();
+
+    private static readonly Logger log = new(nameof(AudioPoolManager));
+    private List<AudioSource> pool = new();
 
     void Awake()
     {
@@ -25,18 +27,25 @@ public class AudioPoolManager : MonoBehaviour
         }
     }
 
-    public void PlayAt(AudioClip clip, Vector3 pos, float volume = 1f, float pitch = 1f)
+    public void PlayAt(AudioClip clip, Vector3 pos, float delay = 0f, float pitch = 1f)
     {
         AudioSource s = pool.Find(x => !x.isPlaying);
-        if (s == null) s = pool[0];
+        if (s == null)
+        {
+            Debug.LogWarning("No available audio sources in pool");
+            return;
+        }
+
+        if (delay < 0)
+        {
+            log.Warning($"Impact sound delay was negative ({delay}s), timing might be off.");
+            delay = 0;
+        }
+
         s.transform.position = pos;
         s.clip = clip;
-        s.volume = volume;
         s.pitch = pitch;
-        s.spatialBlend = 1f;
-        s.minDistance = 5f;
-        s.maxDistance = 80f;
-        s.rolloffMode = AudioRolloffMode.Logarithmic;
-        s.Play();
+        s.PlayDelayed(delay);
+        log.Info($"Scheduled audio with delay {delay}");
     }
 }

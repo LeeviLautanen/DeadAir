@@ -4,6 +4,7 @@ using UnityEngine;
 public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance { get; private set; }
+    public float DeltaTime => GetDeltaTime();
     public int CurrentDay => currentDay;
     public float GameTimeMultiplier = 1f;
     public float DayLengthSeconds = 60f;
