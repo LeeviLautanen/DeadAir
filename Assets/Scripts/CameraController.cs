@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     public float zoomSpeed = 5f;
     public float minZoom = 7f;
     public float maxZoom = 30f;
-    public int targetFramteRate = 60;
+    public int targetFrameRate = 60;
 
     private TechManager techManager;
     private InputHandler inputHandler;
@@ -25,7 +25,16 @@ public class CameraController : MonoBehaviour
         mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
         zoomMultiplier = mainCamera.orthographicSize;
 
-        //Application.targetFrameRate = targetFramteRate;
+        //Application.targetFrameRate = targetFrameRate;
+    }
+
+    private void OnDestroy()
+    {
+        if (inputHandler != null)
+        {
+            inputHandler.UnregisterMoveHandler(HandleMoveInput);
+            inputHandler.UnregisterScrollHandler(HandleScrollInput);
+        }
     }
 
     private bool HandleMoveInput(Vector2 move)

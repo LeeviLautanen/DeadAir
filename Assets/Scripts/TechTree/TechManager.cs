@@ -76,6 +76,17 @@ public class TechManager : MonoBehaviour, IDragHandler
         }
     }
 
+    private void OnDestroy()
+    {
+        UpgradeNode.OnUpgradeNodeClicked -= HandleUpgradeNodeClicked;
+
+        if (inputHandler != null)
+        {
+            inputHandler.UnregisterMoveHandler(HandleMoveInput);
+            inputHandler.UnregisterScrollHandler(HandleScrollInput);
+        }
+    }
+
     public void OnDrag(PointerEventData eventData)
     {
         if (isVisible)
@@ -86,6 +97,11 @@ public class TechManager : MonoBehaviour, IDragHandler
     {
         isVisible = visible;
         upgradeCanvas.enabled = visible;
+
+        if (inputHandler != null)
+        {
+            inputHandler.SetInputContext(visible ? InputHandler.InputContext.ResearchTree : InputHandler.InputContext.Gameplay);
+        }
     }
 
     public void Research(float amount)

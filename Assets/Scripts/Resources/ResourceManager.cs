@@ -35,11 +35,6 @@ public class ResourceManager : MonoBehaviour
 
     private void Update()
     {
-        foreach (var amount in resourceLookup.Values)
-        {
-            resourceRateLookup[amount.Data.Id] = amount.Amount;
-        }
-
         // Handle pending registers
         foreach (Building building in registerBuffer)
         {
@@ -58,6 +53,14 @@ public class ResourceManager : MonoBehaviour
                 list.Remove(building);
         }
         unregisterBuffer.Clear();
+
+        if (GetDeltaTime() <= 0f) return;
+
+        // Clear rates
+        foreach (ResourceData data in allResources)
+        {
+            resourceRateLookup[data.Id] = 0f;
+        }
 
         // Consume resources
         foreach (var userList in resourceUserLists)
@@ -89,11 +92,6 @@ public class ResourceManager : MonoBehaviour
         }
 
         SmoothResources();
-
-        foreach (var amount in resourceLookup.Values)
-        {
-            resourceRateLookup[amount.Data.Id] = amount.Amount - resourceRateLookup[amount.Data.Id];
-        }
     }
 
     public void RegisterResourceUser(Building building)
@@ -207,6 +205,7 @@ public class ResourceManager : MonoBehaviour
             if (resourceLookup.TryGetValue(cost.Data.Id, out var entry))
             {
                 float amount = cost.Amount * (isRate ? GetDeltaTime() : 1f);
+                resourceRateLookup[cost.Data.Id] -= amount; // Used for rate calcuations
                 if (amount > (entry.Amount - reservationLookup[entry.Data.Id]))
                 {
                     break;
@@ -228,7 +227,9 @@ public class ResourceManager : MonoBehaviour
                 var cost = costs[i];
                 if (resourceLookup.TryGetValue(cost.Data.Id, out var entry))
                 {
-                    entry.Amount += cost.Amount * (isRate ? GetDeltaTime() : 1f);
+                    float amount = cost.Amount * (isRate ? GetDeltaTime() : 1f);
+                    resourceRateLookup[cost.Data.Id] += amount; // Used for rate calcuations
+                    entry.Amount += amount;
                 }
             }
             return false;
@@ -243,10 +244,13 @@ public class ResourceManager : MonoBehaviour
         {
             if (resourceLookup.TryGetValue(resource.Data.Id, out ResourceAmount entry))
             {
+                // Add to rate calcuation
+                float amount = resource.Amount * (isRate ? GetDeltaTime() : 1f);
+                resourceRateLookup[entry.Data.Id] += amount; // Used for rate calcuations
+
                 // Ignore if we are already over the cap
                 if (entry.Amount >= resourceMaxLookup[entry.Data.Id]) continue;
 
-                float amount = resource.Amount * (isRate ? GetDeltaTime() : 1f);
                 if (entry.Amount + amount > resourceMaxLookup[entry.Data.Id])
                 {
                     entry.Amount = resourceMaxLookup[entry.Data.Id];
@@ -393,7 +397,7 @@ public class ResourceManager : MonoBehaviour
                 humanAdjustmentList.Add(new ResourceAmount(humans.Data, 0f));
 
             humanAdjustmentList[0].Amount = Math.Max(1f, maxHumans * 0.01f);
-            if (humans.Amount < maxHumans)
+            if (humans.Amount <= maxHumans)
             {
                 AddResources(humanAdjustmentList, true);
             }
@@ -420,6 +424,7 @@ public class ResourceManager : MonoBehaviour
             resourceLookup[data.Id] = new ResourceAmount(data, 0f);
             resourceMaxLookup[data.Id] = 0f;
             reservationLookup[data.Id] = 0f;
+            resourceRateLookup[data.Id] = 0f;
         }
     }
 }

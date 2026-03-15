@@ -45,6 +45,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - AttackWaveSO
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99edfdff0fd919e4dbdffdd9a439ef39
+    m_Address: Assets/Meteorites/AttackWaves/Wave1 1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b3b8f1dc2aa52b449a95148736b791a9
     m_Address: Assets/Meteorites/AttackWaves/Wave4.asset
     m_ReadOnly: 0

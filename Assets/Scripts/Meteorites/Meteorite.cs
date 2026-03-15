@@ -81,7 +81,7 @@ public class Meteorite : MonoBehaviour
     {
         rb.MovePosition(rb.position + Speed * Time.fixedDeltaTime * timeManager.GameTimeMultiplier * moveDirection);
 
-        lifeTimer += Time.deltaTime;
+        lifeTimer += timeManager.GetDeltaTime();
         if (lifeTimer >= Lifetime)
         {
             Destroy(gameObject);

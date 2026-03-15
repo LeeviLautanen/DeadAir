@@ -12,8 +12,15 @@ public enum SaveAction
 
 public class InputHandler : MonoBehaviour
 {
+    public enum InputContext
+    {
+        Gameplay,
+        ResearchTree
+    }
+
     public Vector2 MouseWorldPosition { get; private set; }
     public InputActionAsset inputActions;
+    public InputContext CurrentContext { get; private set; } = InputContext.Gameplay;
     public static readonly Key[] numberKeys =
     {
         Key.Digit1, Key.Digit2, Key.Digit3, Key.Digit4, Key.Digit5, Key.Digit6, Key.Digit7, Key.Digit8, Key.Digit9
@@ -30,14 +37,27 @@ public class InputHandler : MonoBehaviour
     public event Action<Key> NumberKeyPressed;
     public event Action<SaveAction> SaveActionTriggered;
     public event Action<MouseButton> MouseButtonReleased;
+    public event Action<float> TimeSpeedStepRequested;
+    public event Action ResearchMenuToggleRequested;
+    public event Action PauseToggleRequested;
+    public event Action PauseMenuRequested;
 
     private readonly List<(int priority, ClickHandler handler)> clickHandlers = new();
     private readonly List<(int priority, MoveHandler handler)> moveHandlers = new();
     private readonly List<(int priority, ScrollHandler handler)> scrollHandlers = new();
 
     private static readonly Logger log = new(nameof(InputHandler));
+    private InputActionMap gameplayActionMap;
+    private InputActionMap researchTreeActionMap;
+    private InputActionMap globalHotkeysActionMap;
     private InputAction cameraMoveAction;
     private InputAction cameraZoomAction;
+    private InputAction pointerPositionAction;
+    private InputAction speedUpTimeAction;
+    private InputAction slowDownTimeAction;
+    private InputAction toggleResearchAction;
+    private InputAction togglePauseAction;
+    private InputAction openPauseMenuAction;
     private Camera mainCamera;
     private Vector2 screenPosCache = Vector2.zero;
     private readonly MouseClick cachedClick = new();
@@ -56,9 +76,41 @@ public class InputHandler : MonoBehaviour
             return;
         }
 
-        InputActionMap actionMap = inputActions.FindActionMap("CameraMovement");
-        cameraMoveAction = actionMap.FindAction("CameraMove");
-        cameraZoomAction = actionMap.FindAction("CameraZoom");
+        gameplayActionMap = inputActions.FindActionMap("Gameplay");
+        researchTreeActionMap = inputActions.FindActionMap("ResearchTree");
+
+        if (gameplayActionMap == null || researchTreeActionMap == null)
+        {
+            Debug.LogError("Input maps Gameplay and ResearchTree are required in InputActions asset.");
+            enabled = false;
+            return;
+        }
+
+        gameplayActionMap.Enable();
+        researchTreeActionMap.Disable();
+
+        cameraMoveAction = gameplayActionMap.FindAction("ViewMove");
+        cameraZoomAction = gameplayActionMap.FindAction("ViewZoom");
+        pointerPositionAction = gameplayActionMap.FindAction("MousePosition");
+        speedUpTimeAction = gameplayActionMap.FindAction("SpeedUpTime", false);
+        slowDownTimeAction = gameplayActionMap.FindAction("SlowDownTime", false);
+        toggleResearchAction = gameplayActionMap.FindAction("ToggleResearchMenu", false);
+        togglePauseAction = gameplayActionMap.FindAction("TogglePause", false);
+
+        globalHotkeysActionMap = inputActions.FindActionMap("GlobalHotkeys", false);
+        if (globalHotkeysActionMap != null)
+        {
+            globalHotkeysActionMap.Enable();
+            openPauseMenuAction = globalHotkeysActionMap.FindAction("OpenPauseMenu", false);
+        }
+
+        if (cameraMoveAction == null || cameraZoomAction == null || pointerPositionAction == null)
+        {
+            Debug.LogError("Actions ViewMove, ViewZoom, and MousePosition are required in Gameplay map.");
+            enabled = false;
+            return;
+        }
+
     }
 
     private void Update()
@@ -74,15 +126,44 @@ public class InputHandler : MonoBehaviour
         HandleMove();
         HandleNumberKeys();
         HandleSaveControls();
+        HandleGameplayHotkeys();
+        HandleGlobalHotkeys();
     }
 
     private void UpdateMouseWorldPosition()
     {
-        var screenPos = Mouse.current.position.ReadValue();
+        var screenPos = pointerPositionAction.ReadValue<Vector2>();
         cachedPointerDelta = screenPos - screenPosCache;
         screenPosCache.x = screenPos.x;
         screenPosCache.y = screenPos.y;
         MouseWorldPosition = mainCamera.ScreenToWorldPoint(screenPosCache);
+    }
+
+    public void SetInputContext(InputContext context)
+    {
+        if (CurrentContext == context)
+            return;
+
+        if (context == InputContext.ResearchTree)
+        {
+            researchTreeActionMap.Enable();
+            gameplayActionMap.Disable();
+
+            cameraMoveAction = researchTreeActionMap.FindAction("ViewMove");
+            cameraZoomAction = researchTreeActionMap.FindAction("ViewZoom");
+            pointerPositionAction = researchTreeActionMap.FindAction("MousePosition");
+        }
+        else
+        {
+            gameplayActionMap.Enable();
+            researchTreeActionMap.Disable();
+
+            cameraMoveAction = gameplayActionMap.FindAction("ViewMove");
+            cameraZoomAction = gameplayActionMap.FindAction("ViewZoom");
+            pointerPositionAction = gameplayActionMap.FindAction("MousePosition");
+        }
+
+        CurrentContext = context;
     }
 
     private void HandleMouseClicks()
@@ -181,6 +262,38 @@ public class InputHandler : MonoBehaviour
             if (Keyboard.current.sKey.wasPressedThisFrame) SaveActionTriggered?.Invoke(SaveAction.Save);
             else if (Keyboard.current.rKey.wasPressedThisFrame) SaveActionTriggered?.Invoke(SaveAction.Load);
             else if (Keyboard.current.cKey.wasPressedThisFrame) SaveActionTriggered?.Invoke(SaveAction.Clear);
+        }
+    }
+
+    private void HandleGameplayHotkeys()
+    {
+        if (speedUpTimeAction != null && speedUpTimeAction.WasPressedThisFrame())
+        {
+            TimeSpeedStepRequested?.Invoke(0.5f);
+        }
+
+        if (slowDownTimeAction != null && slowDownTimeAction.WasPressedThisFrame())
+        {
+            TimeSpeedStepRequested?.Invoke(-0.5f);
+        }
+
+        bool ctrlPressed = Keyboard.current != null && (Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.rightCtrlKey.isPressed);
+        if (!ctrlPressed && toggleResearchAction != null && toggleResearchAction.WasPressedThisFrame())
+        {
+            ResearchMenuToggleRequested?.Invoke();
+        }
+
+        if (togglePauseAction != null && togglePauseAction.WasPressedThisFrame())
+        {
+            PauseToggleRequested?.Invoke();
+        }
+    }
+
+    private void HandleGlobalHotkeys()
+    {
+        if (openPauseMenuAction != null && openPauseMenuAction.WasPressedThisFrame())
+        {
+            PauseMenuRequested?.Invoke();
         }
     }
 

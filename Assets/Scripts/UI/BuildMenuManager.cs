@@ -40,6 +40,17 @@ public class BuildMenuManager : MonoBehaviour
         SetVisible(true);
     }
 
+    private void OnDestroy()
+    {
+        BuildMenuElement.OnElementClicked -= HandleElementClicked;
+
+        if (inputHandler != null)
+        {
+            inputHandler.UnregisterClickHandler(HandleMouseClick);
+            inputHandler.NumberKeyPressed -= HandleNumberKey;
+        }
+    }
+
     public void SetVisible(bool visible)
     {
         isVisible = visible;

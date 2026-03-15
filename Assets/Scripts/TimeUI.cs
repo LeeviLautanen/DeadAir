@@ -4,20 +4,19 @@ using UnityEngine.UI;
 
 public class TimeUI : MonoBehaviour
 {
-    private GameObject clockTextGO;
-    private GameObject dayCounterGO;
     private TMP_Text clockText;
     private TMP_Text dayCounterText;
+    private TMP_Text gameTimeMultText;
     private TimeManager timeManager;
     private int lastHour = -1;
     private int lastDay = -1;
+    private float lastMult = -1f;
 
     private void Start()
     {
-        clockTextGO = GameObject.Find("Clock");
-        dayCounterGO = GameObject.Find("DayCounter");
-        clockText = clockTextGO.GetComponent<TMP_Text>();
-        dayCounterText = dayCounterGO.GetComponent<TMP_Text>();
+        clockText = GameObject.Find("Clock").GetComponent<TMP_Text>();
+        dayCounterText = GameObject.Find("DayCounter").GetComponent<TMP_Text>();
+        gameTimeMultText = GameObject.Find("GameTimeMult").GetComponent<TMP_Text>();
         timeManager = FindFirstObjectByType<TimeManager>();
     }
 
@@ -35,6 +34,24 @@ public class TimeUI : MonoBehaviour
         {
             lastDay = day;
             dayCounterText.text = $"Day {day}";
+        }
+
+        float mult = timeManager.GameTimeMultiplier;
+        if (mult != lastMult)
+        {
+            lastMult = mult;
+            if (mult == 1f)
+            {
+                gameTimeMultText.text = "";
+            }
+            else if (mult == 0f)
+            {
+                gameTimeMultText.text = "(Paused)";
+            }
+            else
+            {
+                gameTimeMultText.text = $"(Speed x{mult:F1})";
+            }
         }
     }
 }

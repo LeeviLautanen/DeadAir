@@ -3,12 +3,12 @@
     "name": "InputActions",
     "maps": [
         {
-            "name": "CameraMovement",
+            "name": "Gameplay",
             "id": "54542bc3-d00d-4bef-98cd-315ad2808cd1",
             "actions": [
                 {
-                    "name": "CameraMove",
-                    "type": "Value",
+                    "name": "ViewMove",
+                    "type": "PassThrough",
                     "id": "c2f34fbb-b83b-4915-b599-09bf0bee7e03",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -17,7 +17,7 @@
                 },
                 {
                     "name": "MousePosition",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "3d1ccf63-617c-4ee3-8f63-c78c9cb6070a",
                     "expectedControlType": "Vector2",
                     "processors": "",
@@ -25,13 +25,49 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "CameraZoom",
+                    "name": "ViewZoom",
                     "type": "Value",
                     "id": "8e9d02fe-6604-4ee0-b8c1-2e9e8ba94b2c",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "SpeedUpTime",
+                    "type": "Button",
+                    "id": "b60526bf-e3d8-4cd0-9cf2-50f41a66b760",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SlowDownTime",
+                    "type": "Button",
+                    "id": "5be58fab-d48f-4e5f-b925-820e3f501a7b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleResearchMenu",
+                    "type": "Button",
+                    "id": "6b8dd84f-f03a-4f1f-9115-0ebe664db7d8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TogglePause",
+                    "type": "Button",
+                    "id": "7d2f999b-0780-4b35-8ecd-cfca5bcbe519",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -42,7 +78,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "CameraMove",
+                    "action": "ViewMove",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -52,8 +88,8 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "CameraMove",
+                    "groups": ";PC control scheme",
+                    "action": "ViewMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -63,8 +99,8 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "CameraMove",
+                    "groups": ";PC control scheme",
+                    "action": "ViewMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -74,8 +110,8 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "CameraMove",
+                    "groups": ";PC control scheme",
+                    "action": "ViewMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -85,8 +121,8 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "CameraMove",
+                    "groups": ";PC control scheme",
+                    "action": "ViewMove",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -96,7 +132,7 @@
                     "path": "<Mouse>/position",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";PC control scheme",
                     "action": "MousePosition",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -107,8 +143,198 @@
                     "path": "<Mouse>/scroll",
                     "interactions": "",
                     "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "ViewZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "309ff33b-ef10-4a75-990c-d92c3ce5f99a",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "SpeedUpTime",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d261eec-4ed1-40f4-b67f-0e81ca86f0d7",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "SlowDownTime",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "12db42aa-26f6-44ce-8157-93a42e8e5d13",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "ToggleResearchMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9d32bd90-d056-4b6c-97ef-f793f933fff4",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "TogglePause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "ResearchTree",
+            "id": "c902fb4a-28aa-437a-81bb-8533089bdad1",
+            "actions": [
+                {
+                    "name": "ViewMove",
+                    "type": "PassThrough",
+                    "id": "2acdb8bb-1448-4939-9b13-660b1c54977b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "MousePosition",
+                    "type": "PassThrough",
+                    "id": "5314748f-b261-442a-9b46-fc49d3468bcf",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ViewZoom",
+                    "type": "Value",
+                    "id": "7a67e90f-7220-4cde-905c-9ff87cefa355",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "Move",
+                    "id": "e7524a68-8ecf-4638-8335-a7fd46df707a",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
                     "groups": "",
-                    "action": "CameraZoom",
+                    "action": "ViewMove",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "4896fe70-b1ba-44dd-845e-df6fdfc175c3",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "ViewMove",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "53fbbe2c-bd42-4b63-a559-97d3a5ae8eec",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "ViewMove",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "8a55fee9-f0f9-49bf-bd7d-9cdbb9546a2d",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "ViewMove",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "f8060c69-14c7-412d-8219-9eb70cacc97f",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "ViewMove",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "60dac243-9b2b-46c5-a268-96704c47804e",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "MousePosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6db5b748-2c77-4ca9-9c7c-bd36fba39c57",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "ViewZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PauseMenu",
+            "id": "114b516c-d972-499f-8672-2e76c1d09c12",
+            "actions": [],
+            "bindings": []
+        },
+        {
+            "name": "GlobalHotkeys",
+            "id": "4a43b0c3-c615-4ed8-a41e-0f92c7d5a42f",
+            "actions": [
+                {
+                    "name": "OpenPauseMenu",
+                    "type": "Button",
+                    "id": "6ea2dc85-cf13-4f9e-9927-951223ad42f0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "172665d4-bddd-43d2-ad32-3df8df18d54b",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC control scheme",
+                    "action": "OpenPauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -117,11 +343,16 @@
     ],
     "controlSchemes": [
         {
-            "name": "New Control Scheme",
-            "bindingGroup": "New Control Scheme",
+            "name": "PC control scheme",
+            "bindingGroup": "PC control scheme",
             "devices": [
                 {
                     "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
                     "isOptional": false,
                     "isOR": false
                 }

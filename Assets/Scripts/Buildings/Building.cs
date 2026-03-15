@@ -241,7 +241,10 @@ public class Building : MonoBehaviour
                 break;
 
             case BuildingState.Destroyed:
-                resourceManager.ReleaseReservations(requiredReservations, this);
+                if (resourceManager.HasReservation(this))
+                {
+                    resourceManager.ReleaseReservations(requiredReservations, this);
+                }
                 resourceManager.UnregisterResourceUser(this);
                 resourceManager.RemoveCapacityEffects(capacityEffects, this);
                 OnDestroyed?.Invoke(this);

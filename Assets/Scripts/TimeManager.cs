@@ -7,6 +7,8 @@ public class TimeManager : MonoBehaviour
     public float DeltaTime => GetDeltaTime();
     public int CurrentDay => currentDay;
     public float GameTimeMultiplier = 1f;
+    public float MinGameTimeMultiplier = 0.5f;
+    public float MaxGameTimeMultiplier = 5f;
     public float DayLengthSeconds = 60f;
     public Light SunLight;
     public float DayBrightness = 1f;
@@ -16,6 +18,8 @@ public class TimeManager : MonoBehaviour
     private int currentDay = 1;
     private float dayProgress = 0f;
     private readonly List<TimedEvent> scheduledEvents = new();
+    private bool isPaused;
+    private float unpausedMultiplier = 1f;
 
     void Awake()
     {
@@ -52,8 +56,41 @@ public class TimeManager : MonoBehaviour
 
     private void OnValidate()
     {
-        GameTimeMultiplier = Mathf.Max(0.01f, GameTimeMultiplier);
+        MinGameTimeMultiplier = Mathf.Max(0.1f, MinGameTimeMultiplier);
+        MaxGameTimeMultiplier = Mathf.Max(MinGameTimeMultiplier, MaxGameTimeMultiplier);
+        if (!isPaused)
+        {
+            GameTimeMultiplier = Mathf.Clamp(GameTimeMultiplier, MinGameTimeMultiplier, MaxGameTimeMultiplier);
+        }
         DayLengthSeconds = Mathf.Max(1f, DayLengthSeconds);
+    }
+
+    public void StepGameTimeMultiplier(float step)
+    {
+        if (Mathf.Approximately(step, 0f))
+            return;
+
+        if (isPaused)
+        {
+            unpausedMultiplier = Mathf.Clamp(unpausedMultiplier + step, MinGameTimeMultiplier, MaxGameTimeMultiplier);
+            return;
+        }
+
+        GameTimeMultiplier = Mathf.Clamp(GameTimeMultiplier + step, MinGameTimeMultiplier, MaxGameTimeMultiplier);
+    }
+
+    public void TogglePause()
+    {
+        if (isPaused)
+        {
+            isPaused = false;
+            GameTimeMultiplier = Mathf.Clamp(unpausedMultiplier, MinGameTimeMultiplier, MaxGameTimeMultiplier);
+            return;
+        }
+
+        isPaused = true;
+        unpausedMultiplier = Mathf.Clamp(GameTimeMultiplier, MinGameTimeMultiplier, MaxGameTimeMultiplier);
+        GameTimeMultiplier = 0f;
     }
 
     public void ScheduleEvent(System.Action action, int day, int hour, int minute = 0, int second = 0)
