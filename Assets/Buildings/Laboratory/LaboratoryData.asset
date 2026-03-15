@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   id: laboratory
   displayName: Laboratory
-  description: 
+  description: The source of scientific research. Allows us to improve our existing
+    buildings.
   maxHealth: 100
   resourcePriority: 0
-  startupTime: 1
+  startupTime: 3
   prefab: {fileID: 5548335663501128034, guid: ab5db255ed42f5b48bc9d08386af7325, type: 3}
   ConstructionCost:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}

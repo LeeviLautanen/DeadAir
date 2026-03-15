@@ -9,12 +9,19 @@ public class ShieldController : Building
     private static readonly new Logger log = new(nameof(ShieldController));
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D shieldCollider;
-    private bool isShieldActive;
+    private bool isShieldActive = false;
     private float shieldHealth = 100f;
 
     protected override void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        if (PlacementMode)
+        {
+            base.Start();
+            return;
+        }
+
         foreach (var collider in GetComponentsInChildren<BuildingCollider>())
         {
             if (collider.Type == BuildingColliderType.Shield)
@@ -27,6 +34,8 @@ public class ShieldController : Building
         {
             log.Error("No shield collider found on shield building");
         }
+
+        spriteRenderer.sprite = shieldOffTexture; // Swap the 
 
         base.Start();
     }

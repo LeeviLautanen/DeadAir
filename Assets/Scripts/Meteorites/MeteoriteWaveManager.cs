@@ -9,9 +9,8 @@ public class MeteoriteWaveManager : MonoBehaviour
     public Vector2 SpawnRange = new(-10, 10);
     public float SpawnHeight = 40f;
     public float SpawnAngleRange = 20f;
-    public float rotationSpeedMin = 30f;
-    public float rotationSpeedMax = 180f;
-    public float speedRandomizationMult = 0.1f;
+    public Vector2 RotationSpeedRange = new(30f, 180f);
+    public Vector2 SpeedRandomizationRange = new(0.8f, 1.1f);
 
     private static readonly Logger log = new(nameof(MeteoriteWaveManager));
     private TimeManager timeManager;
@@ -110,30 +109,36 @@ public class MeteoriteWaveManager : MonoBehaviour
 
         for (int i = 0; i < spawnAmount; i++)
         {
-            float spawnPos = Random.Range(SpawnRange.x, SpawnRange.y);
+            float impactPos = Random.Range(SpawnRange.x, SpawnRange.y);
             float angle = Random.Range(-SpawnAngleRange, SpawnAngleRange);
-            SpawnMeteorite(spawnPos, angle);
+            SpawnMeteorite(impactPos, angle);
 
             // Wait the interval before spawning the next one (no wait after last spawn)
             if (i < spawnAmount - 1)
+            {
                 yield return new WaitForSeconds(intervals[i]);
+            }
         }
     }
 
-    private void SpawnMeteorite(float position, float angle)
+    private void SpawnMeteorite(float targetImpactX, float angle)
     {
-        Vector3 spawnPosition = new(position, SpawnHeight, -1);
+        float angleRadians = angle * Mathf.Deg2Rad;
+        float horizontalOffset = Mathf.Tan(angleRadians) * SpawnHeight;
+        float spawnX = targetImpactX - horizontalOffset;
+
+        Vector3 spawnPosition = new(spawnX, SpawnHeight, -1);
         Quaternion spawnRotation = Quaternion.AngleAxis(angle, Vector3.forward) * MeteoritePrefab.transform.rotation;
         GameObject meteor = Instantiate(MeteoritePrefab, spawnPosition, spawnRotation);
 
         // Randomize rotation
-        float rotationSpeed = Random.Range(rotationSpeedMin, rotationSpeedMax);
+        float rotationSpeed = Random.Range(RotationSpeedRange.x, RotationSpeedRange.y);
         rotationSpeed = Random.value > 0.5f ? -rotationSpeed : rotationSpeed;
         meteor.GetComponent<Rigidbody2D>().angularVelocity = rotationSpeed;
 
         // Randomize speed
         Meteorite meteoriteComponent = meteor.GetComponent<Meteorite>();
-        float speedChange = Random.Range(-1f, 1f) * speedRandomizationMult;
+        float speedChange = Random.Range(SpeedRandomizationRange.x, SpeedRandomizationRange.y);
         meteoriteComponent.Speed += meteoriteComponent.Speed * speedChange;
     }
 }

@@ -85,11 +85,8 @@ public class BuildingSelector : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(inputHandler.MouseWorldPosition, Vector2.zero);
             if (hit.collider != null && hit.collider.transform.parent.TryGetComponent<Building>(out var b))
             {
-                if (b.IsValidPlacement())
-                {
-                    OpenPanel(b);
-                    return true;
-                }
+                OpenPanel(b);
+                return true;
             }
             else if (isPanelOpen)
             {

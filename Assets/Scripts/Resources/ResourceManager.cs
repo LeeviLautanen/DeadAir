@@ -112,8 +112,9 @@ public class ResourceManager : MonoBehaviour
     {
         resourceLookup.TryGetValue(reservation.Data.Id, out ResourceAmount entry);
         float amount = reservation.Amount;
-        if (entry.Amount < (amount + reservationLookup[entry.Data.Id]) ||
-            resourceMaxLookup[entry.Data.Id] < (amount + reservationLookup[entry.Data.Id]))
+        bool notEnoughResources = amount > (entry.Amount - reservationLookup[entry.Data.Id]);
+        bool isOverMaxWithReservation = amount > (resourceMaxLookup[entry.Data.Id] - reservationLookup[entry.Data.Id]);
+        if (notEnoughResources || isOverMaxWithReservation)
         {
             return false;
         }
@@ -206,7 +207,7 @@ public class ResourceManager : MonoBehaviour
             if (resourceLookup.TryGetValue(cost.Data.Id, out var entry))
             {
                 float amount = cost.Amount * (isRate ? GetDeltaTime() : 1f);
-                if (amount > (entry.Amount + reservationLookup[entry.Data.Id]))
+                if (amount > (entry.Amount - reservationLookup[entry.Data.Id]))
                 {
                     break;
                 }
@@ -267,7 +268,7 @@ public class ResourceManager : MonoBehaviour
             if (resourceLookup.TryGetValue(cost.Data.Id, out ResourceAmount entry))
             {
                 float amount = cost.Amount * (isRate ? GetDeltaTime() : 1f);
-                if (amount > (entry.Amount + reservationLookup[entry.Data.Id]))
+                if (amount > (entry.Amount - reservationLookup[entry.Data.Id]))
                 {
                     return false;
                 }
@@ -391,7 +392,7 @@ public class ResourceManager : MonoBehaviour
             if (humanAdjustmentList.Count == 0)
                 humanAdjustmentList.Add(new ResourceAmount(humans.Data, 0f));
 
-            humanAdjustmentList[0].Amount = maxHumans * 10f;
+            humanAdjustmentList[0].Amount = Math.Max(1f, maxHumans * 0.01f);
             if (humans.Amount < maxHumans)
             {
                 AddResources(humanAdjustmentList, true);

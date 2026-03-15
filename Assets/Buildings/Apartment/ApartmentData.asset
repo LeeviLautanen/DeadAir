@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: apartment
   displayName: Apartment
-  description: 
+  description: A residential building for citizens to live in.
   maxHealth: 100
   resourcePriority: 0
-  startupTime: 1
+  startupTime: 0
   prefab: {fileID: 2672589904300108679, guid: 3be4f90b12012c243a9bf239c5f7bd34, type: 3}
   ConstructionCost:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}

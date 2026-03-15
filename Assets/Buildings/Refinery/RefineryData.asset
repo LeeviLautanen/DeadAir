@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: refinery
   displayName: Refinery
-  description: 
+  description: A factory where raw and recycled material are refined into a usable
+    form.
   maxHealth: 100
   resourcePriority: 0
   startupTime: 3
@@ -24,9 +25,11 @@ MonoBehaviour:
     amount: 50
   ProducedResources:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    amount: 10
+    amount: 5
   ConsumedResources: []
   CapacityEffects:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     amount: 20
-  RequiredReservations: []
+  RequiredReservations:
+  - data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
+    amount: 20

@@ -342,12 +342,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e749d593618bf4680a3a874bfdc8c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShieldController
+  PlacementMode: 0
   data: {fileID: 11400000, guid: 6b55141d5be5af849b469853701608d0, type: 2}
   currentState: 0
   maxHealth: 0
   shieldOnTexture: {fileID: 21300000, guid: 9a95ce900984ea54595f6ae262043b53, type: 3}
   shieldOffTexture: {fileID: 21300000, guid: 92778e669cdeeae40970e18217b96b8a, type: 3}
-  RecoverSpeed: 15
+  RechargeRate: 10
 --- !u!1 &8406395892397589977
 GameObject:
   m_ObjectHideFlags: 0

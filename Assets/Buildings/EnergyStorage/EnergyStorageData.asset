@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   id: energy_storage
   displayName: Energy storage
-  description: 
+  description: A liquid hydrogen tank providing storage for energy.
   maxHealth: 100
   resourcePriority: 0
   startupTime: 0

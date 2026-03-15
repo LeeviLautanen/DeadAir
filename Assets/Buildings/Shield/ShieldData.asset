@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: shield
   displayName: Shield
-  description: 
+  description: A structure that generates a dome of plasma which can disintegrate
+    and deflect meteorites.
   maxHealth: 100
   resourcePriority: 0
   startupTime: 3

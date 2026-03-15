@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   id: material_storage
   displayName: Material storage
-  description: 
+  description: A warehouse for storing building materials.
   maxHealth: 100
   resourcePriority: 0
   startupTime: 0

@@ -25,7 +25,7 @@ public class BuildingPlacer : MonoBehaviour
         buildingManager = FindFirstObjectByType<BuildingManager>();
 
         ghostNormalMat = new(Shader.Find("Sprites/Default"));
-        ghostInvalidPlacementMat = new(Shader.Find("Shader Graphs/InvalidPlacementShader"));
+        ghostInvalidPlacementMat = new(Shader.Find("Custom/InvalidPlacementShader"));
     }
 
     private void Update()
@@ -70,7 +70,8 @@ public class BuildingPlacer : MonoBehaviour
         ghostGO = Instantiate(buildingPrefab);
         foreach (Collider2D collider in ghostGO.GetComponentsInChildren<Collider2D>())
         {
-            if (collider.gameObject.layer != LayerMask.NameToLayer("Placement"))
+            collider.TryGetComponent<BuildingCollider>(out var buildingCollider);
+            if (buildingCollider == null || buildingCollider.Type != BuildingColliderType.Placement)
             {
                 log.Info("Disabling collider: " + collider.gameObject.name);
                 collider.enabled = false;

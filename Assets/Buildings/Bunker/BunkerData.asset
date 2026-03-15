@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: bunker
   displayName: Bunker
-  description: 
-  maxHealth: 1000
+  description: The final hope for humanity. If the bunker falls, everything is lost.
+  maxHealth: 500
   resourcePriority: 0
   startupTime: 0
   prefab: {fileID: 8392107632934456976, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}

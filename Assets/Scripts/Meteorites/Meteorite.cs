@@ -70,7 +70,7 @@ public class Meteorite : MonoBehaviour
                 var collisionPoint = collider.ClosestPoint(transform.position);
                 var collisionNormal = ((Vector2)transform.position - collisionPoint).normalized;
 
-                collisionPoint -= collisionNormal * 0.5f; // Move slightly towards the building
+                //collisionPoint -= collisionNormal * 0.5f; // Move slightly towards the building
 
                 meteoriteParticleSystem.Play(collisionPoint, collisionNormal);
             }

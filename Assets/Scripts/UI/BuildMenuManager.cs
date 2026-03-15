@@ -56,12 +56,8 @@ public class BuildMenuManager : MonoBehaviour
             if (buildingPlacer.TryPlaceGhost())
             {
                 ClearSelected();
-                return true;
             }
-            else
-            {
-                return false;
-            }
+            return true;
         }
         else if (click.Button == InputHandler.MouseButton.Right)
         {

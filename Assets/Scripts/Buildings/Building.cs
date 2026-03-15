@@ -36,6 +36,9 @@ public class Building : MonoBehaviour
     [SerializeField] private float maxHealth;
     private float startupTimer;
     private float placementOverlapCount = 0;
+    private Material buildingMat;
+    private Shader activeShader;
+    private Shader inactiveShader;
 
     protected virtual void Awake()
     {
@@ -53,6 +56,11 @@ public class Building : MonoBehaviour
         }
 
         if (PlacementMode) return;
+
+        buildingMat = GetComponentInChildren<SpriteRenderer>().material;
+        activeShader = buildingMat.shader;
+        inactiveShader = Shader.Find("Custom/BuildingInactiveShader");
+        buildingMat.shader = inactiveShader;
 
         TechManager.OnResearchCompleted += UpdateStats;
 
@@ -90,7 +98,7 @@ public class Building : MonoBehaviour
                 {
                     if (meteorite == null)
                     {
-                        Debug.LogError("Shield collided with an object that doesnt have the meteorite script");
+                        Debug.LogError("Building collided with an object that doesnt have the meteorite script");
                         return;
                     }
                     if (meteorite.HasCollided) return; // Prevent multiple collisions from the same meteorite
@@ -100,8 +108,14 @@ public class Building : MonoBehaviour
                 break;
 
             case BuildingColliderType.Placement:
-                if (other.gameObject.layer != LayerMask.NameToLayer("Placement")) break;
+                other.TryGetComponent<BuildingCollider>(out var buildingCollider);
+                if (buildingCollider == null || buildingCollider.Type != BuildingColliderType.Placement)
+                {
+                    return;
+                }
+
                 placementOverlapCount++;
+                log.Info($"Placement overlap count: {placementOverlapCount}");
                 break;
         }
     }
@@ -111,15 +125,20 @@ public class Building : MonoBehaviour
         switch (colliderType)
         {
             case BuildingColliderType.Placement:
-                if (other.gameObject.layer != LayerMask.NameToLayer("Placement")) break;
+                other.TryGetComponent<BuildingCollider>(out var buildingCollider);
+                if (buildingCollider == null || buildingCollider.Type != BuildingColliderType.Placement)
+                {
+                    return;
+                }
+
                 placementOverlapCount = Mathf.Max(placementOverlapCount - 1, 0);
+                log.Info($"Placement overlap count: {placementOverlapCount}");
                 break;
         }
     }
 
     public void Activate()
     {
-        log.Info($"Activating building {data.DisplayName}");
         resourceManager.RegisterResourceUser(this);
         if (currentState == BuildingState.Inactive)
             TransitionTo(BuildingState.PendingResources);
@@ -127,7 +146,6 @@ public class Building : MonoBehaviour
 
     public void Deactivate()
     {
-        log.Info($"Deactivating building {data.DisplayName}");
         if (currentState != BuildingState.Inactive)
             TransitionTo(BuildingState.Inactive);
     }
@@ -142,39 +160,51 @@ public class Building : MonoBehaviour
         switch (currentState)
         {
             case BuildingState.Inactive:
-                // Do nothing until activated
-                break;
+                {
+                    // Do nothing until activated
+                    break;
+                }
 
             case BuildingState.PendingResources:
-                if (resourceManager.HasEnoughResources(requiredReservations, false) &&
-                    resourceManager.HasEnoughResources(consumedResources, true))
                 {
-                    TransitionTo(BuildingState.Startup);
+                    bool canReserve = resourceManager.HasEnoughResources(requiredReservations, false);
+                    bool canConsume = resourceManager.HasEnoughResources(consumedResources, true);
+                    if (canReserve && canConsume)
+                    {
+                        TransitionTo(BuildingState.Startup);
+                    }
+                    break;
                 }
-                break;
 
             case BuildingState.Startup:
-                if (!resourceManager.HasEnoughResources(requiredReservations, false) ||
-                    !resourceManager.HasEnoughResources(consumedResources, true))
                 {
-                    TransitionTo(BuildingState.PendingResources);
-                }
+                    bool canReserve = resourceManager.HasEnoughResources(requiredReservations, false);
+                    bool canConsume = resourceManager.HasEnoughResources(consumedResources, true);
+                    if (!canReserve || !canConsume)
+                    {
+                        TransitionTo(BuildingState.PendingResources);
+                    }
 
-                startupTimer -= deltaTime;
-                if (startupTimer <= 0)
-                {
-                    TransitionTo(BuildingState.Operational);
+                    startupTimer -= deltaTime;
+                    if (startupTimer <= 0)
+                    {
+                        TransitionTo(BuildingState.Operational);
+                    }
+                    break;
                 }
-                break;
 
             case BuildingState.Operational:
-                // Try to consume resources
-                if (!resourceManager.HasReservation(this) ||
-                    !resourceManager.TryConsumeResources(consumedResources, true))
                 {
-                    TransitionTo(BuildingState.PendingResources);
+                    bool hasReservation = resourceManager.HasReservation(this);
+                    bool consumptionSuccessful = resourceManager.TryConsumeResources(consumedResources, true);
+                    // Try to consume resources
+                    if (!hasReservation || !consumptionSuccessful)
+                    {
+                        TransitionTo(BuildingState.PendingResources);
+                    }
+                    break;
                 }
-                break;
+
         }
     }
 
@@ -186,10 +216,12 @@ public class Building : MonoBehaviour
                 resourceManager.ReleaseReservations(requiredReservations, this);
                 resourceManager.RemoveCapacityEffects(capacityEffects, this);
                 resourceManager.UnregisterResourceUser(this);
+                buildingMat.shader = inactiveShader;
                 log.Info($"Building {data.DisplayName} is now inactive.");
                 break;
 
             case BuildingState.PendingResources:
+                buildingMat.shader = inactiveShader;
                 log.Info($"Building {data.DisplayName} is pending reservation.");
                 break;
 
@@ -203,6 +235,7 @@ public class Building : MonoBehaviour
                 if (!resourceManager.TryReserveResources(requiredReservations, this))
                     TransitionTo(BuildingState.PendingResources);
 
+                buildingMat.shader = activeShader;
                 resourceManager.ApplyCapacityEffects(capacityEffects, this);
                 log.Info($"Building {data.DisplayName} is now operational.");
                 break;

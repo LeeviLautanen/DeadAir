@@ -15,14 +15,44 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 559bcb984ce91134997ae9f976a6212a
   m_SerializeEntries:
-  - m_GUID: 9209b8483dd433b4cb2ab7b62b7d31f6
+  - m_GUID: 1d84d53cbff3fc94795c2df32e317e3d
     m_Address: Assets/Meteorites/AttackWaves/Wave2.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - AttackWaveSO
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9f2429824ac4e9d4fb5665a5b40cde6c
+  - m_GUID: 4595bc5e268d8aa4bacb8e85dc01c268
+    m_Address: Assets/Meteorites/AttackWaves/Wave7.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5d510c1e9db690b49bf0463bcef9dde5
+    m_Address: Assets/Meteorites/AttackWaves/Wave6.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7f337a28cc66bdc40bb8ef3b65c8d54a
+    m_Address: Assets/Meteorites/AttackWaves/Wave8.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8736270f04d6d6448abe15a60fa590d9
     m_Address: Assets/Meteorites/AttackWaves/Wave3.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3b8f1dc2aa52b449a95148736b791a9
+    m_Address: Assets/Meteorites/AttackWaves/Wave4.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d201843a9d0867b40a36da1be3e8ccce
+    m_Address: Assets/Meteorites/AttackWaves/Wave5.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - AttackWaveSO
