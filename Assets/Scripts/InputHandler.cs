@@ -110,7 +110,6 @@ public class InputHandler : MonoBehaviour
             enabled = false;
             return;
         }
-
     }
 
     private void Update()
@@ -130,15 +129,6 @@ public class InputHandler : MonoBehaviour
         HandleGlobalHotkeys();
     }
 
-    private void UpdateMouseWorldPosition()
-    {
-        var screenPos = pointerPositionAction.ReadValue<Vector2>();
-        cachedPointerDelta = screenPos - screenPosCache;
-        screenPosCache.x = screenPos.x;
-        screenPosCache.y = screenPos.y;
-        MouseWorldPosition = mainCamera.ScreenToWorldPoint(screenPosCache);
-    }
-
     public void SetInputContext(InputContext context)
     {
         if (CurrentContext == context)
@@ -152,6 +142,7 @@ public class InputHandler : MonoBehaviour
             cameraMoveAction = researchTreeActionMap.FindAction("ViewMove");
             cameraZoomAction = researchTreeActionMap.FindAction("ViewZoom");
             pointerPositionAction = researchTreeActionMap.FindAction("MousePosition");
+            toggleResearchAction = researchTreeActionMap.FindAction("ToggleResearchMenu");
         }
         else
         {
@@ -161,9 +152,52 @@ public class InputHandler : MonoBehaviour
             cameraMoveAction = gameplayActionMap.FindAction("ViewMove");
             cameraZoomAction = gameplayActionMap.FindAction("ViewZoom");
             pointerPositionAction = gameplayActionMap.FindAction("MousePosition");
+            toggleResearchAction = gameplayActionMap.FindAction("ToggleResearchMenu");
         }
 
         CurrentContext = context;
+    }
+
+    public void RegisterMoveHandler(MoveHandler handler, int priority = 0)
+    {
+        moveHandlers.Add((priority, handler));
+        moveHandlers.Sort((a, b) => b.priority.CompareTo(a.priority));
+    }
+
+    public void UnregisterMoveHandler(MoveHandler handler)
+    {
+        moveHandlers.RemoveAll(x => x.handler == handler);
+    }
+
+    public void RegisterScrollHandler(ScrollHandler handler, int priority = 0)
+    {
+        scrollHandlers.Add((priority, handler));
+        scrollHandlers.Sort((a, b) => b.priority.CompareTo(a.priority));
+    }
+
+    public void UnregisterScrollHandler(ScrollHandler handler)
+    {
+        scrollHandlers.RemoveAll(x => x.handler == handler);
+    }
+
+    public void RegisterClickHandler(ClickHandler handler, int priority = 0)
+    {
+        clickHandlers.Add((priority, handler));
+        clickHandlers.Sort((a, b) => b.priority.CompareTo(a.priority));
+    }
+
+    public void UnregisterClickHandler(ClickHandler handler)
+    {
+        clickHandlers.RemoveAll(x => x.handler == handler);
+    }
+
+    private void UpdateMouseWorldPosition()
+    {
+        var screenPos = pointerPositionAction.ReadValue<Vector2>();
+        cachedPointerDelta = screenPos - screenPosCache;
+        screenPosCache.x = screenPos.x;
+        screenPosCache.y = screenPos.y;
+        MouseWorldPosition = mainCamera.ScreenToWorldPoint(screenPosCache);
     }
 
     private void HandleMouseClicks()
@@ -257,7 +291,7 @@ public class InputHandler : MonoBehaviour
     {
         if (Keyboard.current == null) return;
 
-        if (Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.rightCtrlKey.isPressed)
+        if (Keyboard.current.leftCtrlKey.isPressed)
         {
             if (Keyboard.current.sKey.wasPressedThisFrame) SaveActionTriggered?.Invoke(SaveAction.Save);
             else if (Keyboard.current.rKey.wasPressedThisFrame) SaveActionTriggered?.Invoke(SaveAction.Load);
@@ -277,8 +311,7 @@ public class InputHandler : MonoBehaviour
             TimeSpeedStepRequested?.Invoke(-0.5f);
         }
 
-        bool ctrlPressed = Keyboard.current != null && (Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.rightCtrlKey.isPressed);
-        if (!ctrlPressed && toggleResearchAction != null && toggleResearchAction.WasPressedThisFrame())
+        if (toggleResearchAction != null && toggleResearchAction.WasPressedThisFrame())
         {
             ResearchMenuToggleRequested?.Invoke();
         }
@@ -295,39 +328,6 @@ public class InputHandler : MonoBehaviour
         {
             PauseMenuRequested?.Invoke();
         }
-    }
-
-    public void RegisterMoveHandler(MoveHandler handler, int priority = 0)
-    {
-        moveHandlers.Add((priority, handler));
-        moveHandlers.Sort((a, b) => b.priority.CompareTo(a.priority));
-    }
-
-    public void UnregisterMoveHandler(MoveHandler handler)
-    {
-        moveHandlers.RemoveAll(x => x.handler == handler);
-    }
-
-    public void RegisterScrollHandler(ScrollHandler handler, int priority = 0)
-    {
-        scrollHandlers.Add((priority, handler));
-        scrollHandlers.Sort((a, b) => b.priority.CompareTo(a.priority));
-    }
-
-    public void UnregisterScrollHandler(ScrollHandler handler)
-    {
-        scrollHandlers.RemoveAll(x => x.handler == handler);
-    }
-
-    public void RegisterClickHandler(ClickHandler handler, int priority = 0)
-    {
-        clickHandlers.Add((priority, handler));
-        clickHandlers.Sort((a, b) => b.priority.CompareTo(a.priority));
-    }
-
-    public void UnregisterClickHandler(ClickHandler handler)
-    {
-        clickHandlers.RemoveAll(x => x.handler == handler);
     }
 
     public enum MouseButton { Left, Right }

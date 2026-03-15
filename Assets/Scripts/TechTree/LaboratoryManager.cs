@@ -8,6 +8,7 @@ public class LaboratoryManager : MonoBehaviour
 
     private static readonly Logger log = new(nameof(LaboratoryManager));
     private TechManager techManager;
+    private TimeManager timeManager;
     private readonly Dictionary<Building, bool> laboratories = new();
     [SerializeField] private float researchRateMultiplier = 1f;
     private float totalResearchRate = 0f;
@@ -15,14 +16,19 @@ public class LaboratoryManager : MonoBehaviour
 
     private void Start()
     {
+        timeManager = TimeManager.Instance;
         techManager = FindFirstObjectByType<TechManager>();
         TechManager.OnResearchCompleted += HandleResearchCompleted;
     }
 
     private void Update()
     {
-        if (laboratoryCount > 0)
-            techManager.Research(totalResearchRate * Time.deltaTime);
+        float deltaTime = timeManager.DeltaTime;
+
+        if (deltaTime > 0 && laboratoryCount > 0)
+        {
+            techManager.Research(totalResearchRate * deltaTime);
+        }
     }
 
     public void SetLaboratoryState(Building lab, bool isOperational)

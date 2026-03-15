@@ -59,11 +59,11 @@ public class ResourceUI : MonoBehaviour
     {
         if (maxAmount > 0 && reservedAmount > 0)
         {
-            return $"{name}: {amount:F0} / {maxAmount:F0} (Available: {amount - reservedAmount:F0}, Δ: {rate:F1}/s)";
+            return $"{name}: {amount:F0} / {maxAmount:F0} (Available: {amount - reservedAmount:F0}, Δ: {rate:F1}/hr)";
         }
         else if (maxAmount > 0)
         {
-            return $"{name}: {amount:F0} / {maxAmount:F0} (Δ: {rate:F1}/s)";
+            return $"{name}: {amount:F0} / {maxAmount:F0} (Δ: {rate:F1}/hr)";
         }
         else
         {

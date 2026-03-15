@@ -64,13 +64,16 @@ public class BuildMenuManager : MonoBehaviour
 
         if (click.Button == InputHandler.MouseButton.Left)
         {
-            if (buildingPlacer.TryPlaceGhost())
+            if (buildingPlacer.IsPlacing)
             {
-                ClearSelected();
+                if (buildingPlacer.TryPlaceGhost())
+                {
+                    ClearSelected();
+                }
+                return true;
             }
-            return true;
         }
-        else if (click.Button == InputHandler.MouseButton.Right)
+        else if (click.Button == InputHandler.MouseButton.Right && buildingPlacer.IsPlacing)
         {
             ClearSelected();
             return true;

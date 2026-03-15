@@ -25,11 +25,15 @@ public class ReadonlyResourceAmount : IResourceAmount
 [System.Serializable]
 public class ResourceAmount : IResourceAmount
 {
-    public ResourceData Data { get; set; }
-    public float Amount { get; set; }
+    [SerializeField] private ResourceData data;
+    [SerializeField] private float amount;
+
     public ResourceAmount(ResourceData data, float amount)
     {
-        Data = data;
-        Amount = amount;
+        this.data = data;
+        this.amount = amount;
     }
+
+    public ResourceData Data { get => data; set => data = value; }
+    public float Amount { get => amount; set => amount = value; }
 }

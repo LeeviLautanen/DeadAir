@@ -224,6 +224,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ToggleResearchMenu",
+                    "type": "Button",
+                    "id": "92781fbf-4def-4cc6-87d4-b5053dbd5aec",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -301,6 +310,17 @@
                     "processors": "",
                     "groups": ";PC control scheme",
                     "action": "ViewZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "af0ec0fc-5174-4485-8069-f0be438de304",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleResearchMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

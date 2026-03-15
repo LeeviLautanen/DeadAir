@@ -312,6 +312,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
   - {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
   - {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+  startingResources:
+  - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    amount: 50
+  - data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
+    amount: 20
+  - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
+    amount: 50
 --- !u!114 &93531065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3253,10 +3260,10 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 2078389647}
   - {fileID: 1893794175}
+  - {fileID: 2078389647}
   - {fileID: 997910402}
   - {fileID: 81960713}
   - {fileID: 1255553062}

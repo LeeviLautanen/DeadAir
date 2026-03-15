@@ -11,6 +11,7 @@ public class BuildMenuInfo : MonoBehaviour
     private static readonly Logger log = new(nameof(BuildMenuInfo));
     private InputHandler inputHandler;
     private TechManager techManager;
+    private TimeManager timeManager;
     private BuildingData current;
     private Canvas infoCanvas;
     private GameObject infoContainer;
@@ -26,6 +27,7 @@ public class BuildMenuInfo : MonoBehaviour
     {
         inputHandler = FindFirstObjectByType<InputHandler>();
         techManager = FindFirstObjectByType<TechManager>();
+        timeManager = TimeManager.Instance;
 
         infoCanvas = gameObject.GetComponent<Canvas>();
         infoContainer = gameObject.transform.Find("BuildMenuInfoContainer").gameObject;
@@ -63,6 +65,8 @@ public class BuildMenuInfo : MonoBehaviour
         if (current == null)
             return;
 
+        float secondsPerGameHour = timeManager.DayLengthSeconds / 24f;
+
         nameText.text = current.DisplayName;
 
         descriptionText.text = current.Description;
@@ -71,10 +75,10 @@ public class BuildMenuInfo : MonoBehaviour
             r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConstructionCost, current.Id)}");
 
         UpdateInfoText(consumedResourcesText, "Consumes", current.ConsumedResources,
-            r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConsumptionRate, current.Id)}/s");
+            r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConsumptionRate, current.Id) * secondsPerGameHour}/hr");
 
         UpdateInfoText(producedResourcesText, "Produces", current.ProducedResources,
-            r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ProductionRate, current.Id)}/s");
+            r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ProductionRate, current.Id) * secondsPerGameHour}/hr");
 
         UpdateInfoText(capacityText, "Storage", current.CapacityEffects,
             r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Capacity, current.Id)}");

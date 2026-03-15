@@ -11,6 +11,7 @@ public class ResourceManager : MonoBehaviour
     private TimeManager timeManager;
 
     [SerializeField] private List<ResourceData> allResources = new();
+    [SerializeField] private List<ResourceAmount> startingResources = new();
     private readonly List<Building>[] resourceUserLists = new List<Building>[10];
 
     private readonly Dictionary<string, ResourceAmount> resourceLookup = new();
@@ -299,7 +300,9 @@ public class ResourceManager : MonoBehaviour
     {
         if (resourceRateLookup.TryGetValue(resourceId, out float rate))
         {
-            return rate / GetDeltaTime();
+            float amountPerSecond = rate / GetDeltaTime();
+            float secondsInGameHour = timeManager.DayLengthSeconds / 24f;
+            return amountPerSecond * secondsInGameHour; // Rate in game hours
         }
         return -1f;
     }
@@ -425,6 +428,12 @@ public class ResourceManager : MonoBehaviour
             resourceMaxLookup[data.Id] = 0f;
             reservationLookup[data.Id] = 0f;
             resourceRateLookup[data.Id] = 0f;
+        }
+
+        // Add starting resources
+        foreach (ResourceAmount resource in startingResources)
+        {
+            resourceLookup[resource.Data.Id].Amount = resource.Amount;
         }
     }
 }

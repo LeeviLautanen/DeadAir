@@ -19,5 +19,5 @@ MonoBehaviour:
   - TargetBuildingIds:
     - laboratory
     ModType: 6
-    Value: 100
+    Value: 10
     IsPercent: 1
