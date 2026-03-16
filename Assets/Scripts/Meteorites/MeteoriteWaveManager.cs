@@ -5,6 +5,7 @@ using System.Linq;
 
 public class MeteoriteWaveManager : MonoBehaviour
 {
+    public System.Action<(int, int, int)?> OnNextWaveInfoUpdated;
     public GameObject MeteoritePrefab;
     public Vector2 SpawnRange = new(-10, 10);
     public float SpawnHeight = 40f;
@@ -15,26 +16,41 @@ public class MeteoriteWaveManager : MonoBehaviour
     private static readonly Logger log = new(nameof(MeteoriteWaveManager));
     private TimeManager timeManager;
     private TechManager techManager;
-    private MeteoriteParticleSystem meteoriteParticleSystem;
     private List<MeteoriteWaveData> attackWaves = new();
     private Dictionary<Building, bool> interceptors = new();
     private int interceptorCount;
     [SerializeField] private float upgradeReductionMult = 1f;
     [SerializeField] private float totalReductionMult = 1f;
+    private int nextWaveIndex = 0;
 
     private async void Start()
     {
         timeManager = FindFirstObjectByType<TimeManager>();
         techManager = FindFirstObjectByType<TechManager>();
-        meteoriteParticleSystem = FindFirstObjectByType<MeteoriteParticleSystem>();
 
         attackWaves = await Utility.LoadAllByLabel<MeteoriteWaveData>("AttackWaveSO");
+        attackWaves = attackWaves
+            .OrderBy(x => x.Day)
+            .ThenBy(x => x.Hour)
+            .ToList();
         foreach (MeteoriteWaveData wave in attackWaves)
         {
             timeManager.ScheduleEvent(() => HandleWaveSpawn(wave), wave.Day, wave.Hour);
         }
 
         TechManager.OnResearchCompleted += HandleResearchCompleted;
+        OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());
+    }
+
+    public (int, int, int)? GetNextWaveData()
+    {
+        if (nextWaveIndex >= attackWaves.Count)
+        {
+            return null;
+        }
+
+        MeteoriteWaveData nextWave = attackWaves[nextWaveIndex];
+        return (GetSpawnAmountWithMult(nextWave), nextWave.Day, nextWave.Hour);
     }
 
     public void SetInterceptorState(Building interceptor, bool isOperational)
@@ -57,20 +73,26 @@ public class MeteoriteWaveManager : MonoBehaviour
         float newReduction = 1f; // Start from 1, no multiplier
         for (int i = 1; i < interceptorCount + 1; i++)
         {
-            newReduction -= 0.05f; // Flat 5% reduction per interceptor
+            newReduction -= 0.0625f; // Flat reduction per interceptor
         }
 
         newReduction = Mathf.Clamp(newReduction, 0.5f, 1f); // Cap the reduction at 50%
 
         totalReductionMult = newReduction / upgradeReductionMult;
+        OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());
         log.Info($"Raw meteorite reduction: {newReduction}, upgrade multiplier: {upgradeReductionMult}, final reduction: {totalReductionMult}, intercepter count: {interceptorCount}");
     }
 
     private void HandleWaveSpawn(MeteoriteWaveData wave)
     {
-        int spawnAmount = Mathf.FloorToInt(wave.Amount * totalReductionMult);
+        int spawnAmount = GetSpawnAmountWithMult(wave);
         log.Info($"Spawning wave with base amount {wave.Amount}, total multiplier {totalReductionMult}, final spawn amount {spawnAmount}");
         StartCoroutine(SpawnWave(spawnAmount, wave.Duration));
+    }
+
+    private int GetSpawnAmountWithMult(MeteoriteWaveData wave)
+    {
+        return Mathf.FloorToInt(wave.Amount * totalReductionMult);
     }
 
     private void HandleResearchCompleted()
@@ -119,6 +141,9 @@ public class MeteoriteWaveManager : MonoBehaviour
                 yield return new WaitForSeconds(intervals[i]);
             }
         }
+
+        nextWaveIndex++;
+        OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());
     }
 
     private void SpawnMeteorite(float targetImpactX, float angle)

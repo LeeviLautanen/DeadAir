@@ -19,6 +19,6 @@ MonoBehaviour:
   Modifiers:
   - TargetBuildingIds:
     - interceptor_cannon
-    ModType: 8
+    ModType: 7
     Value: 10
     IsPercent: 1

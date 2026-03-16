@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4809968673498863926}
   - component: {fileID: 5056077709760644311}
-  - component: {fileID: 880034269970549229}
+  - component: {fileID: 2740939532561408909}
   m_Layer: 0
   m_Name: InterceptorCannon
   m_TagString: Untagged
@@ -145,7 +145,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &880034269970549229
+--- !u!114 &2740939532561408909
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -154,9 +154,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4104337362272144408}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 634f8a4923f0ee3498573b32abf2dc07, type: 3}
+  m_Script: {fileID: 11500000, guid: f60e80d53a31c994ba3f4d0b6e8f50cb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Building
+  m_EditorClassIdentifier: Assembly-CSharp::InterceptorController
   PlacementMode: 0
   data: {fileID: 11400000, guid: 2ab079b39f30e534aa65ba40c4a399b6, type: 2}
   currentState: 0
