@@ -342,6 +342,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6b55141d5be5af849b469853701608d0, type: 2}
   - {fileID: 11400000, guid: 2ab079b39f30e534aa65ba40c4a399b6, type: 2}
   allBuildings: []
+  cheatMode: 1
 --- !u!114 &93531067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,7 +370,7 @@ MonoBehaviour:
   GameTimeMultiplier: 1
   MinGameTimeMultiplier: 0.5
   MaxGameTimeMultiplier: 5
-  DayLengthSeconds: 120
+  DayLengthSeconds: 180
   SunLight: {fileID: 1082982120}
   DayBrightness: 1
   NightBrightness: 0.2
@@ -380,7 +381,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 93531061}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15a516f98e5b5fc4cb5457c0be765cb7, type: 3}
   m_Name: 
@@ -445,7 +446,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1739824005554139391, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 1739824005554139391, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -453,7 +454,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1739824005554139391, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1739824005554139391, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -486,7 +487,7 @@ PrefabInstance:
     - target: {fileID: 6717258526406071837, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: data
       value: 
-      objectReference: {fileID: 11400000, guid: b57a018d421da0c428a040ef5d0d34e3, type: 2}
+      objectReference: {fileID: 11400000, guid: 6875997f6cbb445448349d5f623e630a, type: 2}
     - target: {fileID: 8392107632934456976, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_Name
       value: Bunker
@@ -2003,7 +2004,7 @@ Transform:
   m_GameObject: {fileID: 320547668}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 139.65906, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2097,8 +2098,8 @@ Transform:
   m_GameObject: {fileID: 337924325}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -39.659058, y: 36, z: 5}
-  m_LocalScale: {x: 200, y: 80, z: 80}
+  m_LocalPosition: {x: 150, y: 36, z: 5}
+  m_LocalScale: {x: 300, y: 120, z: 120}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 320547669}
@@ -7912,7 +7913,7 @@ Transform:
   m_GameObject: {fileID: 1445513115}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000021075227, y: -0, z: 0.000000021071623, w: 1}
-  m_LocalPosition: {x: 100, y: 12.34, z: -20}
+  m_LocalPosition: {x: 150, y: 12.34, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9448,9 +9449,9 @@ Transform:
   m_GameObject: {fileID: 1692612747}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -40, y: -40, z: -10}
-  m_LocalScale: {x: 200, y: 80, z: 80}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 150, y: -50, z: -10}
+  m_LocalScale: {x: 300, y: 100, z: 100}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 320547669}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

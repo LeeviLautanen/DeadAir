@@ -12,6 +12,7 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<string, BuildingData> buildingDatabase = new();
     [SerializeField] private List<Building> allBuildings = new();
     private readonly string saveFilePath = "./buildings.json";
+    [SerializeField] private bool cheatMode = false;
 
     private void Start()
     {
@@ -38,10 +39,13 @@ public class BuildingManager : MonoBehaviour
         }
 
         var buildingData = buildingDatabase[buildingId];
-        if (!resourceManager.TryConsumeResources(buildingData.ConstructionCost))
+        if (!cheatMode)
         {
-            log.Warning("Not enough resources to build " + buildingData.DisplayName);
-            return null;
+            if (!resourceManager.TryConsumeResources(buildingData.ConstructionCost))
+            {
+                log.Warning("Not enough resources to build " + buildingData.DisplayName);
+                return null;
+            }
         }
 
         GameObject newBuilding = Instantiate(buildingData.Prefab, position, rotation);

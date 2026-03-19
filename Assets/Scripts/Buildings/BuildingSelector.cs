@@ -82,16 +82,26 @@ public class BuildingSelector : MonoBehaviour
             if (EventSystem.current.IsPointerOverGameObject())
                 return false;
 
-            RaycastHit2D hit = Physics2D.Raycast(inputHandler.MouseWorldPosition, Vector2.zero);
-            if (hit.collider != null && hit.collider.transform.parent.TryGetComponent<Building>(out var b))
+            RaycastHit2D[] hits = Physics2D.RaycastAll(inputHandler.MouseWorldPosition, Vector2.zero);
+            foreach (var hit in hits)
             {
-                OpenPanel(b);
-                return true;
-            }
-            else if (isPanelOpen)
-            {
-                ClosePanel();
-                return true;
+                if (hit.collider == null)
+                {
+                    continue;
+                }
+
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+                {
+                    return true;
+                }
+
+                if (hit.collider.transform.TryGetComponent<BuildingCollider>(out var buildingCollider)
+                    && buildingCollider.Type == BuildingColliderType.Damage)
+                {
+                    hit.collider.transform.parent.TryGetComponent<Building>(out var building);
+                    OpenPanel(building);
+                    return true;
+                }
             }
         }
         else if (click.Button == InputHandler.MouseButton.Right && isPanelOpen)
@@ -104,6 +114,11 @@ public class BuildingSelector : MonoBehaviour
 
     private void OpenPanel(Building b)
     {
+        if (isPanelOpen)
+        {
+            ClosePanel();
+        }
+
         log.Info("Panel opened for building " + b.name);
         isPanelOpen = true;
         current = b;
