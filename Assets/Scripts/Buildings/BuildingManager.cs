@@ -118,10 +118,12 @@ public class BuildingManager : MonoBehaviour
         BuildingSaveDataList saveDataList = JsonUtility.FromJson<BuildingSaveDataList>(json);
 
         // Clear existing buildings
-        while (allBuildings.Count > 0)
+        foreach (var buildingObj in allBuildings)
         {
-            allBuildings[0].TryGetComponent(out Building buildingScript);
-            buildingScript.DestroyBuilding();
+            if (buildingObj.TryGetComponent(out Building buildingScript))
+            {
+                buildingScript.DestroyBuilding();
+            }
         }
         allBuildings.Clear();
 

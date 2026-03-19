@@ -59,46 +59,11 @@ public class MeteoriteWaveManager : MonoBehaviour
         UpdateMeteoriteAmountMult();
     }
 
-    private void UpdateMeteoriteAmountMult()
-    {
-        // Prevent two calls from the same lab counting as two
-        interceptorCount = interceptors.Values.Count(v => v);
-
-        if (interceptorCount <= 0)
-        {
-            totalReductionMult = 1f;
-            return;
-        }
-
-        float newReduction = 1f; // Start from 1, no multiplier
-        for (int i = 1; i < interceptorCount + 1; i++)
-        {
-            newReduction -= 0.0625f; // Flat reduction per interceptor
-        }
-
-        newReduction = Mathf.Clamp(newReduction, 0.5f, 1f); // Cap the reduction at 50%
-
-        totalReductionMult = newReduction / upgradeReductionMult;
-        OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());
-        log.Info($"Raw meteorite reduction: {newReduction}, upgrade multiplier: {upgradeReductionMult}, final reduction: {totalReductionMult}, intercepter count: {interceptorCount}");
-    }
-
-    private void HandleWaveSpawn(MeteoriteWaveData wave)
+    public void HandleWaveSpawn(MeteoriteWaveData wave)
     {
         int spawnAmount = GetSpawnAmountWithMult(wave);
         log.Info($"Spawning wave with base amount {wave.Amount}, total multiplier {totalReductionMult}, final spawn amount {spawnAmount}");
         StartCoroutine(SpawnWave(spawnAmount, wave.Duration));
-    }
-
-    private int GetSpawnAmountWithMult(MeteoriteWaveData wave)
-    {
-        return Mathf.FloorToInt(wave.Amount * totalReductionMult);
-    }
-
-    private void HandleResearchCompleted()
-    {
-        upgradeReductionMult = techManager.GetModifiedValue(1f, ModifierType.InterceptorEffectiveness, "interceptor_cannon");
-        UpdateMeteoriteAmountMult();
     }
 
     private IEnumerator SpawnWave(int spawnAmount, float spawnDuration)
@@ -144,6 +109,41 @@ public class MeteoriteWaveManager : MonoBehaviour
 
         nextWaveIndex++;
         OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());
+    }
+
+    private void UpdateMeteoriteAmountMult()
+    {
+        // Prevent two calls from the same lab counting as two
+        interceptorCount = interceptors.Values.Count(v => v);
+
+        if (interceptorCount <= 0)
+        {
+            totalReductionMult = 1f;
+            return;
+        }
+
+        float newReduction = 1f; // Start from 1, no multiplier
+        for (int i = 1; i < interceptorCount + 1; i++)
+        {
+            newReduction -= 0.0625f; // Flat reduction per interceptor
+        }
+
+        newReduction = Mathf.Clamp(newReduction, 0.5f, 1f); // Cap the reduction at 50%
+
+        totalReductionMult = newReduction / upgradeReductionMult;
+        OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());
+        log.Info($"Raw meteorite reduction: {newReduction}, upgrade multiplier: {upgradeReductionMult}, final reduction: {totalReductionMult}, intercepter count: {interceptorCount}");
+    }
+
+    private int GetSpawnAmountWithMult(MeteoriteWaveData wave)
+    {
+        return Mathf.FloorToInt(wave.Amount * totalReductionMult);
+    }
+
+    private void HandleResearchCompleted()
+    {
+        upgradeReductionMult = techManager.GetModifiedValue(1f, ModifierType.InterceptorEffectiveness, "interceptor_cannon");
+        UpdateMeteoriteAmountMult();
     }
 
     private void SpawnMeteorite(float targetImpactX, float angle)

@@ -87,7 +87,7 @@ public class ShieldController : Building
         switch (currentState)
         {
             case BuildingState.Operational:
-                RepairShield(RechargeRate * Time.deltaTime);
+                RepairShield(RechargeRate * deltaTime);
 
                 if (!isShieldActive && shieldHealth > 50f)
                 {

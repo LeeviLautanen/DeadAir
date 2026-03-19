@@ -58,6 +58,9 @@ public class InputHandler : MonoBehaviour
     private InputAction toggleResearchAction;
     private InputAction togglePauseAction;
     private InputAction openPauseMenuAction;
+    private InputAction saveGameAction;
+    private InputAction loadGameAction;
+    private InputAction clearGameAction;
     private Camera mainCamera;
     private Vector2 screenPosCache = Vector2.zero;
     private readonly MouseClick cachedClick = new();
@@ -96,6 +99,9 @@ public class InputHandler : MonoBehaviour
         slowDownTimeAction = gameplayActionMap.FindAction("SlowDownTime", false);
         toggleResearchAction = gameplayActionMap.FindAction("ToggleResearchMenu", false);
         togglePauseAction = gameplayActionMap.FindAction("TogglePause", false);
+        saveGameAction = gameplayActionMap.FindAction("SaveGame", false);
+        loadGameAction = gameplayActionMap.FindAction("LoadGame", false);
+        clearGameAction = gameplayActionMap.FindAction("ClearGame", false);
 
         globalHotkeysActionMap = inputActions.FindActionMap("GlobalHotkeys", false);
         if (globalHotkeysActionMap != null)
@@ -124,7 +130,6 @@ public class InputHandler : MonoBehaviour
         // Keyboard
         HandleMove();
         HandleNumberKeys();
-        HandleSaveControls();
         HandleGameplayHotkeys();
         HandleGlobalHotkeys();
     }
@@ -287,18 +292,6 @@ public class InputHandler : MonoBehaviour
         }
     }
 
-    private void HandleSaveControls()
-    {
-        if (Keyboard.current == null) return;
-
-        if (Keyboard.current.leftCtrlKey.isPressed)
-        {
-            if (Keyboard.current.sKey.wasPressedThisFrame) SaveActionTriggered?.Invoke(SaveAction.Save);
-            else if (Keyboard.current.rKey.wasPressedThisFrame) SaveActionTriggered?.Invoke(SaveAction.Load);
-            else if (Keyboard.current.cKey.wasPressedThisFrame) SaveActionTriggered?.Invoke(SaveAction.Clear);
-        }
-    }
-
     private void HandleGameplayHotkeys()
     {
         if (speedUpTimeAction != null && speedUpTimeAction.WasPressedThisFrame())
@@ -319,6 +312,21 @@ public class InputHandler : MonoBehaviour
         if (togglePauseAction != null && togglePauseAction.WasPressedThisFrame())
         {
             PauseToggleRequested?.Invoke();
+        }
+
+        if (saveGameAction != null && saveGameAction.WasPressedThisFrame())
+        {
+            SaveActionTriggered?.Invoke(SaveAction.Save);
+        }
+
+        if (loadGameAction != null && loadGameAction.WasPressedThisFrame())
+        {
+            SaveActionTriggered?.Invoke(SaveAction.Load);
+        }
+
+        if (clearGameAction != null && clearGameAction.WasPressedThisFrame())
+        {
+            SaveActionTriggered?.Invoke(SaveAction.Clear);
         }
     }
 

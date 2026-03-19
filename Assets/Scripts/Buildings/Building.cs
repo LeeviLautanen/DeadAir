@@ -172,6 +172,7 @@ public class Building : MonoBehaviour
                     if (canReserve && canConsume)
                     {
                         TransitionTo(BuildingState.Startup);
+                        break;
                     }
                     break;
                 }
@@ -183,28 +184,41 @@ public class Building : MonoBehaviour
                     if (!canReserve || !canConsume)
                     {
                         TransitionTo(BuildingState.PendingResources);
+                        break;
                     }
 
                     startupTimer -= deltaTime;
                     if (startupTimer <= 0)
                     {
                         TransitionTo(BuildingState.Operational);
+                        break;
                     }
                     break;
                 }
 
             case BuildingState.Operational:
                 {
+                    // Try to reserve resources
                     bool hasReservation = resourceManager.HasReservation(this);
-                    bool consumptionSuccessful = resourceManager.TryConsumeResources(consumedResources, true);
+                    if (!hasReservation)
+                    {
+                        bool newReservation = resourceManager.TryReserveResources(requiredReservations, this);
+                        if (!newReservation)
+                        {
+                            TransitionTo(BuildingState.PendingResources);
+                            break;
+                        }
+                    }
+
                     // Try to consume resources
-                    if (!hasReservation || !consumptionSuccessful)
+                    bool consumptionSuccessful = resourceManager.TryConsumeResources(consumedResources, true);
+                    if (!consumptionSuccessful)
                     {
                         TransitionTo(BuildingState.PendingResources);
+                        break;
                     }
                     break;
                 }
-
         }
     }
 
@@ -231,10 +245,6 @@ public class Building : MonoBehaviour
                 break;
 
             case BuildingState.Operational:
-                // Try to reserve resources
-                if (!resourceManager.TryReserveResources(requiredReservations, this))
-                    TransitionTo(BuildingState.PendingResources);
-
                 buildingMat.shader = activeShader;
                 resourceManager.ApplyCapacityEffects(capacityEffects, this);
                 log.Info($"Building {data.DisplayName} is now operational.");
@@ -244,6 +254,7 @@ public class Building : MonoBehaviour
                 if (resourceManager.HasReservation(this))
                 {
                     resourceManager.ReleaseReservations(requiredReservations, this);
+                    break;
                 }
                 resourceManager.UnregisterResourceUser(this);
                 resourceManager.RemoveCapacityEffects(capacityEffects, this);

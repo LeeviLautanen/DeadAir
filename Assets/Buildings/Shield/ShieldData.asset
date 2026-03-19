@@ -17,7 +17,7 @@ MonoBehaviour:
   description: A structure that generates a dome of plasma which can disintegrate
     and deflect meteorites.
   maxHealth: 100
-  resourcePriority: 1
+  resourcePriority: 0
   startupTime: 3
   prefab: {fileID: 7875127117606328118, guid: 75a9f06e5b96def42bb7290add7fadfe, type: 3}
   ConstructionCost:

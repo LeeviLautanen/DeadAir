@@ -17,7 +17,7 @@ MonoBehaviour:
   description: The source of scientific research. Allows us to improve our existing
     buildings.
   maxHealth: 100
-  resourcePriority: 0
+  resourcePriority: 3
   startupTime: 3
   prefab: {fileID: 5548335663501128034, guid: ab5db255ed42f5b48bc9d08386af7325, type: 3}
   ConstructionCost:

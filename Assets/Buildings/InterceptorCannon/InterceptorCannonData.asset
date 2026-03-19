@@ -17,7 +17,7 @@ MonoBehaviour:
   description: A cannon designed for destroying meteorites before they can hit the
     earth.
   maxHealth: 100
-  resourcePriority: 0
+  resourcePriority: 4
   startupTime: 3
   prefab: {fileID: 4104337362272144408, guid: b9e51466d9830ca4185629f37a859764, type: 3}
   ConstructionCost:

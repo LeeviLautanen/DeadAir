@@ -17,7 +17,7 @@ MonoBehaviour:
   description: A factory where raw and recycled material are refined into a usable
     form.
   maxHealth: 100
-  resourcePriority: 0
+  resourcePriority: 2
   startupTime: 3
   prefab: {fileID: 2672589904300108679, guid: b4aa49893e8a2244480071f2aefa34ac, type: 3}
   ConstructionCost:

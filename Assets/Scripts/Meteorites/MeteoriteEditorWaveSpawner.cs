@@ -1,0 +1,32 @@
+using UnityEditor;
+using UnityEngine;
+
+[CustomEditor(typeof(MeteoriteWaveManager))]
+public class MeteoriteEditorWaveSpawner : Editor
+{
+    private int spawnAmount = 1;
+    private int spawnDuration = 5;
+
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        MeteoriteWaveManager manager = (MeteoriteWaveManager)target;
+
+        EditorGUILayout.Space();
+        spawnAmount = EditorGUILayout.IntField("Meteorite count", spawnAmount);
+        spawnDuration = EditorGUILayout.IntField("Spawn duration", spawnDuration);
+
+        if (GUILayout.Button("Spawn attack"))
+        {
+            MeteoriteWaveData waveData = CreateInstance<MeteoriteWaveData>();
+            waveData.Amount = spawnAmount;
+            waveData.Duration = spawnDuration;
+
+            if (Application.isPlaying)
+                manager.HandleWaveSpawn(waveData);
+            else
+                Debug.Log("Enter Play Mode first");
+        }
+    }
+}
