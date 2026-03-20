@@ -26,6 +26,6 @@ MonoBehaviour:
   ProducedResources: []
   ConsumedResources:
   - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    amount: 3
+    amount: 20
   CapacityEffects: []
   RequiredReservations: []

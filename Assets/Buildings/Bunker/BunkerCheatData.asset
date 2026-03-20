@@ -22,9 +22,9 @@ MonoBehaviour:
   ConstructionCost: []
   ProducedResources:
   - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    amount: 1000
+    amount: 100000
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    amount: 1000
+    amount: 100000
   ConsumedResources: []
   CapacityEffects:
   - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}

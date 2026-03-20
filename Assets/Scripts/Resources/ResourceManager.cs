@@ -300,7 +300,7 @@ public class ResourceManager : MonoBehaviour
     {
         if (resourceRateLookup.TryGetValue(resourceId, out float rate))
         {
-            float amountPerSecond = rate / GetDeltaTime();
+            float amountPerSecond = rate / timeManager.LastDeltaBeforePause; // Last delta avoids dividing by zero
             float secondsInGameHour = timeManager.DayLengthSeconds / 24f;
             return amountPerSecond * secondsInGameHour; // Rate in game hours
         }

@@ -4,7 +4,9 @@ using UnityEngine;
 public class TimeManager : MonoBehaviour
 {
     public static TimeManager Instance { get; private set; }
-    public float DeltaTime => GetDeltaTime();
+    public float DeltaTime => deltaTime;
+    public float LastDeltaBeforePause => lastDeltaBeforePause;
+    public float GameHourToSeconds => DayLengthSeconds / 24f;
     public int CurrentDay => currentDay;
     public float GameTimeMultiplier = 1f;
     public float MinGameTimeMultiplier = 0.5f;
@@ -20,6 +22,8 @@ public class TimeManager : MonoBehaviour
     private readonly List<TimedEvent> scheduledEvents = new();
     private bool isPaused;
     private float unpausedMultiplier = 1f;
+    private float deltaTime = 0f;
+    private float lastDeltaBeforePause = 0f;
 
     void Awake()
     {
@@ -39,7 +43,13 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-        dayProgress += GetDeltaTime() / DayLengthSeconds;
+        deltaTime = Time.deltaTime * GameTimeMultiplier;
+        if (!isPaused)
+        {
+            lastDeltaBeforePause = deltaTime;
+        }
+
+        dayProgress += deltaTime / DayLengthSeconds;
 
         float newIntensity = Mathf.Lerp(NightBrightness, DayBrightness, Mathf.Sin(dayProgress * Mathf.PI * 2f - Mathf.PI / 2f) * 0.5f + 0.5f);
         log.Info($"Updating sun intensity to {newIntensity:F2} (Day Progress: {dayProgress:F2})");
@@ -118,7 +128,7 @@ public class TimeManager : MonoBehaviour
 
     public float GetDeltaTime()
     {
-        return Time.deltaTime * GameTimeMultiplier;
+        return deltaTime;
     }
 
     public int GetHour()

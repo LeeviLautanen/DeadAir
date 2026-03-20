@@ -44,7 +44,9 @@ public class BuildingSelector : MonoBehaviour
         destroyButton.onClick.AddListener(() =>
         {
             if (current != null)
+            {
                 current.DestroyBuilding();
+            }
         });
 
         activateButton = infoContainer.transform.Find("Buttons").transform.Find("ActivateButton").GetComponent<UnityEngine.UI.Button>();

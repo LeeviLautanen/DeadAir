@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class BuildingManager : MonoBehaviour
 {
@@ -118,7 +119,8 @@ public class BuildingManager : MonoBehaviour
         BuildingSaveDataList saveDataList = JsonUtility.FromJson<BuildingSaveDataList>(json);
 
         // Clear existing buildings
-        foreach (var buildingObj in allBuildings)
+        List<Building> buildingsToDestroy = allBuildings.ToList();
+        foreach (var buildingObj in buildingsToDestroy)
         {
             if (buildingObj.TryGetComponent(out Building buildingScript))
             {

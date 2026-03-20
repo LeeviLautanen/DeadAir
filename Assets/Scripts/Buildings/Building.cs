@@ -23,6 +23,7 @@ public class Building : MonoBehaviour
     protected ResourceManager resourceManager;
     protected BuildingManager buildingManager;
     protected TechManager techManager;
+    protected TimeManager timeManager;
     [SerializeField] protected BuildingData data;
     [SerializeField] protected BuildingState currentState = BuildingState.Inactive;
 
@@ -45,6 +46,7 @@ public class Building : MonoBehaviour
         resourceManager = FindFirstObjectByType<ResourceManager>();
         buildingManager = FindFirstObjectByType<BuildingManager>();
         techManager = FindFirstObjectByType<TechManager>();
+        timeManager = TimeManager.Instance;
     }
 
     protected virtual void Start()
@@ -70,8 +72,9 @@ public class Building : MonoBehaviour
         currentHealth = data.MaxHealth;
 
         // Make deep copies of the SO lists
-        producedResources = data.ProducedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
-        consumedResources = data.ConsumedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
+        float hoursToSecs = timeManager.GameHourToSeconds;
+        producedResources = data.ProducedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount / hoursToSecs));
+        consumedResources = data.ConsumedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount / hoursToSecs));
         capacityEffects = data.CapacityEffects.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
         requiredReservations = data.RequiredReservations.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
 
@@ -167,9 +170,15 @@ public class Building : MonoBehaviour
 
             case BuildingState.PendingResources:
                 {
-                    bool canReserve = resourceManager.HasEnoughResources(requiredReservations, false);
                     bool canConsume = resourceManager.HasEnoughResources(consumedResources, true);
-                    if (canReserve && canConsume)
+                    bool hasReservation = resourceManager.HasReservation(this);
+                    bool canReserve = false;
+                    if (!hasReservation)
+                    {
+                        canReserve = resourceManager.HasEnoughResources(requiredReservations, false);
+                    }
+
+                    if (canConsume && (hasReservation || canReserve))
                     {
                         TransitionTo(BuildingState.Startup);
                         break;
@@ -179,9 +188,15 @@ public class Building : MonoBehaviour
 
             case BuildingState.Startup:
                 {
-                    bool canReserve = resourceManager.HasEnoughResources(requiredReservations, false);
                     bool canConsume = resourceManager.HasEnoughResources(consumedResources, true);
-                    if (!canReserve || !canConsume)
+                    bool hasReservation = resourceManager.HasReservation(this);
+                    bool canReserve = false;
+                    if (!hasReservation)
+                    {
+                        canReserve = resourceManager.HasEnoughResources(requiredReservations, false);
+                    }
+
+                    if (!canConsume && (!hasReservation || !canReserve))
                     {
                         TransitionTo(BuildingState.PendingResources);
                         break;
@@ -254,7 +269,6 @@ public class Building : MonoBehaviour
                 if (resourceManager.HasReservation(this))
                 {
                     resourceManager.ReleaseReservations(requiredReservations, this);
-                    break;
                 }
                 resourceManager.UnregisterResourceUser(this);
                 resourceManager.RemoveCapacityEffects(capacityEffects, this);
@@ -274,14 +288,14 @@ public class Building : MonoBehaviour
         // Production
         for (int i = 0; i < data.ProducedResources.Count; i++)
         {
-            float newAmount = techManager.GetModifiedValue(data.ProducedResources[i].Amount, ModifierType.ProductionRate, data.Id);
+            float newAmount = techManager.GetModifiedValue(ProducedResources[i].Amount, ModifierType.ProductionRate, data.Id);
             producedResources[i].Amount = newAmount;
         }
 
         // Consumption
         for (int i = 0; i < data.ConsumedResources.Count; i++)
         {
-            float newAmount = techManager.GetModifiedValue(data.ConsumedResources[i].Amount, ModifierType.ConsumptionRate, data.Id);
+            float newAmount = techManager.GetModifiedValue(ConsumedResources[i].Amount, ModifierType.ConsumptionRate, data.Id);
             consumedResources[i].Amount = newAmount;
         }
 
