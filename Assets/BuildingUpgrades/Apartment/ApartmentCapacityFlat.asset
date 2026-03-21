@@ -10,14 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: RefineryProduction5
+  m_Name: ApartmentCapacityFlat
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Material production +5
-  Description: Bigger machinery increases material produced per hour by five.
-  ResearchCost: 20
+  DisplayName: Apartment capacity +{Capacity}
+  DisplayNameTemplate: Apartment capacity +{Capacity}
+  Description: Efficient use of space allows {Capacity} more people to fit in an
+    apartment building.
+  DescriptionTemplate: Efficient use of space allows {Capacity} more people to fit
+    in an apartment building.
+  ResearchCost: 10
   Modifiers:
   - TargetBuildingIds:
-    - refinery
-    ModType: 1
-    Value: 5
+    - apartment
+    ModType: 3
+    Value: 10
     IsPercent: 0

@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: ApartmentCapacity5pct
+  m_Name: PowerPlantProductionPercentage
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Apartment capacity +5%
-  Description: Efficient use of space in apartments increases their capacity by 5
-    percent.
-  ResearchCost: 10
+  DisplayName: Power production +10%
+  DisplayNameTemplate: Power production +{ProductionRate}
+  Description: Better cooling rods increase power production by 10%.
+  DescriptionTemplate: Better cooling rods increase power production by {ProductionRate}.
+  ResearchCost: 20
   Modifiers:
   - TargetBuildingIds:
-    - apartment
-    ModType: 3
-    Value: 5
+    - power_plant
+    ModType: 1
+    Value: 10
     IsPercent: 1

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
   m_Name: LaboratoryResearchRatePercent
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Research rate +10%
-  Description: Better equipment increases total research rate by 10%.
+  DisplayNameTemplate: Research speed +{ResearchRate}
+  DescriptionTemplate: Better equipment increases speed rate by {ResearchRate}.
   ResearchCost: 20
   Modifiers:
   - TargetBuildingIds:

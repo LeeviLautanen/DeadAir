@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: ShieldInitial
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Shield upgrades
+  DisplayNameTemplate: Shield upgrades
   Description: Research methods of improving plasma shields.
+  DescriptionTemplate: Research methods of improving plasma shields.
   ResearchCost: 0
   Modifiers: []

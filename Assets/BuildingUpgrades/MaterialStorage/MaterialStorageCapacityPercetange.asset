@@ -10,14 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: MaterialStorageCapacity200
+  m_Name: MaterialStorageCapacityPercetange
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Material storage +200
-  Description: Extensions to the warehouse allows 200 more material to be stored.
+  DisplayName: Material storage +{Capacity}
+  DisplayNameTemplate: Material storage +10%
+  Description: Compact packing methods increases the capacity of material storage
+    facilities by 10%.
+  DescriptionTemplate: Compact packing methods increases the capacity of material
+    storage facilities by {Capacity}.
   ResearchCost: 15
   Modifiers:
   - TargetBuildingIds:
     - material_storage
     ModType: 3
-    Value: 200
-    IsPercent: 0
+    Value: 10
+    IsPercent: 1

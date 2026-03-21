@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: ApartmentCapacity10
+  m_Name: MaterialStorageCapacityFlat
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Apartment capacity +10
-  Description: Efficient use of space allows 10 more people to fit in an apartment
-    building.
-  ResearchCost: 10
+  DisplayName: Material storage +200
+  DisplayNameTemplate: Material storage +{Capacity}
+  Description: Extensions to the warehouse allows 200 more material to be stored.
+  DescriptionTemplate: Extensions to the warehouse allows {Capacity} more material
+    to be stored.
+  ResearchCost: 15
   Modifiers:
   - TargetBuildingIds:
-    - apartment
+    - material_storage
     ModType: 3
-    Value: 10
+    Value: 200
     IsPercent: 0

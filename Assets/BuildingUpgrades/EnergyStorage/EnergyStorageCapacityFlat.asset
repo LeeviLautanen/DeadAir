@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: EnergyStorageCapacityFlat
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Energy storage +400
+  DisplayNameTemplate: Energy storage +{Capacity}
   Description: Larger hydrogen tanks can fit 400 more energy.
+  DescriptionTemplate: Larger hydrogen tanks can fit {Capacity} more energy.
   ResearchCost: 15
   Modifiers:
   - TargetBuildingIds:

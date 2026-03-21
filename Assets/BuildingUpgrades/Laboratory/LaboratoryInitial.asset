@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: LaboratoryInitial
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Laboratory upgrades
+  DisplayNameTemplate: Laboratory upgrades
   Description: Research methods of improving laboratory buildings.
+  DescriptionTemplate: Research methods of improving laboratory buildings.
   ResearchCost: 0
   Modifiers: []

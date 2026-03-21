@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: MaterialStorageInitial
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Material storage upgrades
+  DisplayNameTemplate: Material storage upgrades
   Description: Research methods of improving material storage.
+  DescriptionTemplate: Research methods of improving material storage.
   ResearchCost: 0
   Modifiers: []

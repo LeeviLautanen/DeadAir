@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: PowerPlantInitial
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Power plant upgrades
+  DisplayNameTemplate: Power plant upgrades
   Description: Research methods of improving power production.
+  DescriptionTemplate: Research methods of improving power production.
   ResearchCost: 0
   Modifiers: []

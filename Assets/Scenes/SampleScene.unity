@@ -169,7 +169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_text
-      value: Apartment upgrades
+      value: No name
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Enabled
@@ -257,7 +257,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Apartment upgrades_4
+      value: No name_4
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data
@@ -999,7 +999,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_text
-      value: Power plant upgrades
+      value: No name
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Enabled
@@ -1087,7 +1087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Power plant upgrades_14
+      value: No name_14
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data
@@ -2335,7 +2335,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_text
-      value: Refinery upgrades
+      value: No name
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Enabled
@@ -2423,7 +2423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Refinery upgrades_2
+      value: No name_2
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data
@@ -2681,7 +2681,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_text
-      value: Energy storage upgrades
+      value: No name
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Enabled
@@ -2769,7 +2769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Energy storage upgrades_13
+      value: No name_13
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data
@@ -6637,7 +6637,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_text
-      value: Shield upgrades
+      value: No name
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Enabled
@@ -6725,7 +6725,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Shield upgrades_15
+      value: No name_15
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data
@@ -8987,7 +8987,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_text
-      value: Material storage upgrades
+      value: No name
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Enabled
@@ -9075,7 +9075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Material storage upgrades_11
+      value: No name_11
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data
@@ -12436,7 +12436,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1635153326}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 1445513119}
@@ -13686,7 +13686,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_text
-      value: Interceptor cannon upgrades
+      value: No name
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Enabled
@@ -13774,7 +13774,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Interceptor cannon upgrades_3
+      value: No name_3
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data
@@ -14213,7 +14213,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_text
-      value: Laboratory upgrades
+      value: No name
       objectReference: {fileID: 0}
     - target: {fileID: 4103968829678119604, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Enabled
@@ -14301,7 +14301,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5170918516304776204, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: m_Name
-      value: Laboratory upgrades_12
+      value: No name_12
       objectReference: {fileID: 0}
     - target: {fileID: 9002198156313795862, guid: f1b3349c1b945474292523d38c305de4, type: 3}
       propertyPath: data

@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: BunkerInitialUpgrade
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Bunker life support
+  DisplayNameTemplate: Bunker life support
   Description: Start the life sustaining systems of the bunker.
+  DescriptionTemplate: Start the life sustaining systems of the bunker.
   ResearchCost: 0
   Modifiers:
   - TargetBuildingIds:

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: InterceptorInitial
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Interceptor cannon upgrades
+  DisplayNameTemplate: Interceptor cannon upgrades
   Description: Research methods of improving the interceptor cannon.
+  DescriptionTemplate: Research methods of improving the interceptor cannon.
   ResearchCost: 0
   Modifiers: []

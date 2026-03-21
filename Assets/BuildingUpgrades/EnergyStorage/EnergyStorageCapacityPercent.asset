@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
   m_Name: EnergyStorageCapacityPercent
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Energy storage +10%
+  DisplayName: Energy storage +{Capacity}
+  DisplayNameTemplate: Energy storage +{Capacity}
   Description: Better hydrogen compression methods increase the energy stored by
     10 percent.
+  DescriptionTemplate: Better hydrogen compression methods increase the energy stored
+    by {Capacity} percent.
   ResearchCost: 15
   Modifiers:
   - TargetBuildingIds:

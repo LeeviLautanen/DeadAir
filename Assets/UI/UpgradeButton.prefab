@@ -140,7 +140,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Apartment Max Capacity
+  m_text: Material production +10%
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -224,11 +224,11 @@ GameObject:
   - component: {fileID: 8906581464556129716}
   - component: {fileID: 1981370727297421336}
   - component: {fileID: 8006246828556388520}
-  - component: {fileID: 9002198156313795862}
   - component: {fileID: 7055088605705571037}
   - component: {fileID: 1418039488620878396}
+  - component: {fileID: 9002198156313795862}
   m_Layer: 5
-  m_Name: UpgradeButton
+  m_Name: Material production +10%_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -337,25 +337,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &9002198156313795862
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5170918516304776204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a64e990e77c1efa4593681799236dcd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UpgradeNode
-  prequisites: []
-  data: {fileID: 0}
-  upgradeText: {fileID: 4103968829678119604}
-  isUnlocked: 0
-  isResearched: 0
-  selectedColor: {r: 0.7971698, g: 0.8613127, b: 1, a: 1}
-  researchedColor: {r: 0.8254717, g: 1, b: 0.88655657, a: 1}
 --- !u!114 &7055088605705571037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,3 +377,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &9002198156313795862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5170918516304776204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a64e990e77c1efa4593681799236dcd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeNode
+  prequisites: []
+  data: {fileID: 11400000, guid: 9431e831a8630e648b7560dc784391ea, type: 2}
+  isUnlocked: 0
+  isResearched: 0
+  selectedColor: {r: 0.7971698, g: 0.8613127, b: 1, a: 1}
+  researchedColor: {r: 0.8254717, g: 1, b: 0.88655657, a: 1}

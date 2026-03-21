@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: EnergyStorageInitial
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Energy storage upgrades
+  DisplayNameTemplate: Energy storage upgrades
   Description: Research methods of improving energy storage.
+  DescriptionTemplate: Research methods of improving energy storage.
   ResearchCost: 0
   Modifiers: []

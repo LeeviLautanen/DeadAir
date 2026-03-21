@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: InterceptorEffectiveness10pct
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayName: Interceptor effectiveness +10%
+  DisplayNameTemplate: Interceptor effectiveness +{InterceptorEffectiveness}
   Description: More accurate aiming peripherals increase meteorites shot down by
     10 percent.
+  DescriptionTemplate: More accurate aiming peripherals increase meteorites shot
+    down by {InterceptorEffectiveness} percent.
   ResearchCost: 15
   Modifiers:
   - TargetBuildingIds:
