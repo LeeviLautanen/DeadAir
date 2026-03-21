@@ -37,7 +37,8 @@ public class InputHandler : MonoBehaviour
     public event Action<Key> NumberKeyPressed;
     public event Action<SaveAction> SaveActionTriggered;
     public event Action<MouseButton> MouseButtonReleased;
-    public event Action<float> TimeSpeedStepRequested;
+    public event Action GameTimeIncreaseRequested;
+    public event Action GameTimeDecreaseRequested;
     public event Action ResearchMenuToggleRequested;
     public event Action PauseToggleRequested;
     public event Action PauseMenuRequested;
@@ -296,12 +297,12 @@ public class InputHandler : MonoBehaviour
     {
         if (speedUpTimeAction != null && speedUpTimeAction.WasPressedThisFrame())
         {
-            TimeSpeedStepRequested?.Invoke(0.5f);
+            GameTimeIncreaseRequested?.Invoke();
         }
 
         if (slowDownTimeAction != null && slowDownTimeAction.WasPressedThisFrame())
         {
-            TimeSpeedStepRequested?.Invoke(-0.5f);
+            GameTimeDecreaseRequested?.Invoke();
         }
 
         if (toggleResearchAction != null && toggleResearchAction.WasPressedThisFrame())

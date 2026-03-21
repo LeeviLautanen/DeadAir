@@ -25,9 +25,9 @@ public class TechManager : MonoBehaviour, IDragHandler
     private GameObject lineContainer;
     private TMP_Text researchProgressText;
     private List<UpgradeNode> allNodes = new();
-    private Dictionary<UpgradeNode, List<UpgradeNodeUILine>> nodeLines = new();
-    private Dictionary<string, Dictionary<ModifierType, float>> flatModifiers = new();
-    private Dictionary<string, Dictionary<ModifierType, float>> percentMultipliers = new();
+    private readonly Dictionary<UpgradeNode, List<UpgradeNodeUILine>> nodeLines = new();
+    private readonly Dictionary<string, Dictionary<ModifierType, float>> flatModifiers = new();
+    private readonly Dictionary<string, Dictionary<ModifierType, float>> percentMultipliers = new();
     private bool isVisible;
     private Canvas upgradeCanvas;
     private float researchAmount;

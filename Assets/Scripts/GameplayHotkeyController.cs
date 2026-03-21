@@ -20,7 +20,8 @@ public class GameplayHotkeyController : MonoBehaviour
             return;
         }
 
-        inputHandler.TimeSpeedStepRequested += HandleTimeSpeedStep;
+        inputHandler.GameTimeIncreaseRequested += HandleGameTimeIncrease;
+        inputHandler.GameTimeDecreaseRequested += HandleGameTimeDecrease;
         inputHandler.ResearchMenuToggleRequested += HandleResearchToggle;
         inputHandler.PauseToggleRequested += HandlePauseToggle;
         inputHandler.PauseMenuRequested += HandlePauseMenuRequested;
@@ -31,18 +32,55 @@ public class GameplayHotkeyController : MonoBehaviour
         if (inputHandler == null)
             return;
 
-        inputHandler.TimeSpeedStepRequested -= HandleTimeSpeedStep;
+        inputHandler.GameTimeIncreaseRequested -= HandleGameTimeIncrease;
+        inputHandler.GameTimeDecreaseRequested -= HandleGameTimeDecrease;
         inputHandler.ResearchMenuToggleRequested -= HandleResearchToggle;
         inputHandler.PauseToggleRequested -= HandlePauseToggle;
         inputHandler.PauseMenuRequested -= HandlePauseMenuRequested;
     }
 
-    private void HandleTimeSpeedStep(float step)
+    private void HandleGameTimeIncrease()
     {
         if (timeManager == null)
             return;
 
-        timeManager.StepGameTimeMultiplier(step);
+        switch (timeManager.GameTimeMultiplier)
+        {
+            case <= 0.25f:
+                timeManager.StepGameTimeMultiplier(0.25f);
+                break;
+            case <= 0.5f:
+                timeManager.StepGameTimeMultiplier(0.5f);
+                break;
+            case >= 1f:
+                timeManager.StepGameTimeMultiplier(1f);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void HandleGameTimeDecrease()
+    {
+        if (timeManager == null)
+            return;
+
+        switch (timeManager.GameTimeMultiplier)
+        {
+            case <= 0.25f:
+                break;
+            case <= 0.5f:
+                timeManager.StepGameTimeMultiplier(-0.25f);
+                break;
+            case <= 1f:
+                timeManager.StepGameTimeMultiplier(-0.5f);
+                break;
+            case >= 2f:
+                timeManager.StepGameTimeMultiplier(-1f);
+                break;
+            default:
+                break;
+        }
     }
 
     private void HandleResearchToggle()

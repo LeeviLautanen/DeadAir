@@ -9,7 +9,7 @@ public class TimeManager : MonoBehaviour
     public float GameHourToSeconds => DayLengthSeconds / 24f;
     public int CurrentDay => currentDay;
     public float GameTimeMultiplier = 1f;
-    public float MinGameTimeMultiplier = 0.5f;
+    public float MinGameTimeMultiplier = 0.25f;
     public float MaxGameTimeMultiplier = 5f;
     public float DayLengthSeconds = 60f;
     public Light SunLight;

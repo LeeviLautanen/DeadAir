@@ -72,9 +72,8 @@ public class Building : MonoBehaviour
         currentHealth = data.MaxHealth;
 
         // Make deep copies of the SO lists
-        float hoursToSecs = timeManager.GameHourToSeconds;
-        producedResources = data.ProducedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount / hoursToSecs));
-        consumedResources = data.ConsumedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount / hoursToSecs));
+        producedResources = data.ProducedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
+        consumedResources = data.ConsumedResources.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
         capacityEffects = data.CapacityEffects.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
         requiredReservations = data.RequiredReservations.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
 
@@ -288,14 +287,14 @@ public class Building : MonoBehaviour
         // Production
         for (int i = 0; i < data.ProducedResources.Count; i++)
         {
-            float newAmount = techManager.GetModifiedValue(ProducedResources[i].Amount, ModifierType.ProductionRate, data.Id);
+            float newAmount = techManager.GetModifiedValue(data.ProducedResources[i].Amount, ModifierType.ProductionRate, data.Id);
             producedResources[i].Amount = newAmount;
         }
 
         // Consumption
         for (int i = 0; i < data.ConsumedResources.Count; i++)
         {
-            float newAmount = techManager.GetModifiedValue(ConsumedResources[i].Amount, ModifierType.ConsumptionRate, data.Id);
+            float newAmount = techManager.GetModifiedValue(data.ConsumedResources[i].Amount, ModifierType.ConsumptionRate, data.Id);
             consumedResources[i].Amount = newAmount;
         }
 
