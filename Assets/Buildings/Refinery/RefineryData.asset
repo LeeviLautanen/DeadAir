@@ -28,7 +28,7 @@ MonoBehaviour:
     amount: 25
   ConsumedResources:
   - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    amount: 1
+    amount: 5
   CapacityEffects:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     amount: 20

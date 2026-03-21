@@ -19,5 +19,5 @@ MonoBehaviour:
   - TargetBuildingIds:
     - bunker
     ModType: 1
-    Value: 2
+    Value: 5
     IsPercent: 0

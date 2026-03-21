@@ -50,7 +50,7 @@ public class TimeUI : MonoBehaviour
             }
             else
             {
-                gameTimeMultText.text = $"(Speed x{mult:0.##})";
+                gameTimeMultText.text = $"({mult:0.##}x speed)";
             }
         }
     }
