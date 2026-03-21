@@ -21,10 +21,10 @@ MonoBehaviour:
   prefab: {fileID: 2090995044971168592, guid: 1054f02b0834e7b43bcda121960e20f3, type: 3}
   ConstructionCost:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    amount: 30
+    amount: 60
   ProducedResources: []
   ConsumedResources: []
   CapacityEffects:
   - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    amount: 200
+    amount: 400
   RequiredReservations: []

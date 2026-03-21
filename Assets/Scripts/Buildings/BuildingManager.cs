@@ -13,7 +13,7 @@ public class BuildingManager : MonoBehaviour
     private Dictionary<string, BuildingData> buildingDatabase = new();
     [SerializeField] private List<Building> allBuildings = new();
     private readonly string saveFilePath = "./buildings.json";
-    [SerializeField] private bool cheatMode = false;
+    [SerializeField] private bool constructionCostsDisabled = false;
 
     private void Start()
     {
@@ -40,7 +40,7 @@ public class BuildingManager : MonoBehaviour
         }
 
         var buildingData = buildingDatabase[buildingId];
-        if (!cheatMode)
+        if (!constructionCostsDisabled)
         {
             if (!resourceManager.TryConsumeResources(buildingData.ConstructionCost))
             {
@@ -130,10 +130,13 @@ public class BuildingManager : MonoBehaviour
         allBuildings.Clear();
 
         // Instantiate buildings from save data
+        bool previousState = constructionCostsDisabled;
+        constructionCostsDisabled = true;
         foreach (var saveData in saveDataList.Buildings)
         {
             CreateBuilding(saveData.BuildingId, saveData.Position);
         }
+        constructionCostsDisabled = previousState;
     }
 
     private void OnBuildingCreated(Building building)
