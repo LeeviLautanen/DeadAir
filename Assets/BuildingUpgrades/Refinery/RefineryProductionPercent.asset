@@ -12,14 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
   m_Name: RefineryProductionPercent
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Material production +{ProductionRate}
   DisplayNameTemplate: Material production +{ProductionRate}
-  Description: New smelters increase material production by 25%.
   DescriptionTemplate: New smelters increase material production by {ProductionRate}
   ResearchCost: 20
   Modifiers:
   - TargetBuildingIds:
     - refinery
     ModType: 1
-    Value: 10
+    Value: 25
     IsPercent: 1

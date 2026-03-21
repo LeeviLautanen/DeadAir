@@ -52,8 +52,11 @@ public class GameplayHotkeyController : MonoBehaviour
             case <= 0.5f:
                 timeManager.StepGameTimeMultiplier(0.5f);
                 break;
-            case >= 1f:
+            case < 5f:
                 timeManager.StepGameTimeMultiplier(1f);
+                break;
+            case < 10f:
+                timeManager.StepGameTimeMultiplier(5f);
                 break;
             default:
                 break;
@@ -75,8 +78,11 @@ public class GameplayHotkeyController : MonoBehaviour
             case <= 1f:
                 timeManager.StepGameTimeMultiplier(-0.5f);
                 break;
-            case >= 2f:
+            case <= 5f:
                 timeManager.StepGameTimeMultiplier(-1f);
+                break;
+            case <= 10f:
+                timeManager.StepGameTimeMultiplier(-5f);
                 break;
             default:
                 break;

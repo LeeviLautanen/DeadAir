@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
   m_Name: PowerPlantProductionFlat
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Power production +10
   DisplayNameTemplate: Power production +{ProductionRate}
-  Description: Larger cooling resevoirs increase power production by 10 per hour.
   DescriptionTemplate: Larger cooling resevoirs increase power production by {ProductionRate}
     per hour.
   ResearchCost: 20
@@ -22,5 +20,5 @@ MonoBehaviour:
   - TargetBuildingIds:
     - power_plant
     ModType: 1
-    Value: 10
+    Value: 25
     IsPercent: 0
