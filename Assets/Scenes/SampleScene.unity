@@ -673,7 +673,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6b55141d5be5af849b469853701608d0, type: 2}
   - {fileID: 11400000, guid: 2ab079b39f30e534aa65ba40c4a399b6, type: 2}
   allBuildings: []
-  constructionCostsDisabled: 0
+  constructionCostsDisabled: 1
 --- !u!114 &93531067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -720,11 +720,15 @@ MonoBehaviour:
   MeteoritePrefab: {fileID: 2838757934400324701, guid: a2ecc256c071e3c4ca34c02790dae405, type: 3}
   SpawnRange: {x: 0, y: 200}
   SpawnHeight: 500
-  SpawnAngleRange: 30
+  SpawnAngleRange: 20
   RotationSpeedRange: {x: 30, y: 180}
   SpeedRandomizationRange: {x: 0.8, y: 1.1}
   upgradeReductionMult: 1
   totalReductionMult: 1
+  impactSpotSize: 2
+  secondHitChance: 0.5
+  thirdHitChance: 0.2
+  fourthOrMoreHitChance: 0.01
 --- !u!114 &93531072
 MonoBehaviour:
   m_ObjectHideFlags: 0

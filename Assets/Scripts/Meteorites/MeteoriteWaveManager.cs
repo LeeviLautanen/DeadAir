@@ -21,7 +21,18 @@ public class MeteoriteWaveManager : MonoBehaviour
     private int interceptorCount;
     [SerializeField] private float upgradeReductionMult = 1f;
     [SerializeField] private float totalReductionMult = 1f;
+    [SerializeField] private float impactSpotSize = 1f;
+    [SerializeField] private float secondHitChance = 0.3f;
+    [SerializeField] private float thirdHitChance = 0.1f;
+    [SerializeField] private float fourthOrMoreHitChance = 0.01f;
     private int nextWaveIndex = 0;
+    private readonly List<int>[] impactBuckets = { new(), new(), new(), new() };
+    private int[] impactSpotHitCounts = System.Array.Empty<int>();
+    private int waveSpotCount;
+    private float meteoriteImpactSize;
+    private float waveSecondHitChance;
+    private float waveThirdHitChance;
+    private float waveFourthOrMoreHitChance;
 
     private async void Start()
     {
@@ -71,6 +82,8 @@ public class MeteoriteWaveManager : MonoBehaviour
         if (spawnAmount <= 0)
             yield break;
 
+        ResetImpactSelectionForWave();
+
         // Generate random proportions and normalize to spawnDuration so intervals sum to spawnDuration
         float[] props = new float[spawnAmount];
         float sum = 0f;
@@ -96,7 +109,7 @@ public class MeteoriteWaveManager : MonoBehaviour
 
         for (int i = 0; i < spawnAmount; i++)
         {
-            float impactPos = Random.Range(SpawnRange.x, SpawnRange.y);
+            float impactPos = GetWeightedImpactX();
             float angle = Random.Range(-SpawnAngleRange, SpawnAngleRange);
             SpawnMeteorite(impactPos, angle);
 
@@ -144,6 +157,97 @@ public class MeteoriteWaveManager : MonoBehaviour
     {
         upgradeReductionMult = techManager.GetModifiedValue(1f, ModifierType.InterceptorEffectiveness, "interceptor_cannon");
         UpdateMeteoriteAmountMult();
+    }
+
+    private void ResetImpactSelectionForWave()
+    {
+        meteoriteImpactSize = Mathf.Max(0.01f, impactSpotSize);
+        waveSpotCount = Mathf.Max(1, Mathf.CeilToInt((SpawnRange.y - SpawnRange.x) / meteoriteImpactSize));
+        waveSecondHitChance = Mathf.Clamp01(secondHitChance);
+        waveThirdHitChance = Mathf.Clamp01(thirdHitChance);
+        waveFourthOrMoreHitChance = Mathf.Clamp01(fourthOrMoreHitChance);
+
+        if (impactSpotHitCounts.Length < waveSpotCount)
+        {
+            impactSpotHitCounts = new int[waveSpotCount];
+        }
+        System.Array.Clear(impactSpotHitCounts, 0, waveSpotCount);
+
+        for (int i = 0; i < impactBuckets.Length; i++)
+        {
+            impactBuckets[i].Clear();
+        }
+
+        List<int> firstHitBucket = impactBuckets[0];
+        for (int i = 0; i < waveSpotCount; i++)
+        {
+            firstHitBucket.Add(i);
+        }
+    }
+
+    private float GetWeightedImpactX()
+    {
+        // Get a bucket based on weighted random
+        int chosenBucket = GetWeightedBucketIndex();
+        List<int> bucket = impactBuckets[chosenBucket];
+
+        if (bucket.Count == 0)
+        {
+            log.Warning($"Meteorite wave bucket {chosenBucket} was empty, falling back to random spawn.");
+            return Random.Range(SpawnRange.x, SpawnRange.y);
+        }
+
+        // Pick a random index from the bucket and remove it
+        int pickedIndexInBucket = Random.Range(0, bucket.Count);
+        int chosenSpotIndex = bucket[pickedIndexInBucket];
+        int lastIndex = bucket.Count - 1;
+        bucket[pickedIndexInBucket] = bucket[lastIndex];
+        bucket.RemoveAt(lastIndex);
+
+        // Update the bucket of the spot that got hit
+        int previousHits = impactSpotHitCounts[chosenSpotIndex];
+        int newHits = previousHits + 1;
+        impactSpotHitCounts[chosenSpotIndex] = newHits;
+        int newBucketIndex = Mathf.Clamp(newHits, 0, impactBuckets.Length - 1);
+        impactBuckets[newBucketIndex].Add(chosenSpotIndex);
+
+        float minX = SpawnRange.x + (chosenSpotIndex * meteoriteImpactSize);
+        float maxX = Mathf.Min(minX + meteoriteImpactSize, SpawnRange.y);
+        return Random.Range(minX, maxX);
+    }
+
+    private int GetWeightedBucketIndex()
+    {
+        float firstWeight = impactBuckets[0].Count;
+        float secondWeight = impactBuckets[1].Count * waveSecondHitChance;
+        float thirdWeight = impactBuckets[2].Count * waveThirdHitChance;
+        float fourthWeight = impactBuckets[3].Count * waveFourthOrMoreHitChance;
+        float totalWeight = firstWeight + secondWeight + thirdWeight + fourthWeight;
+
+        if (totalWeight <= 0f)
+        {
+            for (int i = 0; i < impactBuckets.Length; i++)
+            {
+                if (impactBuckets[i].Count > 0)
+                    return i;
+            }
+
+            return 0;
+        }
+
+        float randomValue = Random.value * totalWeight;
+        if (randomValue < firstWeight)
+            return 0;
+
+        randomValue -= firstWeight;
+        if (randomValue < secondWeight)
+            return 1;
+
+        randomValue -= secondWeight;
+        if (randomValue < thirdWeight)
+            return 2;
+
+        return 3;
     }
 
     private void SpawnMeteorite(float targetImpactX, float angle)

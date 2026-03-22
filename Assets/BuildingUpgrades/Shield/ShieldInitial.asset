@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
   m_Name: ShieldInitial
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Shield upgrades
   DisplayNameTemplate: Shield upgrades
-  Description: Research methods of improving plasma shields.
   DescriptionTemplate: Research methods of improving plasma shields.
-  ResearchCost: 0
+  ResearchCost: 6
   Modifiers: []

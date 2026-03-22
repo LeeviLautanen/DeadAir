@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
   m_Name: PowerPlantInitial
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Power plant upgrades
   DisplayNameTemplate: Power plant upgrades
-  Description: Research methods of improving power production.
   DescriptionTemplate: Research methods of improving power production.
-  ResearchCost: 0
+  ResearchCost: 6
   Modifiers: []

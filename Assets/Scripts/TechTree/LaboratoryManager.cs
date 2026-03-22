@@ -23,7 +23,7 @@ public class LaboratoryManager : MonoBehaviour
 
     private void Update()
     {
-        float deltaTime = timeManager.DeltaTime;
+        float deltaTime = timeManager.DayDeltaTime;
 
         if (deltaTime > 0 && laboratoryCount > 0)
         {

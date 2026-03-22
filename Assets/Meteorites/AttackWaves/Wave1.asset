@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteWaveData
   Amount: 20
   Duration: 10
-  Day: 2
+  Day: 3
   Hour: 0

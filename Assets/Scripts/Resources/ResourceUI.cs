@@ -1,12 +1,14 @@
 using UnityEngine;
 using TMPro;
 using System.Collections.Generic;
+using System.Text;
 
 public class ResourceUI : MonoBehaviour
 {
     private static readonly Logger log = new(nameof(ResourceUI));
     private ResourceManager resourceManager;
     private readonly Dictionary<string, TMP_Text> resourceTexts = new();
+    private readonly StringBuilder sb = new(128);
 
     private void Start()
     {
@@ -39,11 +41,31 @@ public class ResourceUI : MonoBehaviour
                 float maxAmount = resourceManager.GetResourceMax(kvp.Key);
                 float reservedAmount = resourceManager.GetResourceReserved(kvp.Key);
                 float rate = resourceManager.GetResourceRate(kvp.Key);
-                kvp.Value.SetText(Format(kvp.Key, amount, maxAmount, reservedAmount, rate));
+                FormatPooled(kvp.Key, amount, maxAmount, reservedAmount, rate);
+                kvp.Value.SetText(sb);
+            }
+        }
+    }
+
+    private void FormatPooled(string name, float amount, float maxAmount = 0, float reservedAmount = 0, float rate = 0)
+    {
+        sb.Clear();
+        sb.Append(name).Append(": ").AppendFormat("{0:F0}", amount);
+
+        if (maxAmount > 0)
+        {
+            sb.Append(" / ").AppendFormat("{0:F0}", maxAmount);
+
+            if (reservedAmount > 0)
+            {
+                sb.Append(" (Available: ")
+                   .AppendFormat("{0:F0}", amount - reservedAmount)
+                   .Append(", Δ: ").AppendFormat("{0:F1}", rate)
+                   .Append("/hr)");
             }
             else
             {
-                kvp.Value.SetText(kvp.Key + ":");
+                sb.Append(" (Δ: ").AppendFormat("{0:F0}", rate).Append("/hr)");
             }
         }
     }

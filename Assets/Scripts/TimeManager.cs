@@ -6,7 +6,7 @@ public class TimeManager : MonoBehaviour
     public static TimeManager Instance { get; private set; }
     public float DeltaTime => deltaTime;
     public float LastDeltaBeforePause => lastDeltaBeforePause;
-    public float GameHourToSeconds => DayLengthSeconds / 24f;
+    public float DayDeltaTime => deltaTime / (DayLengthSeconds / 24f);
     public int CurrentDay => currentDay;
     public float GameTimeMultiplier = 1f;
     public float MinGameTimeMultiplier = 0.25f;

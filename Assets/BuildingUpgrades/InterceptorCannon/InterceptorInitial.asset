@@ -12,9 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
   m_Name: InterceptorInitial
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Interceptor cannon upgrades
   DisplayNameTemplate: Interceptor cannon upgrades
-  Description: Research methods of improving the interceptor cannon.
   DescriptionTemplate: Research methods of improving the interceptor cannon.
-  ResearchCost: 0
+  ResearchCost: 6
   Modifiers: []

@@ -413,7 +413,7 @@ public class ResourceManager : MonoBehaviour
 
     private float GetDeltaTime()
     {
-        return timeManager.GetDeltaTime() / timeManager.GameHourToSeconds; // Delta time in game hours
+        return timeManager.DayDeltaTime;
     }
 
     private void InitializeResources()
