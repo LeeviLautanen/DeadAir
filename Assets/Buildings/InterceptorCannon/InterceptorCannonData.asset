@@ -18,7 +18,7 @@ MonoBehaviour:
     earth.
   maxHealth: 100
   resourcePriority: 4
-  startupTime: 3
+  startupTime: 1
   prefab: {fileID: 4104337362272144408, guid: b9e51466d9830ca4185629f37a859764, type: 3}
   ConstructionCost:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}

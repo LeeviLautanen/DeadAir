@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: PowerPlantProductionFlat
+  m_Name: ApartmentConstructionCostFlat
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayNameTemplate: Power production +{ProductionRate}
-  DescriptionTemplate: Larger cooling resevoirs increase power production by {ProductionRate}
-    per hour.
-  ResearchCost: 20
+  DisplayNameTemplate: Apartment construction cost -{ConstructionCost}
+  DescriptionTemplate: Efficient use of space in apartments increases their capacity
+    by {ConstructionCost}.
+  ResearchCost: 10
   Modifiers:
   - TargetBuildingIds:
-    - power_plant
-    ModType: 1
-    Value: 20
+    - apartment
+    ModType: 8
+    Value: -5
     IsPercent: 0

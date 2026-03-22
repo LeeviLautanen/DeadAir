@@ -63,7 +63,7 @@ public class ResourceUI : MonoBehaviour
         }
         else if (maxAmount > 0)
         {
-            return $"{name}: {amount:F0} / {maxAmount:F0} (Δ: {rate:F1}/hr)";
+            return $"{name}: {amount:F0} / {maxAmount:F0} (Δ: {rate:F0}/hr)";
         }
         else
         {

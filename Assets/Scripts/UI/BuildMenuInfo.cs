@@ -65,8 +65,6 @@ public class BuildMenuInfo : MonoBehaviour
         if (current == null)
             return;
 
-        float secondsPerGameHour = timeManager.DayLengthSeconds / 24f;
-
         nameText.text = current.DisplayName;
 
         descriptionText.text = current.Description;
@@ -75,10 +73,10 @@ public class BuildMenuInfo : MonoBehaviour
             r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConstructionCost, current.Id)}");
 
         UpdateInfoText(consumedResourcesText, "Consumes", current.ConsumedResources,
-            r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConsumptionRate, current.Id) * secondsPerGameHour}/hr");
+            r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConsumptionRate, current.Id)}/hr");
 
         UpdateInfoText(producedResourcesText, "Produces", current.ProducedResources,
-            r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ProductionRate, current.Id) * secondsPerGameHour}/hr");
+            r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ProductionRate, current.Id)}/hr");
 
         UpdateInfoText(capacityText, "Storage", current.CapacityEffects,
             r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Capacity, current.Id)}");

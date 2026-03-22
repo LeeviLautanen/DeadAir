@@ -12,16 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
   m_Name: ApartmentCapacityFlat
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Apartment capacity +{Capacity}
   DisplayNameTemplate: Apartment capacity +{Capacity}
-  Description: Efficient use of space allows {Capacity} more people to fit in an
-    apartment building.
-  DescriptionTemplate: Efficient use of space allows {Capacity} more people to fit
-    in an apartment building.
+  DescriptionTemplate: Efficient use of space in apartments increases their capacity
+    by {Capacity}.
   ResearchCost: 10
   Modifiers:
   - TargetBuildingIds:
     - apartment
     ModType: 3
-    Value: 10
+    Value: 5
     IsPercent: 0

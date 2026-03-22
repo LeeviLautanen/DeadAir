@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BunkerCheatData
   m_EditorClassIdentifier: 
   id: bunker
-  displayName: Bunker
-  description: 
+  displayName: Cheat bunker
+  description: Youre not supposed to see this...
   maxHealth: 10000000
   resourcePriority: 0
   startupTime: 0

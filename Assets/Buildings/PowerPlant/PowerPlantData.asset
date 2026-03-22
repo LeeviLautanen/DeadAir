@@ -17,14 +17,14 @@ MonoBehaviour:
   description: A small modular reactor which provides energy for the city.
   maxHealth: 100
   resourcePriority: 0
-  startupTime: 3
+  startupTime: 1
   prefab: {fileID: 2672589904300108679, guid: fdecaa516d1c5034c937ec48c7e162a9, type: 3}
   ConstructionCost:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
     amount: 140
   ProducedResources:
   - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    amount: 195
+    amount: 50
   ConsumedResources: []
   CapacityEffects:
   - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}

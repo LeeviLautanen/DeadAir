@@ -19,7 +19,7 @@ public class UpgradeData : ScriptableObject
         foreach (var m in Modifiers)
         {
             string key = "{" + m.ModType + "}";
-            string valueText = m.IsPercent ? $"{m.Value}%" : $"{m.Value}";
+            string valueText = m.IsPercent ? $"{Mathf.Abs(m.Value)}%" : $"{Mathf.Abs(m.Value)}";
             template = template.Replace(key, valueText);
         }
 

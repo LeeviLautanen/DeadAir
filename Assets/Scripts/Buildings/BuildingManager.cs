@@ -10,6 +10,7 @@ public class BuildingManager : MonoBehaviour
     private static readonly Logger log = new(nameof(BuildingManager));
     private ResourceManager resourceManager;
     private InputHandler inputHandler;
+    private TechManager techManager;
     private Dictionary<string, BuildingData> buildingDatabase = new();
     [SerializeField] private List<Building> allBuildings = new();
     private readonly string saveFilePath = "./buildings.json";
@@ -19,6 +20,7 @@ public class BuildingManager : MonoBehaviour
     {
         resourceManager = FindFirstObjectByType<ResourceManager>();
         inputHandler = FindFirstObjectByType<InputHandler>();
+        techManager = FindFirstObjectByType<TechManager>();
 
         foreach (var buildingData in availableBuildings)
         {
@@ -42,7 +44,12 @@ public class BuildingManager : MonoBehaviour
         var buildingData = buildingDatabase[buildingId];
         if (!constructionCostsDisabled)
         {
-            if (!resourceManager.TryConsumeResources(buildingData.ConstructionCost))
+            var constructionCosts = buildingData.ConstructionCost.ConvertAll(resource => new ResourceAmount(resource.Data, resource.Amount));
+            foreach (var cost in constructionCosts)
+            {
+                cost.Amount = techManager.GetModifiedValue(cost.Amount, ModifierType.ConstructionCost, buildingData.Id);
+            }
+            if (!resourceManager.TryConsumeResources(constructionCosts))
             {
                 log.Warning("Not enough resources to build " + buildingData.DisplayName);
                 return null;

@@ -87,7 +87,7 @@ public class BuildingPlacer : MonoBehaviour
             return false;
         }
 
-        Vector3 spawnPos = new(ghostGO.transform.position.x, 0, ghostGO.transform.position.z);
+        Vector3 spawnPos = new(ghostGO.transform.position.x, 0, ghostBuilding.Data.Prefab.transform.position.z);
         if (buildingManager.CreateBuilding(currentBuildingId, spawnPos))
         {
             return true;

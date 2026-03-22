@@ -18,7 +18,7 @@ MonoBehaviour:
     buildings.
   maxHealth: 100
   resourcePriority: 3
-  startupTime: 3
+  startupTime: 1
   prefab: {fileID: 5548335663501128034, guid: ab5db255ed42f5b48bc9d08386af7325, type: 3}
   ConstructionCost:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}

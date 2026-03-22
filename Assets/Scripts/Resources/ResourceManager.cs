@@ -206,7 +206,7 @@ public class ResourceManager : MonoBehaviour
             if (resourceLookup.TryGetValue(cost.Data.Id, out var entry))
             {
                 float amount = cost.Amount * (isRate ? GetDeltaTime() : 1f);
-                resourceRateLookup[cost.Data.Id] -= amount; // Used for rate calcuations
+                if (isRate) resourceRateLookup[cost.Data.Id] -= amount; // Used for rate calcuations
                 if (amount > (entry.Amount - reservationLookup[entry.Data.Id]))
                 {
                     break;
@@ -247,7 +247,7 @@ public class ResourceManager : MonoBehaviour
             {
                 // Add to rate calcuation
                 float amount = resource.Amount * (isRate ? GetDeltaTime() : 1f);
-                resourceRateLookup[entry.Data.Id] += amount; // Used for rate calcuations
+                if (isRate) resourceRateLookup[entry.Data.Id] += amount; // Used for rate calcuations
 
                 // Ignore if we are already over the cap
                 if (entry.Amount >= resourceMaxLookup[entry.Data.Id]) continue;
