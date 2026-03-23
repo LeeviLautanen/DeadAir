@@ -10,18 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: MaterialStorageCapacityPercetange
+  m_Name: EnergyStorageCapacityFlat_1
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Material storage +{Capacity}
-  DisplayNameTemplate: Material storage +10%
-  Description: Compact packing methods increases the capacity of material storage
-    facilities by 10%.
-  DescriptionTemplate: Compact packing methods increases the capacity of material
-    storage facilities by {Capacity}.
-  ResearchCost: 15
+  DisplayNameTemplate: Energy storage +{Capacity}
+  DescriptionTemplate: Larger hydrogen tanks can fit {Capacity} more energy.
+  ResearchCost: 12
   Modifiers:
   - TargetBuildingIds:
-    - material_storage
+    - energy_storage
     ModType: 3
-    Value: 10
-    IsPercent: 1
+    Value: 400
+    IsPercent: 0

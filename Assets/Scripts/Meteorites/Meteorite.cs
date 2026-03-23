@@ -4,6 +4,7 @@ public class Meteorite : MonoBehaviour
 {
     public float Damage = 50f;
     public float Speed = 30f;
+    public float RotationSpeed = 0f;
     public float Lifetime = 10f;
     public float ImpactAudioDelay = 0.5f;
     public Vector2 ImpactAudioPitchRange = new(0.7f, 1.2f);
@@ -80,8 +81,9 @@ public class Meteorite : MonoBehaviour
     private void FixedUpdate()
     {
         rb.MovePosition(rb.position + Speed * Time.fixedDeltaTime * timeManager.GameTimeMultiplier * moveDirection);
+        rb.MoveRotation(rb.rotation + RotationSpeed * Time.fixedDeltaTime * timeManager.GameTimeMultiplier);
 
-        lifeTimer += timeManager.GetDeltaTime();
+        lifeTimer += timeManager.DeltaTime;
         if (lifeTimer >= Lifetime)
         {
             Destroy(gameObject);

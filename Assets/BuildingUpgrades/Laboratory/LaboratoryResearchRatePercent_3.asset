@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: RefineryProductionPercent
+  m_Name: LaboratoryResearchRatePercent_3
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayNameTemplate: Material production +{ProductionRate}
-  DescriptionTemplate: New smelters increase material production by {ProductionRate}
-  ResearchCost: 20
+  DisplayNameTemplate: Research speed +{ResearchRate}
+  DescriptionTemplate: Better equipment increases speed rate by {ResearchRate}.
+  ResearchCost: 24
   Modifiers:
   - TargetBuildingIds:
-    - refinery
-    ModType: 1
-    Value: 25
+    - laboratory
+    ModType: 6
+    Value: 10
     IsPercent: 1

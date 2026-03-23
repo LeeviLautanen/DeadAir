@@ -48,4 +48,22 @@ public class AudioPoolManager : MonoBehaviour
         s.PlayDelayed(delay);
         log.Info($"Scheduled audio with delay {delay}");
     }
+
+    public void PauseAll()
+    {
+        foreach (var s in pool)
+        {
+            if (s.isPlaying)
+                s.Pause();
+        }
+    }
+
+    public void UnpauseAll()
+    {
+        foreach (var s in pool)
+        {
+            if (s.clip != null && s.time > 0f)
+                s.UnPause();
+        }
+    }
 }

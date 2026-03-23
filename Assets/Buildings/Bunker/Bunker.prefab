@@ -341,6 +341,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Building
   PlacementMode: 0
-  data: {fileID: 11400000, guid: b57a018d421da0c428a040ef5d0d34e3, type: 2}
+  data: {fileID: 11400000, guid: 6875997f6cbb445448349d5f623e630a, type: 2}
   currentState: 0
   maxHealth: 0

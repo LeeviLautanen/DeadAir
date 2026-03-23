@@ -6,12 +6,14 @@ public class GameplayHotkeyController : MonoBehaviour
     private InputHandler inputHandler;
     private TimeManager timeManager;
     private TechManager techManager;
+    private AudioPoolManager audioPoolManager;
 
     private void Start()
     {
         inputHandler = FindFirstObjectByType<InputHandler>();
         timeManager = FindFirstObjectByType<TimeManager>();
         techManager = FindFirstObjectByType<TechManager>();
+        audioPoolManager = FindFirstObjectByType<AudioPoolManager>();
 
         if (inputHandler == null)
         {
@@ -103,6 +105,14 @@ public class GameplayHotkeyController : MonoBehaviour
             return;
 
         timeManager.TogglePause();
+
+        if (audioPoolManager == null)
+            return;
+
+        if (timeManager.IsPaused)
+            audioPoolManager.PauseAll();
+        else
+            audioPoolManager.UnpauseAll();
     }
 
     private void HandlePauseMenuRequested()

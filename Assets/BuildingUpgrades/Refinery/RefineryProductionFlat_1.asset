@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: LaboratoryResearchRatePercent
+  m_Name: RefineryProductionFlat_1
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayNameTemplate: Research speed +{ResearchRate}
-  DescriptionTemplate: Better equipment increases speed rate by {ResearchRate}.
-  ResearchCost: 20
+  DisplayNameTemplate: Material production +{ProductionRate}
+  DescriptionTemplate: Bigger machinery increases material produced per hour by {ProductionRate}.
+  ResearchCost: 12
   Modifiers:
   - TargetBuildingIds:
-    - laboratory
-    ModType: 6
-    Value: 10
-    IsPercent: 1
+    - refinery
+    ModType: 1
+    Value: 5
+    IsPercent: 0

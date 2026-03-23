@@ -10,16 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: EnergyStorageCapacityFlat
+  m_Name: RefineryProductionFlat_3
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayName: Energy storage +400
-  DisplayNameTemplate: Energy storage +{Capacity}
-  Description: Larger hydrogen tanks can fit 400 more energy.
-  DescriptionTemplate: Larger hydrogen tanks can fit {Capacity} more energy.
-  ResearchCost: 15
+  DisplayNameTemplate: Material production +{ProductionRate}
+  DescriptionTemplate: Bigger machinery increases material produced per hour by {ProductionRate}.
+  ResearchCost: 24
   Modifiers:
   - TargetBuildingIds:
-    - energy_storage
-    ModType: 3
-    Value: 400
+    - refinery
+    ModType: 1
+    Value: 5
     IsPercent: 0

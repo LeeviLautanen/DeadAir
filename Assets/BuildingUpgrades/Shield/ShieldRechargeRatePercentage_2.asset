@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: ApartmentConstructionCostFlat
+  m_Name: ShieldRechargeRatePercentage_2
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayNameTemplate: Apartment construction cost -{ConstructionCost}
-  DescriptionTemplate: Efficient use of space in apartments increases their capacity
-    by {ConstructionCost}.
-  ResearchCost: 10
+  DisplayNameTemplate: Shield recharge rate +{ShieldRechargeRate}
+  DescriptionTemplate: Upgraded power electronics allow shields to recharge {ShieldRechargeRate}
+    faster.
+  ResearchCost: 18
   Modifiers:
   - TargetBuildingIds:
-    - apartment
-    ModType: 8
-    Value: -5
-    IsPercent: 0
+    - shield
+    ModType: 5
+    Value: 10
+    IsPercent: 1

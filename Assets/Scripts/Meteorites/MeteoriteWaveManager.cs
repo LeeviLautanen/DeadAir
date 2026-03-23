@@ -116,6 +116,12 @@ public class MeteoriteWaveManager : MonoBehaviour
             // Wait the interval before spawning the next one (no wait after last spawn)
             if (i < spawnAmount - 1)
             {
+                // Wait until unpaused
+                while (timeManager.IsPaused)
+                {
+                    yield return null;
+                }
+
                 yield return new WaitForSeconds(intervals[i]);
             }
         }
@@ -261,12 +267,12 @@ public class MeteoriteWaveManager : MonoBehaviour
         GameObject meteor = Instantiate(MeteoritePrefab, spawnPosition, spawnRotation);
 
         // Randomize rotation
+        Meteorite meteoriteComponent = meteor.GetComponent<Meteorite>();
         float rotationSpeed = Random.Range(RotationSpeedRange.x, RotationSpeedRange.y);
         rotationSpeed = Random.value > 0.5f ? -rotationSpeed : rotationSpeed;
-        meteor.GetComponent<Rigidbody2D>().angularVelocity = rotationSpeed;
+        meteoriteComponent.RotationSpeed = rotationSpeed;
 
         // Randomize speed
-        Meteorite meteoriteComponent = meteor.GetComponent<Meteorite>();
         float speedChange = Random.Range(SpeedRandomizationRange.x, SpeedRandomizationRange.y);
         meteoriteComponent.Speed += meteoriteComponent.Speed * speedChange;
     }

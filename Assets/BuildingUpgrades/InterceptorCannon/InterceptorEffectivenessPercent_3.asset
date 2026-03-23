@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fd2b8783478cf1b4a84befbf5ae98b45, type: 3}
-  m_Name: ApartmentCapacityFlat
+  m_Name: InterceptorEffectivenessPercent_3
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
-  DisplayNameTemplate: Apartment capacity +{Capacity}
-  DescriptionTemplate: Efficient use of space in apartments increases their capacity
-    by {Capacity}.
-  ResearchCost: 10
+  DisplayNameTemplate: Interceptor effectiveness +{InterceptorEffectiveness}
+  DescriptionTemplate: More accurate aiming peripherals increase meteorites shot
+    down by {InterceptorEffectiveness} percent.
+  ResearchCost: 24
   Modifiers:
   - TargetBuildingIds:
-    - apartment
-    ModType: 3
-    Value: 5
-    IsPercent: 0
+    - interceptor_cannon
+    ModType: 7
+    Value: 10
+    IsPercent: 1
