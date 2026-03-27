@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayNameTemplate: Apartment upgrades
   DescriptionTemplate: Research methods of improving housing.
-  ResearchCost: 6
+  ResearchCost: 5
   Modifiers: []

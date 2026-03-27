@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayNameTemplate: Shield upgrades
   DescriptionTemplate: Research methods of improving plasma shields.
-  ResearchCost: 6
+  ResearchCost: 5
   Modifiers: []

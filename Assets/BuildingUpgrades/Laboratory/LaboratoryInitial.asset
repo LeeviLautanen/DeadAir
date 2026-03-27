@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayNameTemplate: Laboratory upgrades
   DescriptionTemplate: Research methods of improving laboratory buildings.
-  ResearchCost: 6
+  ResearchCost: 5
   Modifiers: []

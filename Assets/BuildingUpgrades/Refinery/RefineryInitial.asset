@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeData
   DisplayNameTemplate: Refinery upgrades
   DescriptionTemplate: Research methods of improving material production.
-  ResearchCost: 6
+  ResearchCost: 5
   Modifiers: []
