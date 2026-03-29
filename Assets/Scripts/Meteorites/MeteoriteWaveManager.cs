@@ -144,7 +144,7 @@ public class MeteoriteWaveManager : MonoBehaviour
         float newReduction = 1f; // Start from 1, no multiplier
         for (int i = 1; i < interceptorCount + 1; i++)
         {
-            newReduction -= 0.0625f; // Flat reduction per interceptor
+            newReduction -= 0.1f; // Flat reduction per interceptor
         }
 
         newReduction = Mathf.Clamp(newReduction, 0.5f, 1f); // Cap the reduction at 50%

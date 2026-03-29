@@ -15,8 +15,32 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 559bcb984ce91134997ae9f976a6212a
   m_SerializeEntries:
+  - m_GUID: 01a45d86bfe9e2d4eb43f25e97ee3151
+    m_Address: Assets/Meteorites/AttackWaves/Wave9.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14fe897b58cd29341a3d041945c936ed
+    m_Address: Assets/Meteorites/AttackWaves/Wave6.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1d84d53cbff3fc94795c2df32e317e3d
     m_Address: Assets/Meteorites/AttackWaves/Wave2.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f1e361596ba4434cba4cf475be7387d
+    m_Address: Assets/Meteorites/AttackWaves/Wave8.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85866cc42d4711a44ac2a5ae428cecb9
+    m_Address: Assets/Meteorites/AttackWaves/Wave4.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - AttackWaveSO
@@ -27,8 +51,26 @@ MonoBehaviour:
     m_SerializedLabels:
     - AttackWaveSO
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cbfa27a22be80e246821f28fc25461db
+    m_Address: Assets/Meteorites/AttackWaves/Wave7.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: db4aeef95728052438d1cbad04b156cd
+    m_Address: Assets/Meteorites/AttackWaves/Wave5.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e8d0c9d15eeeae44093ac44fd2ecb80e
     m_Address: Assets/Meteorites/AttackWaves/Wave1.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - AttackWaveSO
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5d3f67749ad1454186c7447a801e5dd
+    m_Address: Assets/Meteorites/AttackWaves/Wave3.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - AttackWaveSO

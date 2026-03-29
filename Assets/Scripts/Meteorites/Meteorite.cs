@@ -9,6 +9,7 @@ public class Meteorite : MonoBehaviour
     public float ImpactAudioDelay = 0.5f;
     public Vector2 ImpactAudioPitchRange = new(0.7f, 1.2f);
     public bool HasCollided = false;
+    public AudioClip ImpactClip;
 
     private static readonly Logger log = new(nameof(Meteorite));
     private MeteoriteParticleSystem meteoriteParticleSystem;
@@ -17,7 +18,7 @@ public class Meteorite : MonoBehaviour
     private Rigidbody2D rb;
     private float lifeTimer = 0f;
     private Vector2 moveDirection;
-    public AudioClip ImpactClip;
+    private GameObject trailGO;
 
     private void Start()
     {
@@ -26,6 +27,7 @@ public class Meteorite : MonoBehaviour
         timeManager = TimeManager.Instance;
         rb = GetComponent<Rigidbody2D>();
         moveDirection = -rb.transform.up;
+        trailGO = transform.Find("Trail").gameObject;
 
         ScheduleImpactAudio();
     }
@@ -82,6 +84,7 @@ public class Meteorite : MonoBehaviour
     {
         rb.MovePosition(rb.position + Speed * Time.fixedDeltaTime * timeManager.GameTimeMultiplier * moveDirection);
         rb.MoveRotation(rb.rotation + RotationSpeed * Time.fixedDeltaTime * timeManager.GameTimeMultiplier);
+        trailGO.transform.rotation = Quaternion.LookRotation(Vector3.forward, -moveDirection);
 
         lifeTimer += timeManager.DeltaTime;
         if (lifeTimer >= Lifetime)

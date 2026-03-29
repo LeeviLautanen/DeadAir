@@ -28,9 +28,9 @@ MonoBehaviour:
   ConsumedResources: []
   CapacityEffects:
   - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    amount: 200
+    amount: 250
   - data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
     amount: 30
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    amount: 200
+    amount: 250
   RequiredReservations: []

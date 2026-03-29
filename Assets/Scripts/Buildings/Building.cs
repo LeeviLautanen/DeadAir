@@ -231,6 +231,12 @@ public class Building : MonoBehaviour
                         TransitionTo(BuildingState.PendingResources);
                         break;
                     }
+
+                    // Regen 0.5 health per second
+                    if (currentHealth < maxHealth)
+                    {
+                        currentHealth = Mathf.Min(currentHealth + deltaTime * 0.5f, maxHealth);
+                    }
                     break;
                 }
         }
@@ -332,6 +338,8 @@ public class Building : MonoBehaviour
     private void Damage(float damage)
     {
         currentHealth = Mathf.Max(currentHealth - damage, 0);
+
+        log.Info($"{data.DisplayName} took {damage} damage, current health: {currentHealth}/{maxHealth}");
 
         if (currentHealth <= 0)
         {

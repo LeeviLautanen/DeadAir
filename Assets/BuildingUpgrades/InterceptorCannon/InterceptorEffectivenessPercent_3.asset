@@ -20,5 +20,5 @@ MonoBehaviour:
   - TargetBuildingIds:
     - interceptor_cannon
     ModType: 7
-    Value: 10
+    Value: 20
     IsPercent: 1

@@ -5,12 +5,13 @@ public class ShieldController : Building
     public Sprite shieldOnTexture;
     public Sprite shieldOffTexture;
     public float RechargePctPerSecond = 10f;
+    public float ShieldMaxHealth = 100f;
 
     private static readonly new Logger log = new(nameof(ShieldController));
     private SpriteRenderer spriteRenderer;
     private CircleCollider2D shieldCollider;
     private bool isShieldActive = false;
-    private float shieldHealth = 100f;
+    private float shieldHealth = 0f;
 
     protected override void Start()
     {
@@ -35,7 +36,8 @@ public class ShieldController : Building
             log.Error("No shield collider found on shield building");
         }
 
-        spriteRenderer.sprite = shieldOffTexture; // Swap the 
+        spriteRenderer.sprite = shieldOffTexture;
+        shieldHealth = ShieldMaxHealth;
 
         base.Start();
     }
@@ -87,10 +89,10 @@ public class ShieldController : Building
         switch (currentState)
         {
             case BuildingState.Operational:
-                float rechargeAmount = deltaTime * shieldHealth * RechargePctPerSecond / 100f;
+                float rechargeAmount = deltaTime * ShieldMaxHealth * RechargePctPerSecond / 100f;
                 RepairShield(rechargeAmount);
 
-                if (!isShieldActive && shieldHealth > (shieldHealth / 2))
+                if (!isShieldActive && shieldHealth > (ShieldMaxHealth / 2))
                 {
                     ActivateShield();
                 }

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Wave6
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteWaveData
   Amount: 70
-  Duration: 10
-  Day: 7
+  Duration: 12
+  Day: 8
   Hour: 0

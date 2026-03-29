@@ -4,7 +4,7 @@ using UnityEngine;
 [CustomEditor(typeof(MeteoriteWaveManager))]
 public class MeteoriteEditorWaveSpawner : Editor
 {
-    private int spawnAmount = 1;
+    private int spawnAmount = 50;
     private int spawnDuration = 5;
 
     public override void OnInspectorGUI()

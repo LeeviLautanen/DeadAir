@@ -32,7 +32,7 @@ public class AudioPoolManager : MonoBehaviour
         AudioSource s = pool.Find(x => !x.isPlaying);
         if (s == null)
         {
-            Debug.LogWarning("No available audio sources in pool");
+            log.Warning("No available audio sources in pool");
             return;
         }
 
