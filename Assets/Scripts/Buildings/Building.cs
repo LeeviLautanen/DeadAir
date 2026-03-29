@@ -235,7 +235,7 @@ public class Building : MonoBehaviour
                     // Regen 0.5 health per second
                     if (currentHealth < maxHealth)
                     {
-                        currentHealth = Mathf.Min(currentHealth + deltaTime * 0.5f, maxHealth);
+                        currentHealth = Mathf.Min(currentHealth + timeManager.DayDeltaTime * 2f, maxHealth);
                     }
                     break;
                 }

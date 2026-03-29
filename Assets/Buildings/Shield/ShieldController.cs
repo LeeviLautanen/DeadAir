@@ -44,7 +44,6 @@ public class ShieldController : Building
 
     public override void ColliderEnter(BuildingColliderType colliderType, Collider2D other)
     {
-        base.ColliderEnter(colliderType, other);
         switch (colliderType)
         {
             case BuildingColliderType.Shield:
@@ -61,6 +60,7 @@ public class ShieldController : Building
                 }
                 break;
         }
+        base.ColliderEnter(colliderType, other);
     }
 
     public void ActivateShield()

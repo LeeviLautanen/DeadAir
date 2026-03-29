@@ -60,12 +60,12 @@ public class ResourceUI : MonoBehaviour
             {
                 sb.Append(" (Available: ")
                    .AppendFormat("{0:F0}", amount - reservedAmount)
-                   .Append(", Δ: ").AppendFormat("{0:F1}", rate)
+                   .Append(", Δ: ").AppendFormat("{0:F0}", Mathf.RoundToInt(rate))
                    .Append("/hr)");
             }
             else
             {
-                sb.Append(" (Δ: ").AppendFormat("{0:F0}", rate).Append("/hr)");
+                sb.Append(" (Δ: ").AppendFormat("{0:F0}", Mathf.RoundToInt(rate)).Append("/hr)");
             }
         }
     }

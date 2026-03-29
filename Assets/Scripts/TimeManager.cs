@@ -127,11 +127,6 @@ public class TimeManager : MonoBehaviour
         log.Info($"Time set to Day {currentDay} at {hour:00}:{minute:00}:{second:00}");
     }
 
-    public float GetDeltaTime()
-    {
-        return deltaTime;
-    }
-
     public int GetHour()
     {
         return Mathf.FloorToInt(dayProgress * 24f);

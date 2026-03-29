@@ -147,7 +147,7 @@ public class MeteoriteWaveManager : MonoBehaviour
             newReduction -= 0.1f; // Flat reduction per interceptor
         }
 
-        newReduction = Mathf.Clamp(newReduction, 0.5f, 1f); // Cap the reduction at 50%
+        newReduction = Mathf.Clamp(newReduction, 0.4f, 1f); // Cap the reduction
 
         totalReductionMult = newReduction / upgradeReductionMult;
         OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());

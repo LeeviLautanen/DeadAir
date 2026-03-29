@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d47bd1386897d834e9088f5b535eb94b, type: 3}
-  m_Name: InterceptorCannonData
+  m_Name: SentinelData
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  id: interceptor_cannon
-  displayName: Interceptor cannon
-  description: A cannon designed for destroying meteorites before they can hit the
-    earth. \n<b>Building more than 4 cannons provides no benefit.</b>
-  maxHealth: 100
+  id: sentinel
+  displayName: The sentinel
+  description: 'The ultimate line of defense. '
+  maxHealth: 1000
   resourcePriority: 4
   startupTime: 1
   prefab: {fileID: 4104337362272144408, guid: b9e51466d9830ca4185629f37a859764, type: 3}
   ConstructionCost:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    amount: 180
+    amount: 500
+  - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    amount: 500
   ProducedResources: []
   ConsumedResources:
-  - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
-    amount: 50
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
-    amount: 25
+    amount: 100
+  - data: {fileID: 11400000, guid: e502644814f8434489237d0b38a536bf, type: 2}
+    amount: 500
   CapacityEffects: []
   RequiredReservations:
   - data: {fileID: 11400000, guid: e9f0e458568dad6488abb20a59915053, type: 2}
-    amount: 15
+    amount: 50

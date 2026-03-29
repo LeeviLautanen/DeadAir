@@ -15,7 +15,7 @@ MonoBehaviour:
   id: material_storage
   displayName: Material storage
   description: A warehouse for storing building materials.
-  maxHealth: 100
+  maxHealth: 300
   resourcePriority: 0
   startupTime: 0
   prefab: {fileID: 2342297968833454867, guid: e1fe2808df5842a41a4aa40d782e3f07, type: 3}

@@ -37,7 +37,7 @@ public class MeteoriteParticleSystem : MonoBehaviour
 
     private void Update()
     {
-        float dt = timeManager.GetDeltaTime();
+        float dt = timeManager.DeltaTime;
 
         for (int i = active.Count - 1; i >= 0; i--)
         {

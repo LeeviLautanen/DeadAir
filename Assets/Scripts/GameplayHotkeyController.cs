@@ -7,6 +7,7 @@ public class GameplayHotkeyController : MonoBehaviour
     private TimeManager timeManager;
     private TechManager techManager;
     private AudioPoolManager audioPoolManager;
+    private Canvas hudCanvas;
 
     private void Start()
     {
@@ -14,6 +15,7 @@ public class GameplayHotkeyController : MonoBehaviour
         timeManager = FindFirstObjectByType<TimeManager>();
         techManager = FindFirstObjectByType<TechManager>();
         audioPoolManager = FindFirstObjectByType<AudioPoolManager>();
+        hudCanvas = GameObject.Find("HudCanvas").GetComponent<Canvas>();
 
         if (inputHandler == null)
         {
@@ -97,6 +99,14 @@ public class GameplayHotkeyController : MonoBehaviour
             return;
 
         techManager.SetVisible(!techManager.IsVisible);
+
+        // Pause the game in the research menu
+        HandlePauseToggle();
+
+        if (hudCanvas == null)
+            return;
+
+        hudCanvas.enabled = !techManager.IsVisible;
     }
 
     private void HandlePauseToggle()

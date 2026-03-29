@@ -19,5 +19,5 @@ MonoBehaviour:
   - TargetBuildingIds:
     - refinery
     ModType: 1
-    Value: 4
+    Value: 3
     IsPercent: 0

@@ -15,7 +15,7 @@ MonoBehaviour:
   id: energy_storage
   displayName: Energy storage
   description: A liquid hydrogen tank providing storage for energy.
-  maxHealth: 100
+  maxHealth: 300
   resourcePriority: 0
   startupTime: 0
   prefab: {fileID: 2090995044971168592, guid: 1054f02b0834e7b43bcda121960e20f3, type: 3}

@@ -15,12 +15,14 @@ public class BuildingManager : MonoBehaviour
     [SerializeField] private List<Building> allBuildings = new();
     private readonly string saveFilePath = "./buildings.json";
     [SerializeField] private bool constructionCostsDisabled = false;
+    private GameObject buildingContainer;
 
     private void Start()
     {
         resourceManager = FindFirstObjectByType<ResourceManager>();
         inputHandler = FindFirstObjectByType<InputHandler>();
         techManager = FindFirstObjectByType<TechManager>();
+        buildingContainer = GameObject.Find("BuildingContainer");
 
         foreach (var buildingData in availableBuildings)
         {
@@ -57,6 +59,7 @@ public class BuildingManager : MonoBehaviour
         }
 
         GameObject newBuilding = Instantiate(buildingData.Prefab, position, rotation);
+        newBuilding.transform.SetParent(buildingContainer.transform);
 
         log.Info($"Created {buildingData.DisplayName} at {position}");
         return newBuilding;

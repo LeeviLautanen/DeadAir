@@ -10,8 +10,6 @@ public class InterceptorController : Building
 
     protected override void EnterState(BuildingState state)
     {
-        base.EnterState(state);
-
         switch (state)
         {
             case BuildingState.Inactive:
@@ -30,5 +28,7 @@ public class InterceptorController : Building
                 meteoriteWaveManager.SetInterceptorState(this, false);
                 break;
         }
+
+        base.EnterState(state);
     }
 }
