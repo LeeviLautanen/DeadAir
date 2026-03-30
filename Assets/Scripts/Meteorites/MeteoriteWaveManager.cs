@@ -12,6 +12,8 @@ public class MeteoriteWaveManager : MonoBehaviour
     public float SpawnAngleRange = 20f;
     public Vector2 RotationSpeedRange = new(30f, 180f);
     public Vector2 SpeedRandomizationRange = new(0.8f, 1.1f);
+    public bool IsSpawning => isSpawning;
+    public bool TestMeteoriteSpawnLoop = false;
 
     private static readonly Logger log = new(nameof(MeteoriteWaveManager));
     private TimeManager timeManager;
@@ -26,6 +28,7 @@ public class MeteoriteWaveManager : MonoBehaviour
     [SerializeField] private float thirdHitChance = 0.1f;
     [SerializeField] private float fourthOrMoreHitChance = 0.01f;
     private int nextWaveIndex = 0;
+    private bool isSpawning = false;
     private readonly List<int>[] impactBuckets = { new(), new(), new(), new() };
     private int[] impactSpotHitCounts = System.Array.Empty<int>();
     private int waveSpotCount;
@@ -51,6 +54,12 @@ public class MeteoriteWaveManager : MonoBehaviour
 
         TechManager.OnResearchCompleted += HandleResearchCompleted;
         OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());
+
+        if (TestMeteoriteSpawnLoop)
+        {
+
+            StartCoroutine(nameof(TestSpawn));
+        }
     }
 
     public (int, int, int)? GetNextWaveData()
@@ -74,7 +83,19 @@ public class MeteoriteWaveManager : MonoBehaviour
     {
         int spawnAmount = GetSpawnAmountWithMult(wave);
         log.Info($"Spawning wave with base amount {wave.Amount}, total multiplier {totalReductionMult}, final spawn amount {spawnAmount}");
-        StartCoroutine(SpawnWave(spawnAmount, wave.Duration));
+        StartCoroutine(SpawnWave(spawnAmount, wave.DurationSeconds));
+    }
+
+    private IEnumerator TestSpawn()
+    {
+        while (true)
+        {
+            if (!timeManager.IsPaused)
+            {
+                SpawnMeteorite(100f, 0f);
+            }
+            yield return new WaitForSeconds(1f);
+        }
     }
 
     private IEnumerator SpawnWave(int spawnAmount, float spawnDuration)
@@ -82,6 +103,8 @@ public class MeteoriteWaveManager : MonoBehaviour
         if (spawnAmount <= 0)
             yield break;
 
+        isSpawning = true;
+        timeManager.GameTimeMultiplier = 1f;
         ResetImpactSelectionForWave();
 
         // Generate random proportions and normalize to spawnDuration so intervals sum to spawnDuration
@@ -128,6 +151,7 @@ public class MeteoriteWaveManager : MonoBehaviour
 
         nextWaveIndex++;
         OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());
+        isSpawning = false;
     }
 
     private void UpdateMeteoriteAmountMult()
@@ -138,6 +162,7 @@ public class MeteoriteWaveManager : MonoBehaviour
         if (interceptorCount <= 0)
         {
             totalReductionMult = 1f;
+            OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());
             return;
         }
 
@@ -147,7 +172,7 @@ public class MeteoriteWaveManager : MonoBehaviour
             newReduction -= 0.1f; // Flat reduction per interceptor
         }
 
-        newReduction = Mathf.Clamp(newReduction, 0.4f, 1f); // Cap the reduction
+        newReduction = Mathf.Clamp(newReduction, 0.5f, 1f); // Cap the reduction
 
         totalReductionMult = newReduction / upgradeReductionMult;
         OnNextWaveInfoUpdated?.Invoke(GetNextWaveData());

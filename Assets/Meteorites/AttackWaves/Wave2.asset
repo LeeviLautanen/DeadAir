@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Wave2
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteWaveData
   Amount: 30
-  Duration: 10
+  DurationSeconds: 10
+  SpawnsPerSecond: 3
   Day: 4
   Hour: 0

@@ -91,7 +91,7 @@ public class ShieldController : Building
         switch (currentState)
         {
             case BuildingState.Operational:
-                float rechargeAmount = deltaTime * rechargeRate;
+                float rechargeAmount = timeManager.DeltaTime * rechargeRate;
                 RepairShield(rechargeAmount);
 
                 if (!isShieldActive && shieldHealth > (ShieldMaxHealth / 2))

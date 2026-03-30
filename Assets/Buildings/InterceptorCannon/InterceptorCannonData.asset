@@ -15,7 +15,7 @@ MonoBehaviour:
   id: interceptor_cannon
   displayName: Interceptor cannon
   description: A cannon designed for destroying meteorites before they can hit the
-    earth. \n<b>Building more than 4 cannons provides no benefit.</b>
+    earth.
   maxHealth: 100
   resourcePriority: 4
   startupTime: 1

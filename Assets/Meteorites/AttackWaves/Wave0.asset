@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 217de444301391c4ab034b1c37004fec, type: 3}
   m_Name: Wave0
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteWaveData
-  Amount: 10
-  Duration: 10
+  Amount: 8
+  DurationSeconds: 10
+  SpawnsPerSecond: 0
   Day: 2
   Hour: 0

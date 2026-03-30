@@ -8,6 +8,7 @@ public class ResourceUI : MonoBehaviour
     private static readonly Logger log = new(nameof(ResourceUI));
     private ResourceManager resourceManager;
     private readonly Dictionary<string, TMP_Text> resourceTexts = new();
+    private readonly Dictionary<string, float> oldRates = new();
     private readonly StringBuilder sb = new(128);
 
     private void Start()
@@ -41,7 +42,18 @@ public class ResourceUI : MonoBehaviour
                 float maxAmount = resourceManager.GetResourceMax(kvp.Key);
                 float reservedAmount = resourceManager.GetResourceReserved(kvp.Key);
                 float rate = resourceManager.GetResourceRate(kvp.Key);
-                FormatPooled(kvp.Key, amount, maxAmount, reservedAmount, rate);
+
+                if (!oldRates.ContainsKey(kvp.Key))
+                {
+                    oldRates[kvp.Key] = rate;
+                }
+
+                if (Mathf.Abs(rate - oldRates[kvp.Key]) > 0.01f)
+                {
+                    oldRates[kvp.Key] = rate;
+                }
+
+                FormatPooled(kvp.Key, amount, maxAmount, reservedAmount, oldRates[kvp.Key]);
                 kvp.Value.SetText(sb);
             }
         }

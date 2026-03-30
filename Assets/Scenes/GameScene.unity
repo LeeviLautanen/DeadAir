@@ -859,11 +859,12 @@ MonoBehaviour:
   SpawnRange: {x: 0, y: 300}
   SpawnHeight: 500
   SpawnAngleRange: 20
-  RotationSpeedRange: {x: 30, y: 180}
+  RotationSpeedRange: {x: 1, y: 2}
   SpeedRandomizationRange: {x: 0.8, y: 1.1}
+  TestMeteoriteSpawnLoop: 1
   upgradeReductionMult: 1
   totalReductionMult: 1
-  impactSpotSize: 3
+  impactSpotSize: 4
   secondHitChance: 0.5
   thirdHitChance: 0.2
   fourthOrMoreHitChance: 0.01
@@ -894,7 +895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteParticleSystem
   prefab: {fileID: 5028681982771986946, guid: 7bf0d1822db950a40aebe0233d9d666e, type: 3}
-  poolSize: 100
+  poolSize: 10
 --- !u!114 &93531074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -908,7 +909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioPoolManager
   prefabSource: {fileID: 2821225486586042492, guid: 0346d5beadca7324493c90b14a329ad4, type: 3}
-  poolSize: 100
+  poolSize: 10
 --- !u!1001 &95699162
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11797,7 +11798,6 @@ GameObject:
   - component: {fileID: 1445513117}
   - component: {fileID: 1445513121}
   - component: {fileID: 1445513122}
-  - component: {fileID: 1445513123}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -11929,7 +11929,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   zoomSpeed: 1
-  minZoom: 5
+  minZoom: 10
   maxZoom: 40
   targetFrameRate: 60
 --- !u!81 &1445513122
@@ -11940,36 +11940,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1445513115}
   m_Enabled: 1
---- !u!114 &1445513123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445513115}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
-  m_Actions: {fileID: -944628639613478452, guid: aaf4b48aff095c54282076415bca1172, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: 
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1 &1447031302
 GameObject:
   m_ObjectHideFlags: 0

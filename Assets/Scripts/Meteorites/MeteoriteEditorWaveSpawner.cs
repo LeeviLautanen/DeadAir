@@ -21,7 +21,7 @@ public class MeteoriteEditorWaveSpawner : Editor
         {
             MeteoriteWaveData waveData = CreateInstance<MeteoriteWaveData>();
             waveData.Amount = spawnAmount;
-            waveData.Duration = spawnDuration;
+            waveData.DurationSeconds = spawnDuration;
 
             if (Application.isPlaying)
                 manager.HandleWaveSpawn(waveData);

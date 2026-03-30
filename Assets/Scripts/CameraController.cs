@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
@@ -7,23 +6,20 @@ public class CameraController : MonoBehaviour
     public float zoomSpeed = 5f;
     public float minZoom = 7f;
     public float maxZoom = 30f;
+    public float CamOrthoSize => mainCamera.orthographicSize;
     public int targetFrameRate = 60;
 
-    private TechManager techManager;
     private InputHandler inputHandler;
     private Camera mainCamera;
-    private float zoomMultiplier;
 
     private void Start()
     {
-        techManager = FindFirstObjectByType<TechManager>();
         inputHandler = FindFirstObjectByType<InputHandler>();
 
         inputHandler.RegisterMoveHandler(HandleMoveInput, priority: 0);
         inputHandler.RegisterScrollHandler(HandleScrollInput, priority: 0);
 
         mainCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
-        zoomMultiplier = mainCamera.orthographicSize;
 
         //Application.targetFrameRate = targetFrameRate;
     }
@@ -39,7 +35,7 @@ public class CameraController : MonoBehaviour
 
     private bool HandleMoveInput(Vector2 move)
     {
-        transform.position += moveSpeed * zoomMultiplier * Time.deltaTime * (Vector3)move;
+        transform.position += moveSpeed * mainCamera.orthographicSize * Time.deltaTime * (Vector3)move;
         return true;
     }
 
@@ -51,7 +47,6 @@ public class CameraController : MonoBehaviour
         }
 
         mainCamera.orthographicSize = Mathf.Clamp(mainCamera.orthographicSize - scroll.y * zoomSpeed, minZoom, maxZoom);
-        zoomMultiplier = mainCamera.orthographicSize;
-        return true;
+        return false; // Why would i consume a scroll event?
     }
 }

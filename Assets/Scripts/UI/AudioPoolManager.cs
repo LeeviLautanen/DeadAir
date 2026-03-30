@@ -8,9 +8,15 @@ public class AudioPoolManager : MonoBehaviour
     public int poolSize = 50;
 
     private static readonly Logger log = new(nameof(AudioPoolManager));
+    private CameraController cameraController;
     private List<AudioSource> pool = new();
+    private float lastCameraZoom;
+    private float baseMinDistance = 15f;
+    private float baseMaxDistance = 500f;
+    private float baseVolume = 0.1f;
+    private float baseOrthoSize = 20f;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -24,6 +30,30 @@ public class AudioPoolManager : MonoBehaviour
             var s = Instantiate(prefabSource, transform);
             s.playOnAwake = false;
             pool.Add(s);
+        }
+    }
+
+    private void Start()
+    {
+        cameraController = FindFirstObjectByType<CameraController>();
+    }
+
+    private void Update()
+    {
+        if (cameraController == null)
+            return;
+
+        if (lastCameraZoom != cameraController.CamOrthoSize)
+        {
+            float zoom = cameraController.CamOrthoSize / baseOrthoSize;
+
+            foreach (var s in pool)
+            {
+                s.minDistance = baseMinDistance * zoom;
+                s.maxDistance = baseMaxDistance * zoom;
+                s.volume = Mathf.Clamp01(baseVolume / (zoom * zoom));
+            }
+            lastCameraZoom = cameraController.CamOrthoSize;
         }
     }
 

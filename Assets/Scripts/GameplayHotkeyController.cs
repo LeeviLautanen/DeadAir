@@ -7,6 +7,7 @@ public class GameplayHotkeyController : MonoBehaviour
     private TimeManager timeManager;
     private TechManager techManager;
     private AudioPoolManager audioPoolManager;
+    private MeteoriteWaveManager meteoriteWaveManager;
     private Canvas hudCanvas;
 
     private void Start()
@@ -15,6 +16,7 @@ public class GameplayHotkeyController : MonoBehaviour
         timeManager = FindFirstObjectByType<TimeManager>();
         techManager = FindFirstObjectByType<TechManager>();
         audioPoolManager = FindFirstObjectByType<AudioPoolManager>();
+        meteoriteWaveManager = FindFirstObjectByType<MeteoriteWaveManager>();
         hudCanvas = GameObject.Find("HudCanvas").GetComponent<Canvas>();
 
         if (inputHandler == null)
@@ -45,7 +47,9 @@ public class GameplayHotkeyController : MonoBehaviour
 
     private void HandleGameTimeIncrease()
     {
-        if (timeManager == null)
+        if (timeManager == null
+            || timeManager.IsPaused
+            || meteoriteWaveManager.IsSpawning)
             return;
 
         switch (timeManager.GameTimeMultiplier)
@@ -69,7 +73,9 @@ public class GameplayHotkeyController : MonoBehaviour
 
     private void HandleGameTimeDecrease()
     {
-        if (timeManager == null)
+        if (timeManager == null
+            || timeManager.IsPaused
+            || meteoriteWaveManager.IsSpawning)
             return;
 
         switch (timeManager.GameTimeMultiplier)
