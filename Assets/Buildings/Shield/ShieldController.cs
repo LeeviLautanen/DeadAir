@@ -37,6 +37,8 @@ public class ShieldController : Building
             log.Error("No shield collider found on shield building");
         }
 
+        isShieldActive = false;
+        shieldCollider.enabled = false;
         spriteRenderer.sprite = shieldOffTexture;
         shieldHealth = ShieldMaxHealth;
         rechargeRate = ShieldMaxHealth * (RechargePctPerSecond / 100f);

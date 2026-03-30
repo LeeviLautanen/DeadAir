@@ -170,7 +170,6 @@ MonoBehaviour:
   PlacementMode: 0
   data: {fileID: 11400000, guid: 82a624732f9ceca4db98e9ee212e8773, type: 2}
   currentState: 0
-  maxHealth: 0
 --- !u!1 &5873801430801634817
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,7 +272,7 @@ GameObject:
   - component: {fileID: 5861947589092365433}
   - component: {fileID: 4660050604355194917}
   - component: {fileID: 6171660787240436985}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: DamageCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}

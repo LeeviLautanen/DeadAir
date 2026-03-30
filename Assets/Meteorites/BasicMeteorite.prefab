@@ -297,7 +297,10 @@ MonoBehaviour:
   Speed: 80
   RotationSpeed: 0
   Lifetime: 5
-  ImpactAudioDelay: -2
+  ImpactAudioDelay: -0.6
   ImpactAudioPitchRange: {x: 0.7, y: 1.1}
   HasCollided: 0
-  ImpactClip: {fileID: 8300000, guid: 1869136ffbe730b438308b5b0d035762, type: 3}
+  WhooshClip: {fileID: 8300000, guid: 371f000e53fe7b44da967183968e5d3a, type: 3}
+  GroundImpactClip: {fileID: 8300000, guid: 5010044083c890e4db6df13d6295c0d9, type: 3}
+  BuildingImpactClip: {fileID: 8300000, guid: f2cc3b2fe966ed545aa8383d1ba9b3e6, type: 3}
+  ShieldImpactClip: {fileID: 8300000, guid: 3517d00b1028af646b8322438d5e5b07, type: 3}

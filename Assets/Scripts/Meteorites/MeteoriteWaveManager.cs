@@ -14,6 +14,7 @@ public class MeteoriteWaveManager : MonoBehaviour
     public Vector2 SpeedRandomizationRange = new(0.8f, 1.1f);
     public bool IsSpawning => isSpawning;
     public bool TestMeteoriteSpawnLoop = false;
+    public float TestSpawnInterval = 2f;
 
     private static readonly Logger log = new(nameof(MeteoriteWaveManager));
     private TimeManager timeManager;
@@ -94,7 +95,7 @@ public class MeteoriteWaveManager : MonoBehaviour
             {
                 SpawnMeteorite(100f, 0f);
             }
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(TestSpawnInterval);
         }
     }
 
@@ -287,7 +288,7 @@ public class MeteoriteWaveManager : MonoBehaviour
         float horizontalOffset = Mathf.Tan(angleRadians) * SpawnHeight;
         float spawnX = targetImpactX - horizontalOffset;
 
-        Vector3 spawnPosition = new(spawnX, SpawnHeight, -1);
+        Vector3 spawnPosition = new(spawnX, SpawnHeight, 1);
         Quaternion spawnRotation = Quaternion.AngleAxis(angle, Vector3.forward) * MeteoritePrefab.transform.rotation;
         GameObject meteor = Instantiate(MeteoritePrefab, spawnPosition, spawnRotation);
 

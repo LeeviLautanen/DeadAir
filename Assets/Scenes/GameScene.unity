@@ -811,7 +811,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2ab079b39f30e534aa65ba40c4a399b6, type: 2}
   - {fileID: 11400000, guid: 4b08b8e3730bac34b9747ef4f2668a87, type: 2}
   allBuildings: []
-  constructionCostsDisabled: 0
+  constructionCostsDisabled: 1
 --- !u!114 &93531067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -857,7 +857,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteManager
   MeteoritePrefab: {fileID: 2838757934400324701, guid: a2ecc256c071e3c4ca34c02790dae405, type: 3}
   SpawnRange: {x: 0, y: 300}
-  SpawnHeight: 500
+  SpawnHeight: 300
   SpawnAngleRange: 20
   RotationSpeedRange: {x: 1, y: 2}
   SpeedRandomizationRange: {x: 0.8, y: 1.1}
@@ -895,7 +895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MeteoriteParticleSystem
   prefab: {fileID: 5028681982771986946, guid: 7bf0d1822db950a40aebe0233d9d666e, type: 3}
-  poolSize: 10
+  poolSize: 200
 --- !u!114 &93531074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -909,7 +909,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioPoolManager
   prefabSource: {fileID: 2821225486586042492, guid: 0346d5beadca7324493c90b14a329ad4, type: 3}
-  poolSize: 10
+  poolSize: 200
 --- !u!1001 &95699162
 PrefabInstance:
   m_ObjectHideFlags: 0

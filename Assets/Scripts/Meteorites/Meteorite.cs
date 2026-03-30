@@ -9,7 +9,10 @@ public class Meteorite : MonoBehaviour
     public float ImpactAudioDelay = 0.5f;
     public Vector2 ImpactAudioPitchRange = new(0.7f, 1.2f);
     public bool HasCollided = false;
-    public AudioClip ImpactClip;
+    public AudioClip WhooshClip;
+    public AudioClip GroundImpactClip;
+    public AudioClip BuildingImpactClip;
+    public AudioClip ShieldImpactClip;
 
     private static readonly Logger log = new(nameof(Meteorite));
     private MeteoriteParticleSystem meteoriteParticleSystem;
@@ -19,6 +22,8 @@ public class Meteorite : MonoBehaviour
     private float lifeTimer = 0f;
     private Vector2 moveDirection;
     private GameObject trailGO;
+    private float randomPitch;
+    private bool impactVisualized = false;
 
     private void Start()
     {
@@ -29,10 +34,11 @@ public class Meteorite : MonoBehaviour
         moveDirection = -rb.transform.up;
         trailGO = transform.Find("Trail").gameObject;
 
-        ScheduleImpactAudio();
+        randomPitch = Random.Range(ImpactAudioPitchRange.x, ImpactAudioPitchRange.y);
+        ScheduleWhooshAudio();
     }
 
-    private void ScheduleImpactAudio()
+    private void ScheduleWhooshAudio()
     {
         int layerMask = LayerMask.GetMask("Ground", "BuildingDamage") & ~(1 << gameObject.layer);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDirection, Mathf.Infinity, layerMask);
@@ -41,19 +47,14 @@ public class Meteorite : MonoBehaviour
         {
             float distance = Vector2.Distance(transform.position, hit.point);
             float travelTime = distance / (Speed * timeManager.GameTimeMultiplier);
-            float randomPitch = Random.Range(ImpactAudioPitchRange.x, ImpactAudioPitchRange.y);
             float timeToImpact = travelTime + ImpactAudioDelay / randomPitch;
-            audioPoolManager.PlayAt(ImpactClip, hit.point, timeToImpact, randomPitch);
+            audioPoolManager.PlayAt(WhooshClip, hit.point, timeToImpact, randomPitch);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        // Trigger particles only once
-        if (HasCollided)
-        {
-            return;
-        }
+        if (impactVisualized) return;
 
         if (collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
@@ -62,22 +63,45 @@ public class Meteorite : MonoBehaviour
                 Vector2 particleAngle = moveDirection;
                 particleAngle.y = Mathf.Abs(particleAngle.y);
                 meteoriteParticleSystem.Play(new(transform.position.x, -1f), particleAngle);
+                audioPoolManager.PlayAt(GroundImpactClip, transform.position, 0f, randomPitch);
+                log.Info($"Ground impact visualized");
             }
         }
-        else if (collider.gameObject.layer == LayerMask.NameToLayer("BuildingDamage"))
+
+        if (!collider.transform.parent.TryGetComponent(out Building building) || building.PlacementMode)
+        {
+            return;
+        }
+
+        if (!collider.TryGetComponent(out BuildingCollider buildingCollider))
+        {
+            return;
+        }
+        else if (buildingCollider.Type == BuildingColliderType.Damage || buildingCollider.Type == BuildingColliderType.Placement)
         {
             if (meteoriteParticleSystem != null)
             {
                 Vector2 particleAngle = moveDirection;
                 particleAngle.y = Mathf.Abs(particleAngle.y);
+                // Perimeter point on the collider
                 var collisionPoint = collider.ClosestPoint(transform.position);
-                var collisionNormal = ((Vector2)transform.position - collisionPoint).normalized;
+                // Vector from the building center to the collision point
+                var collisionNormal = (collisionPoint - (Vector2)collider.transform.position).normalized;
 
-                //collisionPoint -= collisionNormal * 0.5f; // Move slightly towards the building
+                collisionPoint -= collisionNormal * 0.5f; // Move slightly towards the building
 
                 meteoriteParticleSystem.Play(collisionPoint, collisionNormal);
+                audioPoolManager.PlayAt(BuildingImpactClip, collisionPoint, 0f, randomPitch);
+                log.Info($"Building impact visualized");
             }
         }
+        else if (buildingCollider.Type == BuildingColliderType.Shield)
+        {
+            audioPoolManager.PlayAt(ShieldImpactClip, transform.position, 0f, randomPitch);
+            log.Info($"Shield impact visualized");
+        }
+
+        impactVisualized = true;
     }
 
     private void FixedUpdate()

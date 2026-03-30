@@ -79,7 +79,7 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.4629301, y: 2.3298028}
+    - - {x: -0.3513988, y: 2.321231}
       - {x: -0.3457653, y: 4.0785832}
       - {x: -3.2894864, y: 4.0791554}
       - {x: -3.0282192, y: 1.7072799}
@@ -269,7 +269,6 @@ MonoBehaviour:
   PlacementMode: 0
   data: {fileID: 11400000, guid: ad3e0c905937253479cd28201a58ca15, type: 2}
   currentState: 0
-  maxHealth: 0
 --- !u!1 &7210754631646447054
 GameObject:
   m_ObjectHideFlags: 0
