@@ -12,6 +12,7 @@ public class ShieldController : Building
     private CircleCollider2D shieldCollider;
     private bool isShieldActive = false;
     private float shieldHealth = 0f;
+    private float rechargeRate = 0f;
 
     protected override void Start()
     {
@@ -38,6 +39,7 @@ public class ShieldController : Building
 
         spriteRenderer.sprite = shieldOffTexture;
         shieldHealth = ShieldMaxHealth;
+        rechargeRate = ShieldMaxHealth * (RechargePctPerSecond / 100f);
 
         base.Start();
     }
@@ -89,7 +91,7 @@ public class ShieldController : Building
         switch (currentState)
         {
             case BuildingState.Operational:
-                float rechargeAmount = deltaTime * ShieldMaxHealth * RechargePctPerSecond / 100f;
+                float rechargeAmount = deltaTime * rechargeRate;
                 RepairShield(rechargeAmount);
 
                 if (!isShieldActive && shieldHealth > (ShieldMaxHealth / 2))
@@ -121,7 +123,7 @@ public class ShieldController : Building
         base.UpdateStats();
 
         // Shield recharge rate
-        RechargePctPerSecond = techManager.GetModifiedValue(10f, ModifierType.ShieldRechargeRate, data.Id);
+        rechargeRate = techManager.GetModifiedValue(RechargePctPerSecond, ModifierType.ShieldRechargeRate, data.Id);
     }
 
     private void DamageShield(float damage)

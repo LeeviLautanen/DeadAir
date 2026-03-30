@@ -34,7 +34,7 @@ public class Building : MonoBehaviour
     private float startupTime;
     private int resourcePriority;
     private float currentHealth;
-    [SerializeField] private float maxHealth;
+    private float maxHealth;
     private float startupTimer;
     private float placementOverlapCount = 0;
     private Material buildingMat;
