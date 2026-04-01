@@ -862,6 +862,7 @@ MonoBehaviour:
   RotationSpeedRange: {x: 1, y: 2}
   SpeedRandomizationRange: {x: 0.8, y: 1.1}
   TestMeteoriteSpawnLoop: 1
+  TestSpawnInterval: 2
   upgradeReductionMult: 1
   totalReductionMult: 1
   impactSpotSize: 4
@@ -920,11 +921,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1739824005554139391, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.7912903
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 1739824005554139391, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -12.00388
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1739824005554139391, guid: 5bd2895801d2e2440a8f8aab4e61e2c3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2670,9 +2671,9 @@ Transform:
   m_GameObject: {fileID: 337924325}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 150, y: 36, z: 5}
-  m_LocalScale: {x: 300, y: 120, z: 120}
-  m_ConstrainProportionsScale: 1
+  m_LocalPosition: {x: 200, y: 39, z: 5}
+  m_LocalScale: {x: 400, y: 80, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 320547669}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11909,7 +11910,7 @@ Transform:
   m_GameObject: {fileID: 1445513115}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000021075227, y: -0, z: 0.000000021071623, w: 1}
-  m_LocalPosition: {x: 150, y: 12.34, z: -20}
+  m_LocalPosition: {x: 200, y: 12.34, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14120,8 +14121,8 @@ Transform:
   m_GameObject: {fileID: 1692612747}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 150, y: -50, z: -10}
-  m_LocalScale: {x: 300, y: 100, z: 100}
+  m_LocalPosition: {x: 200, y: -40, z: -10}
+  m_LocalScale: {x: 400, y: 80, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 320547669}
@@ -14892,7 +14893,7 @@ Transform:
   m_GameObject: {fileID: 1833086409}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 146.20871, y: 12.00388, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
