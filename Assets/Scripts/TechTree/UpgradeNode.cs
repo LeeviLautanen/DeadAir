@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+
 
 public class UpgradeNode : MonoBehaviour
 {
@@ -46,15 +49,21 @@ public class UpgradeNode : MonoBehaviour
         Lock();
     }
 
-    private void OnValidate()
+    void OnValidate()
     {
         // This shit is weird
         upgradeText = GetComponentInChildren<TMP_Text>();
-
-        if (upgradeText && data)
+        if (upgradeText)
         {
             upgradeText.text = data.DisplayName;
-            gameObject.name = $"{data.DisplayName}_{transform.GetSiblingIndex()}";
+        }
+
+        if (PrefabUtility.IsPartOfNonAssetPrefabInstance(gameObject))
+        {
+            if (data)
+            {
+                gameObject.name = $"{data.DisplayName}_{transform.GetSiblingIndex()}";
+            }
         }
     }
 

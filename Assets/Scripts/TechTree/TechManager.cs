@@ -22,6 +22,7 @@ public class TechManager : MonoBehaviour, IDragHandler
 
     private static readonly Logger log = new(nameof(TechManager));
     private InputHandler inputHandler;
+    private GameplayHotkeyController hotkeyController;
     private GameObject lineContainer;
     private TMP_Text researchProgressText;
     private List<UpgradeNode> allNodes = new();
@@ -45,16 +46,17 @@ public class TechManager : MonoBehaviour, IDragHandler
         GetComponentsInChildren(allNodes);
         UpgradeNode.OnUpgradeNodeClicked += HandleUpgradeNodeClicked;
 
-        // Set up reserach view toggle button
-        GameObject.Find("ResearchButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
-        {
-            SetVisible(!isVisible);
-        });
-
         // Input handling
+        hotkeyController = FindFirstObjectByType<GameplayHotkeyController>();
         inputHandler = FindFirstObjectByType<InputHandler>();
         inputHandler.RegisterMoveHandler(HandleMoveInput, priority: 10);
         inputHandler.RegisterScrollHandler(HandleScrollInput, priority: 10);
+
+        // Set up reserach view toggle button
+        GameObject.Find("ResearchButton").GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
+        {
+            hotkeyController.HandleResearchToggle();
+        });
 
         // Draw lines between prequisites nodes
         foreach (var node in allNodes)

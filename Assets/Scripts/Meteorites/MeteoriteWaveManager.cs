@@ -58,7 +58,6 @@ public class MeteoriteWaveManager : MonoBehaviour
 
         if (TestMeteoriteSpawnLoop)
         {
-
             StartCoroutine(nameof(TestSpawn));
         }
     }

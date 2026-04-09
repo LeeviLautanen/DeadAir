@@ -9,6 +9,7 @@ public class GameplayHotkeyController : MonoBehaviour
     private AudioPoolManager audioPoolManager;
     private MeteoriteWaveManager meteoriteWaveManager;
     private Canvas hudCanvas;
+    private Canvas buildMenuCanvas;
 
     private void Start()
     {
@@ -18,6 +19,7 @@ public class GameplayHotkeyController : MonoBehaviour
         audioPoolManager = FindFirstObjectByType<AudioPoolManager>();
         meteoriteWaveManager = FindFirstObjectByType<MeteoriteWaveManager>();
         hudCanvas = GameObject.Find("HudCanvas").GetComponent<Canvas>();
+        buildMenuCanvas = GameObject.Find("BuildMenuCanvas").GetComponent<Canvas>();
 
         if (inputHandler == null)
         {
@@ -99,7 +101,7 @@ public class GameplayHotkeyController : MonoBehaviour
         }
     }
 
-    private void HandleResearchToggle()
+    public void HandleResearchToggle()
     {
         if (techManager == null)
             return;
@@ -109,10 +111,15 @@ public class GameplayHotkeyController : MonoBehaviour
         // Pause the game in the research menu
         HandlePauseToggle();
 
-        if (hudCanvas == null)
-            return;
+        if (hudCanvas != null)
+        {
+            hudCanvas.enabled = !techManager.IsVisible;
+        }
 
-        hudCanvas.enabled = !techManager.IsVisible;
+        if (buildMenuCanvas != null)
+        {
+            buildMenuCanvas.enabled = !techManager.IsVisible;
+        }
     }
 
     private void HandlePauseToggle()

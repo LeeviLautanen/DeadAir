@@ -56,7 +56,15 @@ public class Meteorite : MonoBehaviour
     {
         if (impactVisualized) return;
 
-        if (collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        var layerName = collider.gameObject.layer;
+
+        if (layerName == LayerMask.NameToLayer("MeteoriteDestroyer"))
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        if (layerName == LayerMask.NameToLayer("Ground"))
         {
             if (meteoriteParticleSystem != null)
             {

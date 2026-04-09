@@ -1,10 +1,10 @@
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class AttackInfoUI : MonoBehaviour
 {
     private MeteoriteWaveManager meteoriteWaveManager;
-    private TMP_Text attackDateText;
     private TMP_Text attackAmountText;
 
     private void Start()
@@ -12,9 +12,10 @@ public class AttackInfoUI : MonoBehaviour
         meteoriteWaveManager = FindFirstObjectByType<MeteoriteWaveManager>();
         meteoriteWaveManager.OnNextWaveInfoUpdated += UpdateAttackInfo;
 
-        GameObject infoContainer = GameObject.Find("AttackInfoContainer");
-        attackDateText = infoContainer.transform.Find("AttackDate").GetComponent<TMP_Text>();
-        attackAmountText = infoContainer.transform.Find("AttackAmount").GetComponent<TMP_Text>();
+        attackAmountText = gameObject.GetComponent<TMP_Text>();
+
+        if (meteoriteWaveManager)
+            UpdateAttackInfo(meteoriteWaveManager.GetNextWaveData());
     }
 
     private void OnDestroy()
@@ -31,7 +32,6 @@ public class AttackInfoUI : MonoBehaviour
         }
 
         var (amount, day, hour) = waveData.Value;
-        attackDateText.text = $"Day {day}, {hour:00}:00";
-        attackAmountText.text = $"Meteorites: {amount}";
+        attackAmountText.text = $"{amount}";
     }
 }
