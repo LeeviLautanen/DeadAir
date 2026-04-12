@@ -15,7 +15,8 @@ public class InputHandler : MonoBehaviour
     public enum InputContext
     {
         Gameplay,
-        ResearchTree
+        ResearchTree,
+        EndMenu
     }
 
     public Vector2 MouseWorldPosition { get; private set; }
@@ -41,7 +42,8 @@ public class InputHandler : MonoBehaviour
     public event Action GameTimeDecreaseRequested;
     public event Action ResearchMenuToggleRequested;
     public event Action PauseToggleRequested;
-    public event Action PauseMenuRequested;
+    public event Action HelpMenuToggled;
+    public event Action PauseMenuToggled;
 
     private readonly List<(int priority, ClickHandler handler)> clickHandlers = new();
     private readonly List<(int priority, MoveHandler handler)> moveHandlers = new();
@@ -58,7 +60,8 @@ public class InputHandler : MonoBehaviour
     private InputAction slowDownTimeAction;
     private InputAction toggleResearchAction;
     private InputAction togglePauseAction;
-    private InputAction openPauseMenuAction;
+    private InputAction toggleHelpMenu;
+    private InputAction togglePauseMenuAction;
     private InputAction saveGameAction;
     private InputAction loadGameAction;
     private InputAction clearGameAction;
@@ -100,6 +103,7 @@ public class InputHandler : MonoBehaviour
         slowDownTimeAction = gameplayActionMap.FindAction("SlowDownTime", false);
         toggleResearchAction = gameplayActionMap.FindAction("ToggleResearchMenu", false);
         togglePauseAction = gameplayActionMap.FindAction("TogglePause", false);
+        toggleHelpMenu = gameplayActionMap.FindAction("ToggleHelpMenu", false);
         saveGameAction = gameplayActionMap.FindAction("SaveGame", false);
         loadGameAction = gameplayActionMap.FindAction("LoadGame", false);
         clearGameAction = gameplayActionMap.FindAction("ClearGame", false);
@@ -108,7 +112,7 @@ public class InputHandler : MonoBehaviour
         if (globalHotkeysActionMap != null)
         {
             globalHotkeysActionMap.Enable();
-            openPauseMenuAction = globalHotkeysActionMap.FindAction("OpenPauseMenu", false);
+            togglePauseMenuAction = globalHotkeysActionMap.FindAction("TogglePauseMenu", false);
         }
 
         if (cameraMoveAction == null || cameraZoomAction == null || pointerPositionAction == null)
@@ -140,25 +144,30 @@ public class InputHandler : MonoBehaviour
         if (CurrentContext == context)
             return;
 
-        if (context == InputContext.ResearchTree)
+        switch (context)
         {
-            researchTreeActionMap.Enable();
-            gameplayActionMap.Disable();
+            case InputContext.ResearchTree:
+                researchTreeActionMap.Enable();
+                gameplayActionMap.Disable();
+                cameraMoveAction = researchTreeActionMap.FindAction("ViewMove");
+                cameraZoomAction = researchTreeActionMap.FindAction("ViewZoom");
+                pointerPositionAction = researchTreeActionMap.FindAction("MousePosition");
+                toggleResearchAction = researchTreeActionMap.FindAction("ToggleResearchMenu");
+                break;
 
-            cameraMoveAction = researchTreeActionMap.FindAction("ViewMove");
-            cameraZoomAction = researchTreeActionMap.FindAction("ViewZoom");
-            pointerPositionAction = researchTreeActionMap.FindAction("MousePosition");
-            toggleResearchAction = researchTreeActionMap.FindAction("ToggleResearchMenu");
-        }
-        else
-        {
-            gameplayActionMap.Enable();
-            researchTreeActionMap.Disable();
+            case InputContext.Gameplay:
+                gameplayActionMap.Enable();
+                researchTreeActionMap.Disable();
+                cameraMoveAction = gameplayActionMap.FindAction("ViewMove");
+                cameraZoomAction = gameplayActionMap.FindAction("ViewZoom");
+                pointerPositionAction = gameplayActionMap.FindAction("MousePosition");
+                toggleResearchAction = gameplayActionMap.FindAction("ToggleResearchMenu");
+                break;
 
-            cameraMoveAction = gameplayActionMap.FindAction("ViewMove");
-            cameraZoomAction = gameplayActionMap.FindAction("ViewZoom");
-            pointerPositionAction = gameplayActionMap.FindAction("MousePosition");
-            toggleResearchAction = gameplayActionMap.FindAction("ToggleResearchMenu");
+            case InputContext.EndMenu:
+                gameplayActionMap.Disable();
+                researchTreeActionMap.Disable();
+                break;
         }
 
         CurrentContext = context;
@@ -315,6 +324,11 @@ public class InputHandler : MonoBehaviour
             PauseToggleRequested?.Invoke();
         }
 
+        if (toggleHelpMenu != null && toggleHelpMenu.WasPressedThisFrame())
+        {
+            HelpMenuToggled?.Invoke();
+        }
+
         if (saveGameAction != null && saveGameAction.WasPressedThisFrame())
         {
             SaveActionTriggered?.Invoke(SaveAction.Save);
@@ -333,9 +347,9 @@ public class InputHandler : MonoBehaviour
 
     private void HandleGlobalHotkeys()
     {
-        if (openPauseMenuAction != null && openPauseMenuAction.WasPressedThisFrame())
+        if (togglePauseMenuAction != null && togglePauseMenuAction.WasPressedThisFrame())
         {
-            PauseMenuRequested?.Invoke();
+            PauseMenuToggled?.Invoke();
         }
     }
 

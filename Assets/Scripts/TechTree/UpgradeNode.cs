@@ -4,8 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
-using UnityEditor.SceneManagement;
-
 
 public class UpgradeNode : MonoBehaviour
 {
@@ -34,8 +32,9 @@ public class UpgradeNode : MonoBehaviour
     private Image upgradeBackground;
     [SerializeField] private bool isUnlocked;
     [SerializeField] private bool isResearched;
-    [SerializeField] private Color selectedColor;
-    [SerializeField] private Color researchedColor;
+    [SerializeField] private Sprite unlockedSprite;
+    [SerializeField] private Sprite selectedSprite;
+    [SerializeField] private Sprite researchedSprite;
 
     private void Awake()
     {
@@ -49,6 +48,8 @@ public class UpgradeNode : MonoBehaviour
         Lock();
     }
 
+
+#if UNITY_EDITOR
     void OnValidate()
     {
         // This shit is weird
@@ -66,18 +67,19 @@ public class UpgradeNode : MonoBehaviour
             }
         }
     }
+#endif
 
     public void MarkAsResearched()
     {
         isResearched = true;
         upgradeButton.interactable = false;
-        upgradeBackground.color = researchedColor;
+        upgradeBackground.sprite = researchedSprite;
     }
 
     public void MarkAsSelected()
     {
         upgradeButton.interactable = false;
-        upgradeBackground.color = selectedColor;
+        upgradeBackground.sprite = selectedSprite;
     }
 
     public void Unlock()
@@ -85,6 +87,7 @@ public class UpgradeNode : MonoBehaviour
         isUnlocked = true;
         upgradeButton.interactable = true;
         upgradeBackground.color = Color.white;
+        upgradeBackground.sprite = unlockedSprite;
         upgradeText.alpha = 1f;
     }
 

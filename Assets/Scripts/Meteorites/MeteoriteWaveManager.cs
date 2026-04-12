@@ -15,7 +15,7 @@ public class MeteoriteWaveManager : MonoBehaviour
     public bool IsSpawning => isSpawning;
     public bool TestMeteoriteSpawnLoop = false;
     public float TestSpawnInterval = 2f;
-
+    public float DifficultyModifier = 1f;
     private static readonly Logger log = new(nameof(MeteoriteWaveManager));
     private TimeManager timeManager;
     private TechManager techManager;
@@ -60,6 +60,11 @@ public class MeteoriteWaveManager : MonoBehaviour
         {
             StartCoroutine(nameof(TestSpawn));
         }
+    }
+
+    public void UpdateWaveinfo()
+    {
+        OnNextWaveInfoUpdated.Invoke(GetNextWaveData());
     }
 
     public (int, int, int)? GetNextWaveData()
@@ -181,7 +186,7 @@ public class MeteoriteWaveManager : MonoBehaviour
 
     private int GetSpawnAmountWithMult(MeteoriteWaveData wave)
     {
-        return Mathf.FloorToInt(wave.Amount * totalReductionMult);
+        return Mathf.FloorToInt(wave.Amount * totalReductionMult * DifficultyModifier);
     }
 
     private void HandleResearchCompleted()

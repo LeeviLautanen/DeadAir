@@ -10,6 +10,8 @@ public class GameplayHotkeyController : MonoBehaviour
     private MeteoriteWaveManager meteoriteWaveManager;
     private Canvas hudCanvas;
     private Canvas buildMenuCanvas;
+    [SerializeField] private Canvas helpMenuCanvas;
+    [SerializeField] private Canvas pauseMenuCanvas;
 
     private void Start()
     {
@@ -32,7 +34,9 @@ public class GameplayHotkeyController : MonoBehaviour
         inputHandler.GameTimeDecreaseRequested += HandleGameTimeDecrease;
         inputHandler.ResearchMenuToggleRequested += HandleResearchToggle;
         inputHandler.PauseToggleRequested += HandlePauseToggle;
-        inputHandler.PauseMenuRequested += HandlePauseMenuRequested;
+        inputHandler.PauseMenuToggled += HandlePauseMenuRequested;
+        inputHandler.HelpMenuToggled += HandleHelpMenuToggle;
+        inputHandler.PauseMenuToggled += HandlePauseMenuToggle;
     }
 
     private void OnDestroy()
@@ -44,7 +48,7 @@ public class GameplayHotkeyController : MonoBehaviour
         inputHandler.GameTimeDecreaseRequested -= HandleGameTimeDecrease;
         inputHandler.ResearchMenuToggleRequested -= HandleResearchToggle;
         inputHandler.PauseToggleRequested -= HandlePauseToggle;
-        inputHandler.PauseMenuRequested -= HandlePauseMenuRequested;
+        inputHandler.PauseMenuToggled -= HandlePauseMenuRequested;
     }
 
     private void HandleGameTimeIncrease()
@@ -141,5 +145,22 @@ public class GameplayHotkeyController : MonoBehaviour
     private void HandlePauseMenuRequested()
     {
         log.Info("Pause menu requested (ESC). Hook this to the pause menu UI.");
+    }
+
+    private void HandleHelpMenuToggle()
+    {
+        if (helpMenuCanvas == null)
+            return;
+
+        helpMenuCanvas.enabled = !helpMenuCanvas.enabled;
+    }
+
+    public void HandlePauseMenuToggle()
+    {
+        if (timeManager == null)
+            return;
+
+        pauseMenuCanvas.enabled = !pauseMenuCanvas.enabled;
+        timeManager.IsPaused = pauseMenuCanvas.enabled;
     }
 }

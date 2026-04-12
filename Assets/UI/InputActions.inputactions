@@ -70,6 +70,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "ToggleHelpMenu",
+                    "type": "Button",
+                    "id": "75743cd1-d118-4dee-a5c0-e207f58c9f2e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "SaveGame",
                     "type": "Button",
                     "id": "e7fc6e01-8edd-448b-9f64-35dbcd23dcd2",
@@ -251,6 +260,17 @@
                     "action": "ClearGame",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d78d6735-e6ff-4121-a39b-d3742680c02b",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleHelpMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -397,7 +417,7 @@
             "id": "4a43b0c3-c615-4ed8-a41e-0f92c7d5a42f",
             "actions": [
                 {
-                    "name": "OpenPauseMenu",
+                    "name": "TogglePauseMenu",
                     "type": "Button",
                     "id": "6ea2dc85-cf13-4f9e-9927-951223ad42f0",
                     "expectedControlType": "",
@@ -414,7 +434,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";PC control scheme",
-                    "action": "OpenPauseMenu",
+                    "action": "TogglePauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

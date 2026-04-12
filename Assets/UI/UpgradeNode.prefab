@@ -277,7 +277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.80784315, b: 0.80784315, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -394,8 +394,9 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 9431e831a8630e648b7560dc784391ea, type: 2}
   isUnlocked: 0
   isResearched: 0
-  selectedColor: {r: 0.7971698, g: 0.8613127, b: 1, a: 1}
-  researchedColor: {r: 0.8254717, g: 1, b: 0.88655657, a: 1}
+  unlockedSprite: {fileID: 21300000, guid: d19ece015af59c944a30767404042444, type: 3}
+  selectedSprite: {fileID: 21300000, guid: 432b89f8acd896646be7b2e5ddb52170, type: 3}
+  researchedSprite: {fileID: 21300000, guid: 455edaab76f875c468c6c710f676416c, type: 3}
 --- !u!114 &7765035314878196974
 MonoBehaviour:
   m_ObjectHideFlags: 0

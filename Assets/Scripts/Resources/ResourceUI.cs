@@ -67,6 +67,11 @@ public class ResourceUI : MonoBehaviour
                     oldRates[kvp.Key] = rate;
                 }
 
+                if (float.IsNaN(rate) || float.IsInfinity(rate))
+                {
+                    rate = 0;
+                }
+
                 //FormatPooled(kvp.Key, amount, maxAmount, reservedAmount, oldRates[kvp.Key]);
                 sb.Clear();
                 sb.AppendFormat("{0:F0}/{1:F0}", amount, maxAmount);
@@ -86,7 +91,6 @@ public class ResourceUI : MonoBehaviour
     private void FormatPooled(string name, float amount, float maxAmount = 0, float reservedAmount = 0, float rate = 0)
     {
         sb.Clear();
-
         sb.AppendFormat("{0:F0}/{1:F0}   {2:F0}/hr", amount, maxAmount, rate);
         return;
 

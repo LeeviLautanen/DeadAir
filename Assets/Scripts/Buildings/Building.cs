@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+    public delegate bool LethalDamageHandler(Building building);
+
     public int ResourcePriority => resourcePriority;
     public BuildingState CurrentState => currentState;
     public BuildingData Data => data;
@@ -18,6 +20,8 @@ public class Building : MonoBehaviour
     public bool PlacementMode = false;
     public static Action<Building> OnCreated;
     public static Action<Building> OnDestroyed;
+    public static Action<Building> OnOperational;
+    public static event LethalDamageHandler OnLethalDamage;
 
     protected static readonly Logger log = new(nameof(Building));
     protected ResourceManager resourceManager;
@@ -268,6 +272,7 @@ public class Building : MonoBehaviour
                 buildingMat.shader = activeShader;
                 resourceManager.ApplyCapacityEffects(capacityEffects, this);
                 log.Info($"Building {data.DisplayName} is now operational.");
+                OnOperational?.Invoke(this);
                 break;
 
             case BuildingState.Destroyed:
@@ -343,6 +348,17 @@ public class Building : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            if (OnLethalDamage != null)
+            {
+                foreach (LethalDamageHandler handler in OnLethalDamage.GetInvocationList())
+                {
+                    if (handler(this))
+                    {
+                        return;
+                    }
+                }
+            }
+
             DestroyBuilding();
         }
     }
