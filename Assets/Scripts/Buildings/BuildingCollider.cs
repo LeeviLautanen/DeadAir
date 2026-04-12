@@ -30,11 +30,21 @@ public class BuildingCollider : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (owner == null)
+        {
+            return;
+        }
+
         owner.ColliderEnter(Type, other);
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
+        if (owner == null)
+        {
+            return;
+        }
+
         owner.ColliderExit(Type, other);
     }
 }

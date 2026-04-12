@@ -160,7 +160,7 @@ MonoBehaviour:
   PlacementMode: 0
   data: {fileID: 11400000, guid: 2ab079b39f30e534aa65ba40c4a399b6, type: 2}
   currentState: 0
-  maxHealth: 0
+  inactiveShader: {fileID: -6465566751694194690, guid: 22ac1c876cc20674f93dd1bca315f268, type: 3}
 --- !u!1 &5061679230582414585
 GameObject:
   m_ObjectHideFlags: 0

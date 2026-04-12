@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BuildingPlacer : MonoBehaviour
@@ -12,6 +13,8 @@ public class BuildingPlacer : MonoBehaviour
     private GameObject ghostGO;
     private Building ghostBuilding;
     private Material ghostNormalMat;
+    [SerializeField] Shader defaultShader;
+    [SerializeField] Shader invalidPlacementShader;
     private Material ghostInvalidPlacementMat;
     private SpriteRenderer ghostSpriteRenderer;
     private bool isPlacing;
@@ -22,8 +25,8 @@ public class BuildingPlacer : MonoBehaviour
         inputHandler = FindFirstObjectByType<InputHandler>();
         buildingManager = FindFirstObjectByType<BuildingManager>();
 
-        ghostNormalMat = new(Shader.Find("Sprites/Default"));
-        ghostInvalidPlacementMat = new(Shader.Find("Custom/InvalidPlacementShader"));
+        ghostNormalMat = new(defaultShader);
+        ghostInvalidPlacementMat = new(invalidPlacementShader);
     }
 
     private void Update()

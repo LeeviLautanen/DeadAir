@@ -43,7 +43,7 @@ public class Building : MonoBehaviour
     private float placementOverlapCount = 0;
     private Material buildingMat;
     private Shader activeShader;
-    private Shader inactiveShader;
+    [SerializeField] private Shader inactiveShader;
 
     protected virtual void Awake()
     {
@@ -65,7 +65,6 @@ public class Building : MonoBehaviour
 
         buildingMat = GetComponentInChildren<SpriteRenderer>().material;
         activeShader = buildingMat.shader;
-        inactiveShader = Shader.Find("Custom/BuildingInactiveShader");
         buildingMat.shader = inactiveShader;
 
         TechManager.OnResearchCompleted += UpdateStats;
