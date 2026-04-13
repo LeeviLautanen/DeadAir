@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -40,6 +41,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Button pauseMenuRestartButton;
     [SerializeField] Button pauseMenuResumeButton;
     [SerializeField] Button pauseMenuExitButton;
+    [SerializeField] Slider volumeSlider;
+    [SerializeField] AudioMixer audioMixer;
 
     public GameEndType EndType { get; private set; } = GameEndType.None;
     public bool IsGameEnding => isGameEnding;
@@ -73,6 +76,10 @@ public class GameManager : MonoBehaviour
         normalButton.onClick.AddListener(() => SelectDifficulty(1f));
         hardButton.onClick.AddListener(() => SelectDifficulty(1.2f));
 
+        volumeSlider.onValueChanged.AddListener((value) => { SetAudioLevel(value); });
+        volumeSlider.value = 0.5f;
+        SetAudioLevel(volumeSlider.value);
+
         PauseGame();
         helpMenuCanvas.enabled = false;
         difficultySelectionCanvas.enabled = true;
@@ -90,9 +97,10 @@ public class GameManager : MonoBehaviour
         Building.OnOperational -= HandleBuildingOperational;
     }
 
-    private void TogglePauseMenu()
+    private void SetAudioLevel(float sliderValue)
     {
-
+        float decibels = Mathf.Max(0.0001f, sliderValue) * 40f - 20f;
+        audioMixer.SetFloat("MasterVolume", decibels);
     }
 
     private void RestartGame()
