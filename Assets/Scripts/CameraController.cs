@@ -4,6 +4,7 @@ using System.Reflection;
 public class CameraController : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float maxAcceleration = 20f;
     public float zoomSpeed = 1f;
     public float minZoom = 7f;
     public float maxZoom = 30f;
@@ -20,6 +21,7 @@ public class CameraController : MonoBehaviour
     private FieldInfo refResolutionYField;
     private int cachedAssetsPPU = 1;
     private int cachedRefResolutionY = 1080;
+    private Vector2 currentMoveVelocity;
 
     private void Start()
     {
@@ -207,7 +209,20 @@ public class CameraController : MonoBehaviour
         if (clampedMove.sqrMagnitude > 1f)
             clampedMove.Normalize();
 
-        transform.position += moveSpeed * mainCamera.orthographicSize * Time.deltaTime * (Vector3)clampedMove;
+        float zoomScaledSpeed = moveSpeed * mainCamera.orthographicSize;
+        Vector2 targetVelocity = clampedMove * zoomScaledSpeed;
+
+        if (maxAcceleration <= 0f)
+        {
+            currentMoveVelocity = targetVelocity;
+        }
+        else
+        {
+            float zoomScaledAcceleration = maxAcceleration * mainCamera.orthographicSize;
+            currentMoveVelocity = Vector2.MoveTowards(currentMoveVelocity, targetVelocity, zoomScaledAcceleration * Time.deltaTime);
+        }
+
+        transform.position += (Vector3)(currentMoveVelocity * Time.deltaTime);
         ClampCameraToBounds();
 
         return true;
