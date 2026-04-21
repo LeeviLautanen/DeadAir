@@ -1,0 +1,22 @@
+{
+  "AudioPoolManager": "Warning",
+  "BuildMenuElement": "Warning",
+  "BuildMenuWarning": "Warning",
+  "BuildMenuManager": "Warning",
+  "Building": "Warning",
+  "BuildingCollider": "Warning",
+  "BuildingManager": "Warning",
+  "BuildingPlacer": "Warning",
+  "BuildingSelector": "Warning",
+  "GameplayHotkeyController": "Warning",
+  "InputHandler": "Warning",
+  "LaboratoryManager": "Warning",
+  "Meteorite": "Warning",
+  "MeteoriteParticleSystem": "Warning",
+  "MeteoriteWaveManager": "Warning",
+  "ResourceManager": "Warning",
+  "ResourceUI": "Warning",
+  "TechManager": "Warning",
+  "TimeManager": "Warning",
+  "UpgradeNode": "Warning"
+}
