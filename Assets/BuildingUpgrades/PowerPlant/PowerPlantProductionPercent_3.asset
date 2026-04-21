@@ -19,5 +19,5 @@ MonoBehaviour:
   - TargetBuildingIds:
     - power_plant
     ModType: 1
-    Value: 30
+    Value: 35
     IsPercent: 1
