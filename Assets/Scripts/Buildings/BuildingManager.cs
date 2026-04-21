@@ -70,18 +70,17 @@ public class BuildingManager : MonoBehaviour
         return buildingDatabase.ContainsKey(buildingId) ? buildingDatabase[buildingId] : null;
     }
 
-    public List<Building> GetBuildingsByIds(List<string> buildingIds)
+    public int GetBuildingCount(string buildingId)
     {
-        List<Building> matchingBuildings = new();
+        int counter = 0;
         foreach (var building in allBuildings)
         {
-            log.Info(building.Id);
-            if (buildingIds.Contains(building.Id))
+            if (building.Data.Id == buildingId)
             {
-                matchingBuildings.Add(building);
+                counter++;
             }
         }
-        return matchingBuildings;
+        return counter;
     }
 
     private void HandleSave(SaveAction action)

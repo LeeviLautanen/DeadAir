@@ -74,7 +74,7 @@ public class ResourceUI : MonoBehaviour
 
                 //FormatPooled(kvp.Key, amount, maxAmount, reservedAmount, oldRates[kvp.Key]);
                 sb.Clear();
-                sb.AppendFormat("{0:F0}/{1:F0}", amount, maxAmount);
+                sb.AppendFormat("{0:F0}/{1:F0}", amount - reservedAmount, maxAmount);
                 counterText.SetText(sb);
 
                 if (kvp.Value.Count > 1)

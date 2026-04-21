@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour
     private CameraController cameraController;
     private InputHandler inputHandler;
     private TimeManager timeManager;
+    private BuildingManager buildingManager;
     private MeteoriteWaveManager waveManager;
     [SerializeField] private CanvasGroup loseFadeGroup;
     [SerializeField] private CanvasGroup winFadeGroup;
@@ -43,6 +46,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Button pauseMenuExitButton;
     [SerializeField] Button SettingsButton;
     [SerializeField] Slider volumeSlider;
+    [SerializeField] TMP_Text scoreText;
     [SerializeField] AudioMixer audioMixer;
 
     public GameEndType EndType { get; private set; } = GameEndType.None;
@@ -55,6 +59,7 @@ public class GameManager : MonoBehaviour
         inputHandler = FindFirstObjectByType<InputHandler>();
         timeManager = TimeManager.Instance ?? FindFirstObjectByType<TimeManager>();
         waveManager = FindFirstObjectByType<MeteoriteWaveManager>();
+        buildingManager = FindFirstObjectByType<BuildingManager>();
 
         loseFadeGroup.alpha = 0f;
         loseFadeGroup.blocksRaycasts = false;
@@ -157,6 +162,30 @@ public class GameManager : MonoBehaviour
         PauseGame();
 
         yield return MoveCameraToTarget(focusTarget);
+
+        // Calculate some bs score
+        if (EndType == GameEndType.Win)
+        {
+            int totalScore = 0;
+            Dictionary<string, int> buildingScores = new()
+            {
+                { "apartment", 15 },
+                { "energy_storage", 30 },
+                { "interceptor_cannon", 100 },
+                { "material_storage", 30 },
+                { "power_plant", 50 },
+                { "shield", 10 },
+                { "refinery", 60 },
+                { "laboratory", 80 }
+            };
+
+            foreach (var entry in buildingScores)
+            {
+                totalScore += buildingManager.GetBuildingCount(entry.Key) * entry.Value;
+            }
+
+            scoreText.SetText($"Your score: {totalScore}");
+        }
 
         SetGameSpeed(cinematicGameSpeed);
         loseFadeGroup.blocksRaycasts = true;
