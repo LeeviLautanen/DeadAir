@@ -15605,7 +15605,6 @@ GameObject:
   - component: {fileID: 1445513117}
   - component: {fileID: 1445513121}
   - component: {fileID: 1445513122}
-  - component: {fileID: 1445513123}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -15736,12 +15735,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
+  maxAcceleration: 20
   zoomSpeed: 1
   minZoom: 10
   maxZoom: 40
-  targetFrameRate: 60
   xBounds: {x: 0, y: 400}
-  yBounds: {x: -80, y: 80}
+  yBounds: {x: -60, y: 80}
 --- !u!81 &1445513122
 AudioListener:
   m_ObjectHideFlags: 0
@@ -15750,30 +15749,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1445513115}
   m_Enabled: 1
---- !u!114 &1445513123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1445513115}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.PixelPerfectCamera
-  m_ComponentVersion: 1
-  m_AssetsPPU: 16
-  m_RefResolutionX: 480
-  m_RefResolutionY: 270
-  m_CropFrame: 0
-  m_GridSnapping: 0
-  m_FilterMode: 0
-  m_UpscaleRT: 0
-  m_PixelSnapping: 0
-  m_CropFrameX: 0
-  m_CropFrameY: 0
-  m_StretchFill: 0
 --- !u!1 &1447031302
 GameObject:
   m_ObjectHideFlags: 0

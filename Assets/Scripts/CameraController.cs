@@ -3,16 +3,17 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    public float maxAcceleration = 20f;
     public float zoomSpeed = 5f;
     public float minZoom = 7f;
     public float maxZoom = 30f;
     public float CamOrthoSize => mainCamera.orthographicSize;
-    public int targetFrameRate = 60;
     public Vector2 xBounds = new Vector2(-10f, 10f);
     public Vector2 yBounds = new Vector2(-10f, 10f);
 
     private InputHandler inputHandler;
     private Camera mainCamera;
+    private Vector2 currentMoveVelocity;
 
     private void Start()
     {
@@ -68,8 +69,26 @@ public class CameraController : MonoBehaviour
 
     private bool HandleMoveInput(Vector2 move)
     {
-        transform.position += moveSpeed * mainCamera.orthographicSize * Time.deltaTime * (Vector3)move;
+        Vector2 clampedMove = move;
+        if (clampedMove.sqrMagnitude > 1f)
+            clampedMove.Normalize();
+
+        float zoomScaledSpeed = moveSpeed * mainCamera.orthographicSize;
+        Vector2 targetVelocity = clampedMove * zoomScaledSpeed;
+
+        if (maxAcceleration <= 0f)
+        {
+            currentMoveVelocity = targetVelocity;
+        }
+        else
+        {
+            float zoomScaledAcceleration = maxAcceleration * mainCamera.orthographicSize;
+            currentMoveVelocity = Vector2.MoveTowards(currentMoveVelocity, targetVelocity, zoomScaledAcceleration * Time.deltaTime);
+        }
+
+        transform.position += (Vector3)(currentMoveVelocity * Time.deltaTime);
         ClampCameraToBounds();
+
         return true;
     }
 
