@@ -331,17 +331,17 @@ public class InputHandler : MonoBehaviour
 
         if (saveGameAction != null && saveGameAction.WasPressedThisFrame())
         {
-            SaveActionTriggered?.Invoke(SaveAction.Save);
+            //SaveActionTriggered?.Invoke(SaveAction.Save);
         }
 
         if (loadGameAction != null && loadGameAction.WasPressedThisFrame())
         {
-            SaveActionTriggered?.Invoke(SaveAction.Load);
+            //SaveActionTriggered?.Invoke(SaveAction.Load);
         }
 
         if (clearGameAction != null && clearGameAction.WasPressedThisFrame())
         {
-            SaveActionTriggered?.Invoke(SaveAction.Clear);
+            //SaveActionTriggered?.Invoke(SaveAction.Clear);
         }
     }
 
