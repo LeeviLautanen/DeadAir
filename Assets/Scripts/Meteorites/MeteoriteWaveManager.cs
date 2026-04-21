@@ -109,6 +109,7 @@ public class MeteoriteWaveManager : MonoBehaviour
             yield break;
 
         isSpawning = true;
+        timeManager.SetGameTimeMultiplier(1f);
         timeManager.SetPause(false);
         ResetImpactSelectionForWave();
 

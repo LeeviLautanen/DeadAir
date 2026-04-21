@@ -1064,7 +1064,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2ab079b39f30e534aa65ba40c4a399b6, type: 2}
   - {fileID: 11400000, guid: 4b08b8e3730bac34b9747ef4f2668a87, type: 2}
   allBuildings: []
-  constructionCostsDisabled: 1
+  constructionCostsDisabled: 0
 --- !u!114 &93531067
 MonoBehaviour:
   m_ObjectHideFlags: 0

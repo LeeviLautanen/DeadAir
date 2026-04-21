@@ -81,12 +81,17 @@ public class TimeManager : MonoBehaviour
         if (Mathf.Approximately(step, 0f))
             return;
 
+        SetGameTimeMultiplier(GameTimeMultiplier + step);
+    }
+
+    public void SetGameTimeMultiplier(float newValue)
+    {
         if (isPaused)
         {
             return;
         }
 
-        GameTimeMultiplier = Mathf.Clamp(GameTimeMultiplier + step, MinGameTimeMultiplier, MaxGameTimeMultiplier);
+        GameTimeMultiplier = Mathf.Clamp(newValue, MinGameTimeMultiplier, MaxGameTimeMultiplier);
     }
 
     public void SetPause(bool pause)
