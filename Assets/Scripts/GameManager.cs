@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Button pauseMenuRestartButton;
     [SerializeField] Button pauseMenuResumeButton;
     [SerializeField] Button pauseMenuExitButton;
+    [SerializeField] Button SettingsButton;
     [SerializeField] Slider volumeSlider;
     [SerializeField] AudioMixer audioMixer;
 
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
         tryAgainButton.onClick.AddListener(() => { RestartGame(); });
         playAgainButton.onClick.AddListener(() => { RestartGame(); });
 
+        SettingsButton.onClick.AddListener(() => { inputHandler.gameObject.GetComponent<GameplayHotkeyController>().HandlePauseMenuToggle(); });
         pauseMenuRestartButton.onClick.AddListener(() => { RestartGame(); });
         pauseMenuResumeButton.onClick.AddListener(() => { inputHandler.gameObject.GetComponent<GameplayHotkeyController>().HandlePauseMenuToggle(); });
         pauseMenuExitButton.onClick.AddListener(() => { Application.Quit(); });
