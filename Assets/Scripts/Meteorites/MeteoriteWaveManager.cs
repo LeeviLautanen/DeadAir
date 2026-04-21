@@ -109,7 +109,7 @@ public class MeteoriteWaveManager : MonoBehaviour
             yield break;
 
         isSpawning = true;
-        timeManager.GameTimeMultiplier = 1f;
+        timeManager.SetPause(false);
         ResetImpactSelectionForWave();
 
         // Generate random proportions and normalize to spawnDuration so intervals sum to spawnDuration

@@ -418,7 +418,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 16672003}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 1445513119}
@@ -1197,7 +1197,7 @@ MonoBehaviour:
   pauseMenuRestartButton: {fileID: 1820757734}
   pauseMenuResumeButton: {fileID: 973424689}
   pauseMenuExitButton: {fileID: 1524079953}
-  SettingsButton: {fileID: 1987845993}
+  settingsButton: {fileID: 1987845993}
   volumeSlider: {fileID: 1356021613}
   scoreText: {fileID: 1432505171}
   audioMixer: {fileID: 24100000, guid: b5f08cb14abf08d4d8bc3098312f4293, type: 2}
@@ -12936,6 +12936,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameplayHotkeyController
   helpMenuCanvas: {fileID: 75714649}
   pauseMenuCanvas: {fileID: 653346784}
+  researchCanvas: {fileID: 1635153330}
 --- !u!114 &1266144150
 MonoBehaviour:
   m_ObjectHideFlags: 0

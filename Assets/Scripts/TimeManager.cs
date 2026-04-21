@@ -7,7 +7,7 @@ public class TimeManager : MonoBehaviour
     public float DeltaTime => deltaTime;
     public float LastDeltaBeforePause => lastDeltaBeforePause;
     public float DayDeltaTime => deltaTime / (DayLengthSeconds / 24f);
-    public bool IsPaused { get => isPaused; set { if (value) { GameTimeMultiplier = 0f; } else { GameTimeMultiplier = unpausedMultiplier; } } }
+    public bool IsPaused { get => isPaused; set => SetPause(value); }
     public int CurrentDay => currentDay;
     public float GameTimeMultiplier = 1f;
     public float MinGameTimeMultiplier = 0.25f;
@@ -83,25 +83,30 @@ public class TimeManager : MonoBehaviour
 
         if (isPaused)
         {
-            unpausedMultiplier = Mathf.Clamp(unpausedMultiplier + step, MinGameTimeMultiplier, MaxGameTimeMultiplier);
             return;
         }
 
         GameTimeMultiplier = Mathf.Clamp(GameTimeMultiplier + step, MinGameTimeMultiplier, MaxGameTimeMultiplier);
     }
 
-    public void TogglePause()
+    public void SetPause(bool pause)
     {
-        if (isPaused)
+        if (isPaused == pause)
         {
-            isPaused = false;
-            GameTimeMultiplier = Mathf.Clamp(unpausedMultiplier, MinGameTimeMultiplier, MaxGameTimeMultiplier);
             return;
         }
 
-        isPaused = true;
-        unpausedMultiplier = Mathf.Clamp(GameTimeMultiplier, MinGameTimeMultiplier, MaxGameTimeMultiplier);
-        GameTimeMultiplier = 0f;
+        isPaused = pause;
+
+        if (isPaused)
+        {
+            unpausedMultiplier = Mathf.Clamp(GameTimeMultiplier, MinGameTimeMultiplier, MaxGameTimeMultiplier);
+            GameTimeMultiplier = 0f;
+        }
+        else
+        {
+            GameTimeMultiplier = Mathf.Clamp(unpausedMultiplier, MinGameTimeMultiplier, MaxGameTimeMultiplier);
+        }
     }
 
     public void ScheduleEvent(System.Action action, int day, int hour, int minute = 0, int second = 0)

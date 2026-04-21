@@ -92,26 +92,6 @@ public class ResourceUI : MonoBehaviour
     {
         sb.Clear();
         sb.AppendFormat("{0:F0}/{1:F0}   {2:F0}/hr", amount, maxAmount, rate);
-        return;
-
-        sb.Append(name).Append(": ").AppendFormat("{0:F0}", amount);
-
-        if (maxAmount > 0)
-        {
-            sb.Append(" / ").AppendFormat("{0:F0}", maxAmount);
-
-            if (reservedAmount > 0)
-            {
-                sb.Append(" (Available: ")
-                   .AppendFormat("{0:F0}", amount - reservedAmount)
-                   .Append(", Δ: ").AppendFormat("{0:F0}", Mathf.RoundToInt(rate))
-                   .Append("/hr)");
-            }
-            else
-            {
-                sb.Append(" (Δ: ").AppendFormat("{0:F0}", Mathf.RoundToInt(rate)).Append("/hr)");
-            }
-        }
     }
 
     private void OnResourceChanged(string id, float amount, float maxAmount, float reservedAmount)

@@ -12,6 +12,7 @@ public class GameplayHotkeyController : MonoBehaviour
     private Canvas buildMenuCanvas;
     [SerializeField] private Canvas helpMenuCanvas;
     [SerializeField] private Canvas pauseMenuCanvas;
+    [SerializeField] private Canvas researchCanvas;
 
     private void Start()
     {
@@ -34,7 +35,6 @@ public class GameplayHotkeyController : MonoBehaviour
         inputHandler.GameTimeDecreaseRequested += HandleGameTimeDecrease;
         inputHandler.ResearchMenuToggleRequested += HandleResearchToggle;
         inputHandler.PauseToggleRequested += HandlePauseToggle;
-        inputHandler.PauseMenuToggled += HandlePauseMenuRequested;
         inputHandler.HelpMenuToggled += HandleHelpMenuToggle;
         inputHandler.PauseMenuToggled += HandlePauseMenuToggle;
     }
@@ -48,7 +48,6 @@ public class GameplayHotkeyController : MonoBehaviour
         inputHandler.GameTimeDecreaseRequested -= HandleGameTimeDecrease;
         inputHandler.ResearchMenuToggleRequested -= HandleResearchToggle;
         inputHandler.PauseToggleRequested -= HandlePauseToggle;
-        inputHandler.PauseMenuToggled -= HandlePauseMenuRequested;
     }
 
     private void HandleGameTimeIncrease()
@@ -107,13 +106,19 @@ public class GameplayHotkeyController : MonoBehaviour
 
     public void HandleResearchToggle()
     {
+        // Block if pause menu is open
+        if (pauseMenuCanvas.enabled)
+        {
+            return;
+        }
+
         if (techManager == null)
             return;
 
         techManager.SetVisible(!techManager.IsVisible);
 
         // Pause the game in the research menu
-        HandlePauseToggle();
+        SetPause(researchCanvas.enabled);
 
         if (hudCanvas != null)
         {
@@ -128,10 +133,16 @@ public class GameplayHotkeyController : MonoBehaviour
 
     private void HandlePauseToggle()
     {
+        if (!pauseMenuCanvas.enabled)
+            SetPause(!timeManager.IsPaused);
+    }
+
+    private void SetPause(bool pause)
+    {
         if (timeManager == null)
             return;
 
-        timeManager.TogglePause();
+        timeManager.IsPaused = pause;
 
         if (audioPoolManager == null)
             return;
@@ -140,11 +151,6 @@ public class GameplayHotkeyController : MonoBehaviour
             audioPoolManager.PauseAll();
         else
             audioPoolManager.UnpauseAll();
-    }
-
-    private void HandlePauseMenuRequested()
-    {
-        log.Info("Pause menu requested (ESC). Hook this to the pause menu UI.");
     }
 
     private void HandleHelpMenuToggle()
@@ -161,6 +167,8 @@ public class GameplayHotkeyController : MonoBehaviour
             return;
 
         pauseMenuCanvas.enabled = !pauseMenuCanvas.enabled;
-        timeManager.IsPaused = pauseMenuCanvas.enabled;
+
+        if (!researchCanvas.enabled)
+            timeManager.IsPaused = pauseMenuCanvas.enabled;
     }
 }

@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Button pauseMenuRestartButton;
     [SerializeField] Button pauseMenuResumeButton;
     [SerializeField] Button pauseMenuExitButton;
-    [SerializeField] Button SettingsButton;
+    [SerializeField] Button settingsButton;
     [SerializeField] Slider volumeSlider;
     [SerializeField] TMP_Text scoreText;
     [SerializeField] AudioMixer audioMixer;
@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
     {
         cameraController = FindFirstObjectByType<CameraController>();
         inputHandler = FindFirstObjectByType<InputHandler>();
-        timeManager = TimeManager.Instance ?? FindFirstObjectByType<TimeManager>();
+        timeManager = TimeManager.Instance;
         waveManager = FindFirstObjectByType<MeteoriteWaveManager>();
         buildingManager = FindFirstObjectByType<BuildingManager>();
 
@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
         tryAgainButton.onClick.AddListener(() => { RestartGame(); });
         playAgainButton.onClick.AddListener(() => { RestartGame(); });
 
-        SettingsButton.onClick.AddListener(() => { inputHandler.gameObject.GetComponent<GameplayHotkeyController>().HandlePauseMenuToggle(); });
+        settingsButton.onClick.AddListener(() => { inputHandler.gameObject.GetComponent<GameplayHotkeyController>().HandlePauseMenuToggle(); });
         pauseMenuRestartButton.onClick.AddListener(() => { RestartGame(); });
         pauseMenuResumeButton.onClick.AddListener(() => { inputHandler.gameObject.GetComponent<GameplayHotkeyController>().HandlePauseMenuToggle(); });
         pauseMenuExitButton.onClick.AddListener(() => { Application.Quit(); });
@@ -266,22 +266,17 @@ public class GameManager : MonoBehaviour
     private void PauseGame()
     {
         if (timeManager == null)
-            timeManager = TimeManager.Instance ?? FindFirstObjectByType<TimeManager>();
+            return;
 
-        if (timeManager != null && !timeManager.IsPaused)
-            timeManager.TogglePause();
+        timeManager.SetPause(true);
     }
 
     private void SetGameSpeed(float speed)
     {
         if (timeManager == null)
-            timeManager = TimeManager.Instance ?? FindFirstObjectByType<TimeManager>();
-
-        if (timeManager == null)
             return;
 
-        if (timeManager.IsPaused)
-            timeManager.TogglePause();
+        timeManager.SetPause(false);
 
         timeManager.GameTimeMultiplier = Mathf.Max(0f, speed);
     }
