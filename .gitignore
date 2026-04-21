@@ -82,3 +82,4 @@ crashlytics-build.properties
 
 # Some temp files created during build?
 /[Aa]ssets/[Rr]esources/PerformanceTestRun*
+/[Aa]ssets/AddressableAssetsData/link.xml*
