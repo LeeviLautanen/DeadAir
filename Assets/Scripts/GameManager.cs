@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
 
         easyButton.onClick.AddListener(() => SelectDifficulty(0.8f));
         normalButton.onClick.AddListener(() => SelectDifficulty(1f));
-        hardButton.onClick.AddListener(() => SelectDifficulty(1.2f));
+        hardButton.onClick.AddListener(() => SelectDifficulty(1.3f));
 
         volumeSlider.onValueChanged.AddListener((value) => { SetAudioLevel(value); });
         volumeSlider.value = 0.5f;
