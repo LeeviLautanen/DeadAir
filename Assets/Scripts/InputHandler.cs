@@ -36,7 +36,7 @@ public class InputHandler : MonoBehaviour
     public event Action<Vector2> PointerMove;
     public event Action<Vector2> PointerMoveDelta;
     public event Action<Key> NumberKeyPressed;
-    public event Action<SaveAction> SaveActionTriggered;
+    //public event Action<SaveAction> SaveActionTriggered;
     public event Action<MouseButton> MouseButtonReleased;
     public event Action GameTimeIncreaseRequested;
     public event Action GameTimeDecreaseRequested;

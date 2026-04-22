@@ -32,7 +32,7 @@ public class BuildingManager : MonoBehaviour
         Building.OnCreated += OnBuildingCreated;
         Building.OnDestroyed += OnBuildingDestroyed;
 
-        inputHandler.SaveActionTriggered += HandleSave;
+        //inputHandler.SaveActionTriggered += HandleSave;
     }
 
     public GameObject CreateBuilding(string buildingId, Vector3 position, Quaternion rotation = default)
