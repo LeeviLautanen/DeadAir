@@ -73,9 +73,9 @@ public class ResourceUI : MonoBehaviour
                 }
 
                 //FormatPooled(kvp.Key, amount, maxAmount, reservedAmount, oldRates[kvp.Key]);
-                sb.Clear();
-                sb.AppendFormat("{0:F0}/{1:F0}", amount - reservedAmount, maxAmount);
-                counterText.SetText(sb);
+                //sb.Clear();
+                //sb.AppendFormat("{0:F0}/{1:F0}", amount - reservedAmount, maxAmount);
+                counterText.SetText("{0:0}/{1:0}", amount - reservedAmount, maxAmount);
 
                 if (kvp.Value.Count > 1)
                 {
@@ -85,35 +85,6 @@ public class ResourceUI : MonoBehaviour
                     rateText.SetText(sb);
                 }
             }
-        }
-    }
-
-    private void FormatPooled(string name, float amount, float maxAmount = 0, float reservedAmount = 0, float rate = 0)
-    {
-        sb.Clear();
-        sb.AppendFormat("{0:F0}/{1:F0}   {2:F0}/hr", amount, maxAmount, rate);
-    }
-
-    private void OnResourceChanged(string id, float amount, float maxAmount, float reservedAmount)
-    {
-        if (!resourceTexts.ContainsKey(id)) return;
-        //Debug.Log($"Resource '{id}' changed to {amount}");
-        //resourceTexts[id].text = Format(id, amount, maxAmount, reservedAmount);
-    }
-
-    private string Format(string name, float amount, float maxAmount = 0, float reservedAmount = 0, float rate = 0)
-    {
-        if (maxAmount > 0 && reservedAmount > 0)
-        {
-            return $"{name}: {amount:F0} / {maxAmount:F0} (Available: {amount - reservedAmount:F0}, Δ: {Mathf.FloorToInt(rate)}/hr)";
-        }
-        else if (maxAmount > 0)
-        {
-            return $"{name}: {amount:F0} / {maxAmount:F0} (Δ: {Mathf.FloorToInt(rate)}/hr)";
-        }
-        else
-        {
-            return $"{name}: {amount:F0}";
         }
     }
 }

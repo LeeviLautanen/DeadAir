@@ -53,7 +53,7 @@ public class TimeManager : MonoBehaviour
         dayProgress += deltaTime / DayLengthSeconds;
 
         float newIntensity = Mathf.Lerp(NightBrightness, DayBrightness, Mathf.Sin(dayProgress * Mathf.PI * 2f - Mathf.PI / 2f) * 0.5f + 0.5f);
-        log.Info($"Updating sun intensity to {newIntensity:F2} (Day Progress: {dayProgress:F2})");
+        //log.Info($"Updating sun intensity to {newIntensity:F2} (Day Progress: {dayProgress:F2})");
         if (SunLight != null) SunLight.intensity = newIntensity;
 
         ProcessScheduledEvents();

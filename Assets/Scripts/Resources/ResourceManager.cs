@@ -396,7 +396,9 @@ public class ResourceManager : MonoBehaviour
             float maxHumans = resourceMaxLookup["humans"];
 
             if (humanAdjustmentList.Count == 0)
+            {
                 humanAdjustmentList.Add(new ResourceAmount(humans.Data, 0f));
+            }
 
             humanAdjustmentList[0].Amount = Math.Max(5f, maxHumans * 0.05f);
             if (humans.Amount <= maxHumans)
