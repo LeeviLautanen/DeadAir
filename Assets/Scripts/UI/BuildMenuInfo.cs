@@ -17,6 +17,7 @@ public class BuildMenuInfo : MonoBehaviour
     private GameObject infoContainer;
     private TMP_Text nameText;
     private TMP_Text descriptionText;
+    private TMP_Text startupTimeText;
     private TMP_Text constructionCostsText;
     private TMP_Text consumedResourcesText;
     private TMP_Text producedResourcesText;
@@ -34,6 +35,7 @@ public class BuildMenuInfo : MonoBehaviour
 
         nameText = infoContainer.transform.Find("NameText").GetComponent<TMP_Text>();
         descriptionText = infoContainer.transform.Find("DescriptionText").GetComponent<TMP_Text>();
+        startupTimeText = infoContainer.transform.Find("StartupTimeText").GetComponent<TMP_Text>();
         constructionCostsText = infoContainer.transform.Find("ConstructionCostsText").GetComponent<TMP_Text>();
         consumedResourcesText = infoContainer.transform.Find("ConsumedResourcesText").GetComponent<TMP_Text>();
         producedResourcesText = infoContainer.transform.Find("ProducedResourcesText").GetComponent<TMP_Text>();
@@ -69,20 +71,44 @@ public class BuildMenuInfo : MonoBehaviour
 
         descriptionText.text = current.Description;
 
+        GameObject startupTextGO = startupTimeText.gameObject;
+        bool isStartupTextActive = startupTextGO.activeInHierarchy;
+        if (!isStartupTextActive && current.StartupTime > 0)
+        {
+            startupTextGO.SetActive(true);
+            if (Mathf.Approximately(current.StartupTime, 1))
+            {
+                startupTimeText.SetText($"Startup time: {current.StartupTime} hr");
+            }
+            else
+            {
+                startupTimeText.SetText($"Startup time: {current.StartupTime} hrs");
+            }
+        }
+        else if (isStartupTextActive && current.StartupTime == 0)
+        {
+            startupTextGO.SetActive(false);
+        }
+
         UpdateInfoText(constructionCostsText, "Construction costs", current.ConstructionCost,
             r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConstructionCost, current.Id)}");
+        constructionCostsText.gameObject.SetActive(constructionCostsText.text.Length > 0);
 
         UpdateInfoText(consumedResourcesText, "Consumes", current.ConsumedResources,
             r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConsumptionRate, current.Id)}/hr");
+        consumedResourcesText.gameObject.SetActive(consumedResourcesText.text.Length > 0);
 
         UpdateInfoText(producedResourcesText, "Produces", current.ProducedResources,
             r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ProductionRate, current.Id)}/hr");
+        producedResourcesText.gameObject.SetActive(producedResourcesText.text.Length > 0);
 
         UpdateInfoText(capacityText, "Storage", current.CapacityEffects,
             r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Capacity, current.Id)}");
+        capacityText.gameObject.SetActive(capacityText.text.Length > 0);
 
         UpdateInfoText(reservationsText, "Operational requirements", current.RequiredReservations,
             r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Reservation, current.Id)}");
+        reservationsText.gameObject.SetActive(reservationsText.text.Length > 0);
     }
 
     private void UpdateInfoText<T>(TMP_Text text, string header, IEnumerable<T> items, Func<T, string> formatter)

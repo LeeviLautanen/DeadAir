@@ -16,6 +16,7 @@ public class BuildingSelector : MonoBehaviour
     private TMP_Text nameText;
     private TMP_Text statusText;
     private TMP_Text integrityText;
+    private TMP_Text startupTimeText;
     private TMP_Text consumedResourcesText;
     private TMP_Text producedResourcesText;
     private TMP_Text capacityText;
@@ -35,6 +36,7 @@ public class BuildingSelector : MonoBehaviour
         nameText = infoContainer.transform.Find("NameText").GetComponent<TMP_Text>();
         statusText = infoContainer.transform.Find("StatusText").GetComponent<TMP_Text>();
         integrityText = infoContainer.transform.Find("IntegrityText").GetComponent<TMP_Text>();
+        startupTimeText = infoContainer.transform.Find("StartupTimeText").GetComponent<TMP_Text>();
         consumedResourcesText = infoContainer.transform.Find("ConsumedResourcesText").GetComponent<TMP_Text>();
         producedResourcesText = infoContainer.transform.Find("ProducedResourcesText").GetComponent<TMP_Text>();
         capacityText = infoContainer.transform.Find("CapacityEffectsText").GetComponent<TMP_Text>();
@@ -170,21 +172,44 @@ public class BuildingSelector : MonoBehaviour
         if (integrityPercent > 0 && integrityPercent <= 100)
             integrityText.SetText($"Integrity: {integrityPercent}%");
 
+        GameObject startupTextGO = startupTimeText.gameObject;
+        bool isStartupTextActive = startupTextGO.activeInHierarchy;
+        if (!isStartupTextActive && current.Data.StartupTime > 0)
+        {
+            startupTextGO.SetActive(true);
+            if (Mathf.Approximately(current.Data.StartupTime, 1))
+            {
+                startupTimeText.SetText($"Startup time: {current.Data.StartupTime} hr");
+            }
+            else
+            {
+                startupTimeText.SetText($"Startup time: {current.Data.StartupTime} hrs");
+            }
+        }
+        else if (isStartupTextActive && current.Data.StartupTime == 0)
+        {
+            startupTextGO.SetActive(false);
+        }
+
         consumedResourcesText.SetText(
             FormatSection("Consumes", current.Data.ConsumedResources,
                 r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConsumptionRate, current.Data.Id)}/s"));
+        consumedResourcesText.gameObject.SetActive(consumedResourcesText.text.Length > 0);
 
         producedResourcesText.SetText(
             FormatSection("Produces", current.Data.ProducedResources,
                 r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ProductionRate, current.Data.Id)}/s"));
+        producedResourcesText.gameObject.SetActive(producedResourcesText.text.Length > 0);
 
         capacityText.SetText(
             FormatSection("Storage", current.Data.CapacityEffects,
                 r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Capacity, current.Data.Id)}"));
+        capacityText.gameObject.SetActive(capacityText.text.Length > 0);
 
         reservationsText.SetText(
             FormatSection("Operational requirements", current.Data.RequiredReservations,
                 r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Reservation, current.Data.Id)}"));
+        reservationsText.gameObject.SetActive(reservationsText.text.Length > 0);
     }
 
     private string FormatSection<T>(string header, IEnumerable<T> items, Func<T, string> formatter)

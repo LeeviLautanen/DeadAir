@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: refinery
   displayName: Refinery
-  description: A factory where raw and recycled material are refined into a usable
-    form.
+  description: A factory where raw material is refined into a usable form.
   maxHealth: 100
   resourcePriority: 2
   startupTime: 1

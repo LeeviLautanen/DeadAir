@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'The ultimate line of defense. '
   maxHealth: 1000
   resourcePriority: 4
-  startupTime: 1
+  startupTime: 2
   prefab: {fileID: 2338727921691040950, guid: f391f629fef8ce34fb21ced9643db6d3, type: 3}
   ConstructionCost:
   - data: {fileID: 11400000, guid: e43df258ef1307844a5409e1fdbc2859, type: 2}
