@@ -12,13 +12,15 @@ public enum LogLevel
 public class Logger
 {
     private readonly string key;
-    private readonly Dictionary<string, LogLevel> config;
+    private readonly Dictionary<string, LogLevel> config = null;
 
     public Logger(string key)
     {
+#if UNITY_EDITOR
         this.key = key;
 
         string configPath = Application.dataPath + "/Scripts/Logging/logger_config.json";
+
         if (!System.IO.File.Exists(configPath))
         {
             Debug.LogError($"Logger configuration file not found at path: {configPath}");
@@ -27,6 +29,7 @@ public class Logger
 
         string json = System.IO.File.ReadAllText(configPath);
         config = JsonConvert.DeserializeObject<Dictionary<string, LogLevel>>(json);
+#endif
     }
 
     private bool Enabled(LogLevel msgLevel)
