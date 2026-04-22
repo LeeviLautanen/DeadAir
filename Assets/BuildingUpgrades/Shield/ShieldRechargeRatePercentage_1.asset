@@ -20,5 +20,5 @@ MonoBehaviour:
   - TargetBuildingIds:
     - shield
     ModType: 5
-    Value: 25
+    Value: 20
     IsPercent: 1

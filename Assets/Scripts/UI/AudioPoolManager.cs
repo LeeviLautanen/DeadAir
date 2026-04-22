@@ -13,7 +13,7 @@ public class AudioPoolManager : MonoBehaviour
     private float lastCameraZoom;
     private float baseMinDistance = 15f;
     private float baseMaxDistance = 500f;
-    private float baseVolume = 0.1f;
+    private float baseVolume = 0.2f;
     private float baseOrthoSize = 20f;
 
     private void Awake()
