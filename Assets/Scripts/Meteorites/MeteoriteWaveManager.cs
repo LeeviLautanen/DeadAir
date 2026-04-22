@@ -306,5 +306,8 @@ public class MeteoriteWaveManager : MonoBehaviour
         // Randomize speed
         float speedChange = Random.Range(SpeedRandomizationRange.x, SpeedRandomizationRange.y);
         meteoriteComponent.Speed += meteoriteComponent.Speed * speedChange;
+
+        // Schedule whoosh sound effect with the expected impact position
+        meteoriteComponent.ScheduleWhooshAudio(targetImpactX);
     }
 }

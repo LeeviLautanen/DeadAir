@@ -25,7 +25,7 @@ public class Meteorite : MonoBehaviour
     private float randomPitch;
     private bool impactVisualized = false;
 
-    private void Start()
+    private void Awake()
     {
         meteoriteParticleSystem = MeteoriteParticleSystem.Instance;
         audioPoolManager = AudioPoolManager.Instance;
@@ -35,21 +35,15 @@ public class Meteorite : MonoBehaviour
         trailGO = transform.Find("Trail").gameObject;
 
         randomPitch = Random.Range(ImpactAudioPitchRange.x, ImpactAudioPitchRange.y);
-        ScheduleWhooshAudio();
     }
 
-    private void ScheduleWhooshAudio()
+    public void ScheduleWhooshAudio(float impactPosX)
     {
-        int layerMask = LayerMask.GetMask("Ground", "BuildingDamage") & ~(1 << gameObject.layer);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, moveDirection, Mathf.Infinity, layerMask);
-
-        if (hit.collider != GetComponent<Collider2D>())
-        {
-            float distance = Vector2.Distance(transform.position, hit.point);
-            float travelTime = distance / (Speed * timeManager.GameTimeMultiplier);
-            float timeToImpact = travelTime + ImpactAudioDelay / randomPitch;
-            audioPoolManager.PlayAt(WhooshClip, hit.point, timeToImpact, randomPitch);
-        }
+        Vector2 impactPos = new(impactPosX, 0);
+        float distance = Vector2.Distance(transform.position, impactPos);
+        float travelTime = distance / (Speed * timeManager.GameTimeMultiplier);
+        float timeToImpact = travelTime + ImpactAudioDelay / randomPitch;
+        audioPoolManager.PlayAt(WhooshClip, impactPos, timeToImpact, randomPitch);
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

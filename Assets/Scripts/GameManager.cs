@@ -106,6 +106,12 @@ public class GameManager : MonoBehaviour
 
     private void SetAudioLevel(float sliderValue)
     {
+        if (Mathf.Approximately(sliderValue, 0f))
+        {
+            audioMixer.SetFloat("MasterVolume", -80f);
+            return;
+        }
+
         float decibels = Mathf.Max(0.0001f, sliderValue) * 40f - 20f;
         audioMixer.SetFloat("MasterVolume", decibels);
     }
