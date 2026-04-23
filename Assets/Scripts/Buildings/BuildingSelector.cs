@@ -173,50 +173,54 @@ public class BuildingSelector : MonoBehaviour
             integrityText.SetText($"Integrity: {integrityPercent}%");
 
         GameObject startupTextGO = startupTimeText.gameObject;
-        bool isStartupTextActive = startupTextGO.activeInHierarchy;
-        if (!isStartupTextActive && current.Data.StartupTime > 0)
+        bool isStartupTextActive = startupTextGO.activeSelf;
+        if (current.Data.StartupTime > 0)
         {
-            startupTextGO.SetActive(true);
+            if (!isStartupTextActive)
+            {
+                startupTextGO.SetActive(true);
+            }
+
             if (Mathf.Approximately(current.Data.StartupTime, 1))
             {
-                startupTimeText.SetText($"Startup time: {current.Data.StartupTime} hr");
+                startupTimeText.SetText($"Startup time: 1 hr");
             }
             else
             {
                 startupTimeText.SetText($"Startup time: {current.Data.StartupTime} hrs");
             }
         }
-        else if (isStartupTextActive && current.Data.StartupTime == 0)
+        else if (isStartupTextActive)
         {
             startupTextGO.SetActive(false);
         }
 
-        consumedResourcesText.SetText(
-            FormatSection("Consumes", current.Data.ConsumedResources,
-                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConsumptionRate, current.Data.Id)}/s"));
-        consumedResourcesText.gameObject.SetActive(consumedResourcesText.text.Length > 0);
+        UpdateInfoText(consumedResourcesText, "Consumes", current.Data.ConsumedResources,
+                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ConsumptionRate, current.Data.Id)}/s");
 
-        producedResourcesText.SetText(
-            FormatSection("Produces", current.Data.ProducedResources,
-                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ProductionRate, current.Data.Id)}/s"));
-        producedResourcesText.gameObject.SetActive(producedResourcesText.text.Length > 0);
+        UpdateInfoText(producedResourcesText, "Produces", current.Data.ProducedResources,
+                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.ProductionRate, current.Data.Id)}/s");
 
-        capacityText.SetText(
-            FormatSection("Storage", current.Data.CapacityEffects,
-                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Capacity, current.Data.Id)}"));
-        capacityText.gameObject.SetActive(capacityText.text.Length > 0);
+        UpdateInfoText(capacityText, "Storage", current.Data.CapacityEffects,
+                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Capacity, current.Data.Id)}");
 
-        reservationsText.SetText(
-            FormatSection("Operational requirements", current.Data.RequiredReservations,
-                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Reservation, current.Data.Id)}"));
-        reservationsText.gameObject.SetActive(reservationsText.text.Length > 0);
+        UpdateInfoText(reservationsText, "Operational requirements", current.Data.RequiredReservations,
+                r => $"{r.Data.DisplayName} {techManager.GetModifiedValue(r.Amount, ModifierType.Reservation, current.Data.Id)}");
     }
 
-    private string FormatSection<T>(string header, IEnumerable<T> items, Func<T, string> formatter)
+    private void UpdateInfoText<T>(TMP_Text text, string header, IEnumerable<T> items, Func<T, string> formatter)
     {
         if (!items.Any())
-            return "";
+        {
+            text.gameObject.SetActive(false);
+            return;
+        }
 
-        return header + ":\n" + string.Join("\n", items.Select(formatter));
+        if (text.gameObject.activeSelf == false)
+        {
+            text.gameObject.SetActive(true);
+        }
+
+        text.SetText(header + ":\n" + string.Join("\n", items.Select(formatter)));
     }
 }
