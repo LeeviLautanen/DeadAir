@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class BuildMenuManager : MonoBehaviour
@@ -64,6 +65,11 @@ public class BuildMenuManager : MonoBehaviour
 
         if (click.Button == InputHandler.MouseButton.Left)
         {
+            if (buildingPlacer.IsPlacing && EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            {
+                return true;
+            }
+
             if (buildingPlacer.IsPlacing)
             {
                 if (buildingPlacer.TryPlaceGhost())
